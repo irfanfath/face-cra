@@ -13,12 +13,11 @@ export default function TestFace() {
 
     const initializefaceDetector = async () => {
         vision = await FilesetResolver.forVisionTasks(
-            // "../../node_modules/@mediapipe/tasks-vision/wasm"
+            // "./node_modules/@mediapipe/tasks-vision/wasm"
             "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/wasm"
         );
         faceDetector = await FaceDetector.createFromModelPath(vision,
-            "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite"
-            // '../../public/lib/blaze_face_short_range.tflite'
+            './lib/blaze_face_short_range.tflite'
         );
         handleLiveDetection();
     }
