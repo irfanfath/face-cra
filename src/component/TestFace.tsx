@@ -96,58 +96,63 @@ export default function TestFace() {
         if (webcamRef.current?.currentTime !== lastVideoTime) {
             lastVideoTime = webcamRef.current!.currentTime;
             const detections = faceDetector.detectForVideo(webcamRef.current!, startTimeMs).detections;
-            // displayVideoDetections(detections, webcamRef.current!);
+            displayVideoDetections(detections);
         }
 
-        // Call this function again to keep predicting when the browser is ready
         window.requestAnimationFrame(predictWebcam);
     }
 
-    function displayVideoDetections(detections: any[], video: HTMLVideoElement) {
-        // Remove any highlighting from previous frame.
-        const liveView = document.getElementById("liveView") as HTMLDivElement;
+    // function displayVideoDetections(detections: any[], video: HTMLVideoElement) {
+    //     // Remove any highlighting from previous frame.
+    //     const liveView = document.getElementById("liveView") as HTMLDivElement;
 
-        for (let child of children) {
-            liveView.removeChild(child);
-        }
-        children.splice(0);
+    //     for (let child of children) {
+    //         liveView.removeChild(child);
+    //     }
+    //     children.splice(0);
 
-        // Iterate through predictions and draw them to the live view
+    //     // Iterate through predictions and draw them to the live view
+    //     for (let detection of detections) {
+    //         const p: HTMLParagraphElement = document.createElement("p");
+    //         console.log(Math.round(parseFloat(detection.categories[0].score) * 100) + "% .")
+    //         p.innerText = "Confidence: " + Math.round(parseFloat(detection.categories[0].score) * 100) + "% .";
+    //         p.setAttribute('style',
+    //             "left: " + (video.offsetWidth - detection.boundingBox.width - detection.boundingBox.originX) + "px;" +
+    //             "top: " + (detection.boundingBox.originY - 30) + "px;" +
+    //             "width: " + (detection.boundingBox.width - 10) + "px;"
+    //         )
+
+    //         // console.log(detection)
+    //         const highlighter: HTMLDivElement = document.createElement("div");
+    //         highlighter.setAttribute("class", "highlighter");
+    //         highlighter.setAttribute('style',
+    //             "left: " + (video.offsetWidth - detection.boundingBox.width - detection.boundingBox.originX) + "px;" +
+    //             "top: " + detection.boundingBox.originY + "px;" +
+    //             "width: " + (detection.boundingBox.width - 10) + "px;" +
+    //             "height: " + detection.boundingBox.height + "px;"
+    //         )
+
+    //         liveView.appendChild(highlighter);
+    //         liveView.appendChild(p);
+
+    //         // Store drawn objects in memory so they are queued to delete at next call
+    //         children.push(highlighter);
+    //         children.push(p);
+
+    //         for (let keypoint of detection.keypoints) {
+    //             const keypointEl: HTMLSpanElement = document.createElement("span");
+    //             keypointEl.className = "key-point";
+    //             keypointEl.style.top = `${keypoint.y * video.offsetHeight - 3}px`;
+    //             keypointEl.style.left = `${video.offsetWidth - keypoint.x * video.offsetWidth - 3}px`;
+    //             liveView.appendChild(keypointEl);
+    //             children.push(keypointEl);
+    //         }
+    //     }
+    // }
+
+    function displayVideoDetections(detections: any[]) {
         for (let detection of detections) {
-            const p: HTMLParagraphElement = document.createElement("p");
-            console.log(Math.round(parseFloat(detection.categories[0].score) * 100) + "% .")
-            p.innerText = "Confidence: " + Math.round(parseFloat(detection.categories[0].score) * 100) + "% .";
-            p.setAttribute('style',
-                "left: " + (video.offsetWidth - detection.boundingBox.width - detection.boundingBox.originX) + "px;" +
-                "top: " + (detection.boundingBox.originY - 30) + "px;" +
-                "width: " + (detection.boundingBox.width - 10) + "px;"
-            )
-
-            // console.log(detection)
-            const highlighter: HTMLDivElement = document.createElement("div");
-            highlighter.setAttribute("class", "highlighter");
-            highlighter.setAttribute('style',
-                "left: " + (video.offsetWidth - detection.boundingBox.width - detection.boundingBox.originX) + "px;" +
-                "top: " + detection.boundingBox.originY + "px;" +
-                "width: " + (detection.boundingBox.width - 10) + "px;" +
-                "height: " + detection.boundingBox.height + "px;"
-            )
-
-            liveView.appendChild(highlighter);
-            liveView.appendChild(p);
-
-            // Store drawn objects in memory so they are queued to delete at next call
-            children.push(highlighter);
-            children.push(p);
-
-            for (let keypoint of detection.keypoints) {
-                const keypointEl: HTMLSpanElement = document.createElement("span");
-                keypointEl.className = "key-point";
-                keypointEl.style.top = `${keypoint.y * video.offsetHeight - 3}px`;
-                keypointEl.style.left = `${video.offsetWidth - keypoint.x * video.offsetWidth - 3}px`;
-                liveView.appendChild(keypointEl);
-                children.push(keypointEl);
-            }
+            console.log("Confidence: " + Math.round(parseFloat(detection.categories[0].score) * 100) + "% .");
         }
     }
 
