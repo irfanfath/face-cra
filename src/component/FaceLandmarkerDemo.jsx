@@ -178,7 +178,6 @@ const FaceLandmarker = () => {
           )}
           <div style={{ position: 'relative' }}>
             <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0 }} autoPlay playsInline></video>
-            <canvas ref={canvasRef} className="output_canvas" style={{ position: 'absolute', left: 0, top: 0 }} autoPlay playsInline></canvas>
           </div>
         </div>
 
