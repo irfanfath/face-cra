@@ -50,7 +50,9 @@ const FaceLandmarker = () => {
     if (!webcamRunning) {
       webcamRunningRef.current = true;
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { width: { ideal: 640 }, height: { ideal: 480 }, frameRate: { ideal: 30 } }
+        });
         setVideoStream(stream);
         videoRef.current.srcObject = stream;
         videoRef.current.addEventListener("loadeddata", predictWebcam);
@@ -160,6 +162,13 @@ const FaceLandmarker = () => {
     console.log(imageData);
   };
 
+  useEffect(() => {
+    if (webcamRunningRef.current && results) {
+      drawBlendShapesRealTime();
+    }
+  }, [webcamRunningRef.current, results]);
+  
+
 
   return (
     <div>
@@ -177,7 +186,7 @@ const FaceLandmarker = () => {
           )}
           <div style={{ position: 'relative' }}>
             <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0 }} autoPlay playsInline></video>
-            <canvas ref={canvasRef} className="output_canvas" style={{ position: 'absolute', left: 0, top: 0 }}></canvas>
+            <canvas ref={canvasRef} className="output_canvas" style={{ position: 'absolute', left: 0, top: 0 }} autoPlay playsInline></canvas>
           </div>
         </div>
 
