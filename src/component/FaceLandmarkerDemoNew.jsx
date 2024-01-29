@@ -48,8 +48,13 @@ const FaceLandmarker = () => {
   
   useEffect(() => {
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
+    const messagesQueryParam = new URL(window.location.href).searchParams.get('messages');
+
     const pipelineQueryParamArray = (pipelineQueryParam != null && pipelineQueryParam !== '') ? pipelineQueryParam.split(',').map((value) => pipeline[value]): pipeline ;
     setDynamicPipeline(pipelineQueryParamArray);
+    const messagesQueryParamArray = (messagesQueryParam != null && messagesQueryParam !== '') ? messagesQueryParam.split(',') : [];
+    setMessage(messagesQueryParamArray);
+
     dynamicPipelineRef.current = pipelineQueryParamArray;
     const createFaceLandmarker = async () => {
       const filesetResolver = await vision.FilesetResolver.forVisionTasks(
@@ -115,14 +120,12 @@ const FaceLandmarker = () => {
     }
   };
   const storeData = useCallback(() => {
-    // Code to capture the image
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     canvas.width = videoRef.current.videoWidth;
     canvas.height = videoRef.current.videoHeight;
     ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
     isLoadingRef.current = true;
-    // Convert the captured image to a base64 string
     const imageData = canvas.toDataURL('image/jpeg');
     handleApi(imageData.split(',')[1]).then((res) => {
       isLoadingRef.current = false;
@@ -130,11 +133,6 @@ const FaceLandmarker = () => {
     }).catch(() => {
       isLoadingRef.current = false;
     });
-    // Set the captured image in the state
-    // setCapturedImage(imageData);
-    // alert("success");
-    // enableCam();
-    // console.log(imageData);
   }, []);
 
   const drawBlendShapes = useCallback((el, blendShapes) => {
@@ -155,7 +153,8 @@ const FaceLandmarker = () => {
     const pipelineFunc = (activeIndex, pipelineCount) => {
       storeData();
       if(activeIndex === pipelineCount) {
-        cameraRef.current.getTracks().forEach(track => track.stop());        
+        cameraRef.current.getTracks().forEach(track => track.stop());    
+        window.location.href = 'https://bigvision.id/';   
       } else {
         setPipelineIndex((val) => {
           pipelineRef.current = val + 1;
@@ -174,14 +173,12 @@ const FaceLandmarker = () => {
         pipelineFunc(pipelineRef.current,pipelineCount)
       }
     }
-    // If eyelookinleft value is greater than 0.7 and the current task is 'hadap-kiri', move to the next item in the pipeline
     
   }, []);
 
   const drawBlendShapesRealTime = useCallback((result) => {
     drawBlendShapes(videoBlendShapesRef.current, result.faceBlendshapes);
 
-    // Call this function again to keep updating when the browser is ready.
     if (webcamRunningRef.current) {
       window.requestAnimationFrame(drawBlendShapesRealTime);
     }
@@ -194,7 +191,9 @@ const FaceLandmarker = () => {
           <img className="bg-image" alt="" src={require('../assets/bg-camera.png')} />
           <div style={{ position: 'relative'}}>
             <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden'}} autoPlay playsInline></video>
-            <div style={{marginTop: 40}} className="overlay-text">{(dynamicPipeline[pipelineIndex].word)}</div>
+            <div style={{marginTop: 40}} className="overlay-text">
+              {(message && message[pipelineIndex]) || (dynamicPipeline[pipelineIndex]?.word)}
+            </div>
           </div>
         </div>
       </section>
