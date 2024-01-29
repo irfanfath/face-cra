@@ -1,6 +1,6 @@
 // FaceLandmarkerDemo.jsx
 import React, { useEffect, useState } from 'react';
-import vision from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3";
+import vision from "@mediapipe/tasks-vision";
 
 const FaceLandmarkerDemo = () => {
   const [faceLandmarker, setFaceLandmarker] = useState(null);
