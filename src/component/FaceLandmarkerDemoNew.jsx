@@ -19,7 +19,6 @@ const FaceLandmarker = () => {
   const canvasRef = useRef(null);
   const webcamRunningRef = useRef(false);
   const videoBlendShapesRef = useRef(null);
-  const videoWidth = 480;
   const [pipelineIndex, setPipelineIndex] = useState(0);
   const [capturedImage, setCapturedImage] = useState('');
 
@@ -43,7 +42,7 @@ const FaceLandmarker = () => {
     createFaceLandmarker();
   }, []);
 
-  const enableCam = async () => {
+  const enableCam = () => {
     if (!faceLandmarkerRef.current) {
       console.log("Wait! faceLandmarker not loaded yet.");
       return;
@@ -53,9 +52,10 @@ const FaceLandmarker = () => {
     if (!webcamRunning) {
       webcamRunningRef.current = true;
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        videoRef.current.srcObject = stream;
-        videoRef.current.addEventListener("loadeddata", predictWebcam);
+        navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+          videoRef.current.srcObject = stream;
+          videoRef.current.addEventListener("loadeddata", predictWebcam);
+        });
       } catch (error) {
         console.error("Error accessing webcam:", error);
       }
