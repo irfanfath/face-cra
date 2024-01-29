@@ -159,28 +159,31 @@ const FaceLandmarker = () => {
       drawBlendShapesRealTime();
     }
   }, [webcamRunningRef.current, results]);
-  
+
 
 
   return (
     <div>
       <section id="demos">
-        <div id="liveView" className="videoView">
+        {webcamRunning ?
+          <div>
+            <div>{JSON.stringify(pipeline[pipelineIndex].task)}</div>
+            {capturedImage && (
+              <div>
+                <h2>Captured Image</h2>
+                <img src={capturedImage} alt="Captured" />
+              </div>
+            )}
+            <img className="bg-image" alt="" src={require('../assets/bg-camera.png')} />
+            <div style={{ position: 'relative'}}>
+              <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0 }} autoPlay playsInline></video>
+            </div>
+          </div>
+          :
           <button id="webcamButton" onClick={enableCam} className="mdc-button mdc-button--raised">
             <span className="mdc-button__label">{webcamRunning ? 'DISABLE WEBCAM' : 'ENABLE WEBCAM'}</span>
           </button>
-          <div>{JSON.stringify(pipeline[pipelineIndex].task)}</div>
-          {capturedImage && (
-            <div>
-              <h2>Captured Image</h2>
-              <img src={capturedImage} alt="Captured" />
-            </div>
-          )}
-          <div style={{ position: 'relative' }}>
-            <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0 }} autoPlay playsInline></video>
-          </div>
-        </div>
-
+        }
       </section>
     </div>
   );
