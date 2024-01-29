@@ -51,7 +51,7 @@ const FaceLandmarker = () => {
       webcamRunningRef.current = true;
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: { ideal: 300 }, height: { ideal: 720 }, frameRate: { ideal: 30 } }
+          video: { width: { ideal: 300 }, height: { ideal: 300 }, frameRate: { ideal: 15 } }
         });
         setVideoStream(stream);
         videoRef.current.srcObject = stream;
