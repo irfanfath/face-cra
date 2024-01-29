@@ -6,8 +6,8 @@ import FaceTest from './component/FaceTest';
 function App() {
   return (
     <div className="App">
-      {/* <FaceTest /> */}
-      <FaceLandmarker />
+      <FaceTest />
+      {/* <FaceLandmarker /> */}
     </div>
   );
 }
