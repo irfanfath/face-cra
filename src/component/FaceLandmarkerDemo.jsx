@@ -232,6 +232,8 @@ const FaceLandmarker = () => {
     <div>
       <section id="demos" className="invisible">
         <h2>Demo: Webcam continuous face landmarks detection</h2>
+        <div className="blend-shapes-list" ref={videoBlendShapesRef}></div>
+
         <p>Hold your face in front of your webcam to get real-time face landmark detection. Click <b>enable webcam</b> below and grant access to the webcam if prompted.</p>
 
         <div id="liveView" className="videoView">
@@ -242,12 +244,13 @@ const FaceLandmarker = () => {
           <div style={{ position: 'relative' }}>
             <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0 }} autoPlay playsInline></video>
             <canvas ref={canvasRef} className="output_canvas" style={{ position: 'absolute', left: 0, top: 0 }}></canvas>
+
           </div>
         </div>
 
-        <div className="blend-shapes">
-          <ul className="blend-shapes-list" ref={videoBlendShapesRef}></ul>
-        </div>
+        {/* <div className="blend-shapes">
+          <div className="blend-shapes-list" ref={videoBlendShapesRef}></div>
+        </div> */}
       </section>
     </div>
   );
