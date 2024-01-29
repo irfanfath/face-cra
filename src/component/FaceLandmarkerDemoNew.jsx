@@ -199,12 +199,13 @@ const FaceLandmarker = () => {
                 left: 0,
                 top: 0,
                 width: '100%',
-                height: '100vh', 
-                objectFit: 'cover', 
+                height: '80vh',
+                objectFit: 'cover',
               }}
               autoPlay
               playsInline
-            />            <div style={{ marginTop: '700px' }} className="overlay-text">{(pipeline[pipelineIndex].word)}</div>
+            />
+            <div style={{ marginTop: '700px' }} className="overlay-text">{(pipeline[pipelineIndex].word)}</div>
           </div>
         </div>
       </section>
