@@ -152,6 +152,8 @@ const FaceLandmarkerDemo = () => {
     el.innerHTML = htmlMaker;
   };
 
+  console.log(results);
+
   return (
     <div>
       <h1>Face landmark detection using the MediaPipe FaceLandmarker task</h1>
