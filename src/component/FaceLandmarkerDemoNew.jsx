@@ -38,6 +38,7 @@ const FaceLandmarker = () => {
         numFaces: 1
       });
       faceLandmarkerRef.current = newFaceLandmarker;
+      enableCam();
     };
     createFaceLandmarker();
   }, []);
@@ -124,25 +125,21 @@ const FaceLandmarker = () => {
     const newIndex = piplieRef.current + 1;
 
     // If eyelookinleft value is greater than 0.7 and the current task is 'hadap-kiri', move to the next item in the pipeline
-    if (eyelookinleftValue > 0.7 && currentTask === 'hadap-kiri') {
+    if (eyelookinleftValue > 0.5 && currentTask === 'hadap-kiri') {
       if (newIndex !== pipeline.length) {
         setPipelineIndex((val) => {
           piplieRef.current = val + 1;
           return val + 1
         })
-      } else {
-        captureImage();
       }
-    } else if (eyelookinrightValue > 0.7 && currentTask === 'hadap-kanan') {
+    } else if (eyelookinrightValue > 0.5 && currentTask === 'hadap-kanan') {
       if (newIndex !== pipeline.length) {
         setPipelineIndex((val) => {
           piplieRef.current = val + 1;
           return val + 1
         })
-      } else {
-        captureImage();
       }
-    } else if (jawopenValue > 0.7 && currentTask === 'buka-mulut') {
+    } else if (jawopenValue > 0.4 && currentTask === 'buka-mulut') {
       if (newIndex !== pipeline.length) {
         setPipelineIndex((val) => {
           piplieRef.current = val + 1;
@@ -169,9 +166,6 @@ const FaceLandmarker = () => {
     <div>
       <section id="demos">
         <div id="liveView" className="videoView">
-          <button id="webcamButton" onClick={enableCam} className="mdc-button mdc-button--raised">
-            <span className="mdc-button__label">{webcamRunning ? 'DISABLE WEBCAM' : 'ENABLE WEBCAM'}</span>
-          </button>
           <div>{JSON.stringify(pipeline[pipelineIndex].task)}</div>
           {capturedImage && (
             <div>
