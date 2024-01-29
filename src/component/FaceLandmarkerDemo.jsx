@@ -11,7 +11,7 @@ const FaceLandmarker = () => {
   const canvasRef = useRef(null);
   const webcamRunningRef = useRef(false);
   const videoBlendShapesRef = useRef(null);
-  const videoWidth = 300;
+  const videoWidth = 480;
   const [pipelineIndex, setPipelineIndex] = useState(0);
   const [capturedImage, setCapturedImage] = useState('');
 
@@ -50,9 +50,7 @@ const FaceLandmarker = () => {
     if (!webcamRunning) {
       webcamRunningRef.current = true;
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: { ideal: 300 }, height: { ideal: 300 }, frameRate: { ideal: 1 } }
-        });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         setVideoStream(stream);
         videoRef.current.srcObject = stream;
         videoRef.current.addEventListener("loadeddata", predictWebcam);
@@ -116,19 +114,19 @@ const FaceLandmarker = () => {
     const newIndex = (pipelineIndex + 1)
 
     // If eyelookinleft value is greater than 0.7 and the current task is 'hadap-kiri', move to the next item in the pipeline
-    if (eyelookinleftValue > 0.3 && currentTask === 'hadap-kiri') {
+    if (eyelookinleftValue > 0.7 && currentTask === 'hadap-kiri') {
       if (newIndex !== pipeline.length) {
         setPipelineIndex(pipelineIndex + 1)
       } else {
         captureImage();
       }
-    } else if (eyelookinrightValue > 0.3 && currentTask === 'hadap-kanan') {
+    } else if (eyelookinrightValue > 0.7 && currentTask === 'hadap-kanan') {
       if (newIndex !== pipeline.length) {
         setPipelineIndex(pipelineIndex + 1)
       } else {
         captureImage();
       }
-    } else if (jawopenValue > 0.3 && currentTask === 'buka-mulut') {
+    } else if (jawopenValue > 0.7 && currentTask === 'buka-mulut') {
       if (newIndex !== pipeline.length) {
         setPipelineIndex(pipelineIndex + 1)
       } else {
@@ -154,32 +152,27 @@ const FaceLandmarker = () => {
     console.log(imageData);
   };
 
-  useEffect(() => {
-    if (webcamRunningRef.current && results) {
-      drawBlendShapesRealTime();
-    }
-  }, [webcamRunningRef.current, results]);
-
-
 
   return (
     <div>
       <section id="demos">
-          <div>
-            <button id="webcamButton" onClick={enableCam} className="mdc-button mdc-button--raised">
+        <div id="liveView" className="videoView">
+          <button id="webcamButton" onClick={enableCam} className="mdc-button mdc-button--raised">
             <span className="mdc-button__label">{webcamRunning ? 'DISABLE WEBCAM' : 'ENABLE WEBCAM'}</span>
           </button>
-            <div>{JSON.stringify(pipeline[pipelineIndex].task)}</div>
-            {capturedImage && (
-              <div>
-                <h2>Captured Image</h2>
-                <img src={capturedImage} alt="Captured" />
-              </div>
-            )}
-            <div style={{ position: 'relative'}}>
-              <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0 }} autoPlay playsInline></video>
+          <div>{JSON.stringify(pipeline[pipelineIndex].task)}</div>
+          {capturedImage && (
+            <div>
+              <h2>Captured Image</h2>
+              <img src={capturedImage} alt="Captured" />
             </div>
+          )}
+          <div style={{ position: 'relative' }}>
+            <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0 }} autoPlay playsInline></video>
+            <canvas ref={canvasRef} className="output_canvas" style={{ position: 'absolute', left: 0, top: 0 }}></canvas>
           </div>
+        </div>
+
       </section>
     </div>
   );
