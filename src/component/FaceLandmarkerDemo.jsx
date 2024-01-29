@@ -124,19 +124,19 @@ const FaceLandmarker = () => {
     const newIndex = (pipelineIndex + 1)
 
     // If eyelookinleft value is greater than 0.7 and the current task is 'hadap-kiri', move to the next item in the pipeline
-    if (eyelookinleftValue > 0.7 && currentTask === 'hadap-kiri') {
+    if (eyelookinleftValue > 0.5 && currentTask === 'hadap-kiri') {
       if (newIndex !== pipeline.length) {
         setPipelineIndex(pipelineIndex + 1)
       } else {
         captureImage();
       }
-    } else if (eyelookinrightValue > 0.7 && currentTask === 'hadap-kanan') {
+    } else if (eyelookinrightValue > 0.5 && currentTask === 'hadap-kanan') {
       if (newIndex !== pipeline.length) {
         setPipelineIndex(pipelineIndex + 1)
       } else {
         captureImage();
       }
-    } else if (jawopenValue > 0.7 && currentTask === 'buka-mulut') {
+    } else if (jawopenValue > 0.5 && currentTask === 'buka-mulut') {
       if (newIndex !== pipeline.length) {
         setPipelineIndex(pipelineIndex + 1)
       } else {
