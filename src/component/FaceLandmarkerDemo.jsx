@@ -1,189 +1,187 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import * as vision from '@mediapipe/tasks-vision';
+// FaceLandmarkerDemo.jsx
+import React, { useEffect, useState } from 'react';
+import vision from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3";
 
-const pipeline = [
-  { task: 'hadap-kiri' },
-  { task: 'hadap-kanan' },
-  { task: 'buka-mulut' }
-];
-const FaceLandmarker = () => {
-  const faceLandmarkerRef = useRef(false);
-  const piplieRef = useRef(0);
-
+const FaceLandmarkerDemo = () => {
+  const [faceLandmarker, setFaceLandmarker] = useState(null);
   const [runningMode, setRunningMode] = useState("IMAGE");
   const [webcamRunning, setWebcamRunning] = useState(false);
-  const [videoStream, setVideoStream] = useState(null);
-  // const [results, setResults] = useState(null);
-  const videoRef = useRef(null);
-  const canvasRef = useRef(null);
-  const webcamRunningRef = useRef(false);
-  const videoBlendShapesRef = useRef(null);
-  const videoWidth = 480;
-  const [pipelineIndex, setPipelineIndex] = useState(0);
-  const [capturedImage, setCapturedImage] = useState('');
-
+  const [results, setResults] = useState(null);
 
   useEffect(() => {
-    const createFaceLandmarker = async () => {
+    async function createFaceLandmarker() {
       const filesetResolver = await vision.FilesetResolver.forVisionTasks(
-        process.env.PUBLIC_URL + "/wasm"
+        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
       );
-      const newFaceLandmarker = await vision.FaceLandmarker.createFromOptions(filesetResolver, {
+      const faceLandmarkerInstance = await vision.FaceLandmarker.createFromOptions(filesetResolver, {
         baseOptions: {
-          modelAssetPath: './lib/face_landmarker.task',
+          modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
           delegate: "GPU"
         },
         outputFaceBlendshapes: true,
         runningMode,
         numFaces: 1
       });
-      faceLandmarkerRef.current = newFaceLandmarker;
-    };
+      setFaceLandmarker(faceLandmarkerInstance);
+      document.getElementById("demos").classList.remove("invisible");
+    }
     createFaceLandmarker();
   }, []);
 
-  const enableCam = async () => {
-    if (!faceLandmarkerRef.current) {
+  const handleClick = async (event) => {
+    if (!faceLandmarker) {
+      console.log("Wait for faceLandmarker to load before clicking!");
+      return;
+    }
+
+    if (runningMode === "VIDEO") {
+      setRunningMode("IMAGE");
+      await faceLandmarker.setOptions({ runningMode });
+    }
+
+    const allCanvas = event.target.parentNode.getElementsByClassName("canvas");
+    for (let i = allCanvas.length - 1; i >= 0; i--) {
+      const n = allCanvas[i];
+      n.parentNode.removeChild(n);
+    }
+
+    const faceLandmarkerResult = await faceLandmarker.detect(event.target);
+    const canvas = document.createElement("canvas");
+    canvas.setAttribute("class", "canvas");
+    canvas.setAttribute("width", event.target.naturalWidth + "px");
+    canvas.setAttribute("height", event.target.naturalHeight + "px");
+    canvas.style.left = "0px";
+    canvas.style.top = "0px";
+    canvas.style.width = `${event.target.width}px`;
+    canvas.style.height = `${event.target.height}px`;
+
+    event.target.parentNode.appendChild(canvas);
+    const ctx = canvas.getContext("2d");
+    const drawingUtils = new vision.DrawingUtils(ctx);
+
+    for (const landmarks of faceLandmarkerResult.faceLandmarks) {
+      drawingUtils.drawConnectors(
+        landmarks,
+        vision.FaceLandmarker.FACE_LANDMARKS_TESSELATION,
+        { color: "#C0C0C070", lineWidth: 1 }
+      );
+      // ... (Tambahkan bagian ini untuk landmarks wajah lainnya)
+    }
+
+    drawBlendShapes(document.getElementById("image-blend-shapes"), faceLandmarkerResult.faceBlendshapes);
+  };
+
+  const enableCam = (event) => {
+    if (!faceLandmarker) {
       console.log("Wait! faceLandmarker not loaded yet.");
       return;
     }
 
     setWebcamRunning(!webcamRunning);
-    if (!webcamRunning) {
-      webcamRunningRef.current = true;
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        setVideoStream(stream);
-        videoRef.current.srcObject = stream;
-        videoRef.current.addEventListener("loadeddata", predictWebcam);
-      } catch (error) {
-        console.error("Error accessing webcam:", error);
-      }
-    } else {
-      webcamRunningRef.current = false;
-      videoStream.getTracks().forEach(track => track.stop());
-    }
+
+    const constraints = {
+      video: true
+    };
+
+    navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+      const video = document.getElementById("webcam");
+      video.srcObject = stream;
+      video.addEventListener("loadeddata", predictWebcam);
+    });
   };
 
-  const predictWebcam = useCallback(() => {
-    faceLandmarkerRef.current.setOptions({ runningMode: "VIDEO" }).then(async () => {
-
-      let startTimeMs = performance.now();
-      const newResults = await faceLandmarkerRef.current.detectForVideo(videoRef.current, startTimeMs);
-      if (webcamRunningRef.current) {
-        drawBlendShapesRealTime(newResults);
+  const predictWebcam = async () => {
+    const video = document.getElementById("webcam");
+    const canvasElement = document.getElementById("output_canvas");
+    const canvasCtx = canvasElement.getContext("2d");
+  
+    const radio = video.videoHeight / video.videoWidth;
+    video.style.width = "480px";
+    video.style.height = `${480 * radio}px`;
+    canvasElement.style.width = "480px";
+    canvasElement.style.height = `${480 * radio}px`;
+    canvasElement.width = video.videoWidth;
+    canvasElement.height = video.videoHeight;
+  
+    if (runningMode === "IMAGE") {
+      setRunningMode("VIDEO");
+      await faceLandmarker.setOptions({ runningMode: "VIDEO" });
+    }
+  
+    let startTimeMs = performance.now();
+    if (results && results.faceLandmarks) {
+      for (const landmarks of results.faceLandmarks) {
+        vision.DrawingUtils.drawConnectors(
+          landmarks,
+          vision.FaceLandmarker.FACE_LANDMARKS_TESSELATION,
+          { color: "#C0C0C070", lineWidth: 1 }
+        );
+        // ... (Tambahkan bagian ini untuk landmarks wajah lainnya)
       }
-      // Call this function again to keep predicting when the browser is ready.
-      if (webcamRunningRef.current) {
-        window.requestAnimationFrame(predictWebcam);
-      }
-    });
-  }, []);
+  
+      drawBlendShapes(document.getElementById("video-blend-shapes"), results.faceBlendshapes);
+    }
+  
+    setResults(await faceLandmarker.detectForVideo(video, startTimeMs));
+  
+    if (webcamRunning) {
+      window.requestAnimationFrame(predictWebcam);
+    }
+  };
+  
 
-  const captureImage = useCallback(() => {
-    // Code to capture the image
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = videoRef.current.videoWidth;
-    canvas.height = videoRef.current.videoHeight;
-    ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-
-    // Convert the captured image to a base64 string
-    const imageData = canvas.toDataURL('image/jpeg');
-
-    // Set the captured image in the state
-    setCapturedImage(imageData);
-    alert("success");
-    // enableCam();
-    // console.log(imageData);
-  }, []);
-
-  const drawBlendShapes = useCallback((el, blendShapes) => {
+  const drawBlendShapes = (el, blendShapes) => {
     if (!blendShapes || !blendShapes.length) {
       return;
     }
-    const eyelookinleftValue = blendShapes[0]?.categories.find(
-      (shape) => shape.categoryName === "eyeLookInLeft"
-    )?.score;
 
-    const eyelookinrightValue = blendShapes[0]?.categories.find(
-      (shape) => shape.categoryName === "eyeLookInRight"
-    )?.score;
+    let htmlMaker = "";
+    blendShapes[0].categories.map((shape) => {
+      htmlMaker += `
+        <li class="blend-shapes-item">
+          <span class="blend-shapes-label">${
+            shape.displayName || shape.categoryName
+          }</span>
+          <span class="blend-shapes-value" style="width: calc(${
+            +shape.score * 100
+          }% - 120px)">${(+shape.score).toFixed(4)}</span>
+        </li>
+      `;
+    });
 
-    const jawopenValue = blendShapes[0]?.categories.find(
-      (shape) => shape.categoryName === "jawOpen"
-    )?.score;
-
-    const currentTask = pipeline[piplieRef.current]?.task;
-    const newIndex = piplieRef.current + 1;
-    console.log(eyelookinleftValue, 'left')
-    console.log(eyelookinrightValue, 'right')
-
-    // If eyelookinleft value is greater than 0.7 and the current task is 'hadap-kiri', move to the next item in the pipeline
-    if (eyelookinleftValue > 0.7 && currentTask === 'hadap-kiri') {
-      if (newIndex !== pipeline.length) {
-        setPipelineIndex((val) => {
-          piplieRef.current = val + 1;
-          return val + 1
-        })
-      } else {
-        captureImage();
-      }
-    } else if (eyelookinrightValue > 0.7 && currentTask === 'hadap-kanan') {
-      if (newIndex !== pipeline.length) {
-        setPipelineIndex((val) => {
-          piplieRef.current = val + 1;
-          return val + 1
-        })
-      } else {
-        captureImage();
-      }
-    } else if (jawopenValue > 0.7 && currentTask === 'buka-mulut') {
-      if (newIndex !== pipeline.length) {
-        setPipelineIndex((val) => {
-          piplieRef.current = val + 1;
-          return val + 1
-        })
-      } else {
-        captureImage();
-      }
-    }
-  }, [captureImage]);
-
-  const drawBlendShapesRealTime = useCallback((result) => {
-    drawBlendShapes(videoBlendShapesRef.current, result.faceBlendshapes);
-
-    // Call this function again to keep updating when the browser is ready.
-    if (webcamRunningRef.current) {
-      window.requestAnimationFrame(drawBlendShapesRealTime);
-    }
-  }, [drawBlendShapes]);
-
-
+    el.innerHTML = htmlMaker;
+  };
 
   return (
     <div>
-      <section id="demos">
-        <div id="liveView" className="videoView">
-          <button id="webcamButton" onClick={enableCam} className="mdc-button mdc-button--raised">
-            <span className="mdc-button__label">{webcamRunning ? 'DISABLE WEBCAM' : 'ENABLE WEBCAM'}</span>
-          </button>
-          <div>{JSON.stringify(pipeline[pipelineIndex].task)}</div>
-          {capturedImage && (
-            <div>
-              <h2>Captured Image</h2>
-              <img src={capturedImage} alt="Captured" />
-            </div>
-          )}
-          <div style={{ position: 'relative' }}>
-            <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0 }} autoPlay playsInline></video>
-            <canvas ref={canvasRef} className="output_canvas" style={{ position: 'absolute', left: 0, top: 0 }}></canvas>
-          </div>
+      <h1>Face landmark detection using the MediaPipe FaceLandmarker task</h1>
+      <section id="demos" className="invisible">
+        <h2>Demo: Detecting Images</h2>
+        <p><b>Click on an image below</b> to see the key landmarks of the face.</p>
+
+        <div className="blend-shapes">
+          <ul className="blend-shapes-list" id="image-blend-shapes"></ul>
         </div>
 
+        <h2>Demo: Webcam continuous face landmarks detection</h2>
+        <p>Hold your face in front of your webcam to get real-time face landmarker detection.<br />Click <b>enable webcam</b> below and grant access to the webcam if prompted.</p>
+
+        <div id="liveView" className="videoView">
+          <button id="webcamButton" className="mdc-button mdc-button--raised" onClick={enableCam}>
+            <span className="mdc-button__ripple"></span>
+            <span className="mdc-button__label">{webcamRunning ? "DISABLE PREDICTIONS" : "ENABLE WEBCAM"}</span>
+          </button>
+          <div style={{ position: 'relative' }}>
+            <video id="webcam" style={{ position: 'absolute', left: '0px', top: '0px' }} autoPlay playsInline></video>
+            <canvas className="output_canvas" id="output_canvas" style={{ position: 'absolute', left: '0px', top: '0px' }}></canvas>
+          </div>
+        </div>
+        <div className="blend-shapes">
+          <ul className="blend-shapes-list" id="video-blend-shapes"></ul>
+        </div>
       </section>
     </div>
   );
 };
 
-export default FaceLandmarker;
+export default FaceLandmarkerDemo;
