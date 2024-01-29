@@ -192,7 +192,7 @@ const FaceLandmarker = () => {
         <div id="liveView" className="videoView">
           <img className="bg-image" alt="" src={require('../assets/bg-camera.png')} />
           <div style={{ position: 'relative'}}>
-            <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover'}} autoPlay playsInline></video>
+            <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain'}} autoPlay playsInline></video>
             <div style={{marginTop: '750px'}} className="overlay-text">{(pipeline[pipelineIndex].word)}</div>
           </div>
         </div>
