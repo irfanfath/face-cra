@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import * as vision from '@mediapipe/tasks-vision';
 
-const FaceLandmarkerDemo = () => {
+const FaceLandmarker = () => {
   const [faceLandmarker, setFaceLandmarker] = useState(null);
   const [runningMode, setRunningMode] = useState("IMAGE");
   const [webcamRunning, setWebcamRunning] = useState(false);
@@ -179,9 +179,9 @@ const FaceLandmarkerDemo = () => {
     if (!blendShapes || !blendShapes.length) {
       return;
     }
-
+  
     let eyelookinleftValue, eyelookinrightValue, jawOpenValue;
-
+  
     blendShapes[0]?.categories.forEach((shape) => {
       switch (shape.categoryName) {
         case "eyeLookInLeft":
@@ -197,25 +197,37 @@ const FaceLandmarkerDemo = () => {
           break;
       }
     });
-
+  
     // Menampilkan nilai-nilai khusus
     console.log("eyelookinleft:", eyelookinleftValue);
     console.log("eyelookinright:", eyelookinrightValue);
     console.log("jawOpen:", jawOpenValue);
-
+  
     // Membuat tampilan HTML untuk ditampilkan
-    const htmlMaker = blendShapes[0]?.categories.map((shape) => `
+    const htmlMaker = `
       <li class="blend-shapes-item">
-        <span class="blend-shapes-label">${shape.displayName || shape.categoryName}</span>
-        <span class="blend-shapes-value" style="width: calc(${+shape.score * 100}% - 120px)">
-          ${Math.round(parseFloat(+shape.score) * 100) + "%"}
+        <span class="blend-shapes-label">eyelookinleft</span>
+        <span class="blend-shapes-value" style="width: calc(${+eyelookinleftValue * 100}% - 120px)">
+          ${Math.round(parseFloat(+eyelookinleftValue) * 100) + "%"}
         </span>
       </li>
-    `).join('');
-
+      <li class="blend-shapes-item">
+        <span class="blend-shapes-label">eyelookinright</span>
+        <span class="blend-shapes-value" style="width: calc(${+eyelookinrightValue * 100}% - 120px)">
+          ${Math.round(parseFloat(+eyelookinrightValue) * 100) + "%"}
+        </span>
+      </li>
+      <li class="blend-shapes-item">
+        <span class="blend-shapes-label">jawOpen</span>
+        <span class="blend-shapes-value" style="width: calc(${+jawOpenValue * 100}% - 120px)">
+          ${Math.round(parseFloat(+jawOpenValue) * 100) + "%"}
+        </span>
+      </li>
+    `;
+  
     el.innerHTML = htmlMaker;
   };
-
+  
   return (
     <div>
       <section id="demos" className="invisible">
@@ -241,4 +253,4 @@ const FaceLandmarkerDemo = () => {
   );
 };
 
-export default FaceLandmarkerDemo;
+export default FaceLandmarker;
