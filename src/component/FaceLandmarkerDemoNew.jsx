@@ -2,20 +2,35 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import * as vision from '@mediapipe/tasks-vision';
 
 const pipeline = [
-  { task: 'hadap-kiri' },
-  { task: 'hadap-kanan' },
-  { task: 'buka-mulut' }
+  { task: 'hadap-kiri', queryParamLabel: 'left' },
+  { task: 'hadap-kanan', queryParamLabel: 'right' },
+  { task: 'buka-mulut', queryParamLabel: 'open' },
+  { task: 'selesai', queryParamLabel: 'finish' }
 ];
+const handleApi = async (image) => {
+  const action = await fetch('https://bigvision.id/api/ekyc/check', {
+    body: JSON.stringify({
+      image,
+    }),
+    method: "POST", 
+    mode: "cors",
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+  return action.json();
+}
 const FaceLandmarker = () => {
   const faceLandmarkerRef = useRef(false);
   const piplieRef = useRef(0);
   const isVideo = useRef(false);
-
   const [runningMode, setRunningMode] = useState("IMAGE");
   const [webcamRunning, setWebcamRunning] = useState(false);
-  const [videoStream, setVideoStream] = useState(null);
+  const [message, setMessage] = useState([]);
   // const [results, setResults] = useState(null);
   const videoRef = useRef(null);
+  const cameraRef = useRef(null);
   const canvasRef = useRef(null);
   const webcamRunningRef = useRef(false);
   const videoBlendShapesRef = useRef(null);
@@ -24,6 +39,13 @@ const FaceLandmarker = () => {
 
 
   useEffect(() => {
+    const status = new URL(window.location.href).searchParams.get('status');
+    const piplineStart = (element) => element.queryParamLabel === status;
+    // console.log(piplineStart);
+    let isIndex = (status && status !== '')  ? pipeline.findIndex(piplineStart) : 0;
+    piplieRef.current = isIndex;
+    setPipelineIndex(isIndex)
+    // setPipelineIndex(isIndex)
     const createFaceLandmarker = async () => {
       const filesetResolver = await vision.FilesetResolver.forVisionTasks(
         process.env.PUBLIC_URL + "/wasm"
@@ -55,6 +77,7 @@ const FaceLandmarker = () => {
       try {
         navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
           videoRef.current.srcObject = stream;
+          cameraRef.current = stream;
           videoRef.current.addEventListener("loadeddata", predictWebcam);
         });
       } catch (error) {
@@ -62,7 +85,7 @@ const FaceLandmarker = () => {
       }
     } else {
       webcamRunningRef.current = false;
-      videoRef.current.getTracks().forEach(track => track.stop());
+      cameraRef.current.getTracks().forEach(track => track.stop());
     }
   };
 
@@ -86,8 +109,14 @@ const FaceLandmarker = () => {
       }
     }
   };
-
-  const captureImage = useCallback(() => {
+  const updateQueryParam = (status) => {
+    
+    if (window.history.pushState) {
+      var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?status=' + status;
+      window.history.pushState({path:newurl},'',newurl);
+    }
+  }
+  const storeData = useCallback(() => {
     // Code to capture the image
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
@@ -97,10 +126,12 @@ const FaceLandmarker = () => {
 
     // Convert the captured image to a base64 string
     const imageData = canvas.toDataURL('image/jpeg');
-
+    handleApi(imageData.split(',')[1]).then((res) => {
+      setMessage((val) => [...val, res])
+    });
     // Set the captured image in the state
-    setCapturedImage(imageData);
-    alert("success");
+    // setCapturedImage(imageData);
+    // alert("success");
     // enableCam();
     // console.log(imageData);
   }, []);
@@ -122,34 +153,28 @@ const FaceLandmarker = () => {
     )?.score;
 
     const currentTask = pipeline[piplieRef.current]?.task;
-    const newIndex = piplieRef.current + 1;
-
     // If eyelookinleft value is greater than 0.7 and the current task is 'hadap-kiri', move to the next item in the pipeline
     if (eyelookinleftValue > 0.5 && currentTask === 'hadap-kiri') {
-      if (newIndex !== pipeline.length) {
-        setPipelineIndex((val) => {
-          piplieRef.current = val + 1;
-          return val + 1
-        })
-      }
+      setPipelineIndex((val) => {
+        piplieRef.current = val + 1;
+        return val + 1
+      })
+      storeData();
+      updateQueryParam('right');
     } else if (eyelookinrightValue > 0.5 && currentTask === 'hadap-kanan') {
-      if (newIndex !== pipeline.length) {
-        setPipelineIndex((val) => {
-          piplieRef.current = val + 1;
-          return val + 1
-        })
-      }
+      setPipelineIndex((val) => {
+        piplieRef.current = val + 1;
+        return val + 1
+      })
+      storeData();
+      updateQueryParam('open');
     } else if (jawopenValue > 0.4 && currentTask === 'buka-mulut') {
-      if (newIndex !== pipeline.length) {
-        setPipelineIndex((val) => {
-          piplieRef.current = val + 1;
-          return val + 1
-        })
-      } else {
-        captureImage();
-      }
+      storeData();
+      updateQueryParam('finish');
+      // console.log(cameraRef.current)
+      cameraRef.current.getTracks().forEach(track => track.stop());
     }
-  }, [captureImage]);
+  }, []);
 
   const drawBlendShapesRealTime = useCallback((result) => {
     drawBlendShapes(videoBlendShapesRef.current, result.faceBlendshapes);
@@ -160,8 +185,7 @@ const FaceLandmarker = () => {
     }
   }, [drawBlendShapes]);
 
-
-
+  console.log(message);
   return (
     <div>
       <section id="demos">
@@ -175,7 +199,6 @@ const FaceLandmarker = () => {
           )}
           <div style={{ position: 'relative' }}>
             <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0 }} autoPlay playsInline></video>
-            <canvas ref={canvasRef} className="output_canvas" style={{ position: 'absolute', left: 0, top: 0 }}></canvas>
           </div>
         </div>
 
