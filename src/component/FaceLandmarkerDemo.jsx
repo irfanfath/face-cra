@@ -11,11 +11,11 @@ const FaceLandmarkerDemo = () => {
   useEffect(() => {
     async function createFaceLandmarker() {
       const filesetResolver = await vision.FilesetResolver.forVisionTasks(
-        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
+        process.env.PUBLIC_URL + "/wasm"
       );
       const faceLandmarkerInstance = await vision.FaceLandmarker.createFromOptions(filesetResolver, {
         baseOptions: {
-          modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
+          modelAssetPath: './lib/face_landmarker.task',
           delegate: "GPU"
         },
         outputFaceBlendshapes: true,
