@@ -11,7 +11,7 @@ const FaceLandmarker = () => {
   const canvasRef = useRef(null);
   const webcamRunningRef = useRef(false);
   const videoBlendShapesRef = useRef(null);
-  const videoWidth = 400;
+  const videoWidth = 300;
   const [pipelineIndex, setPipelineIndex] = useState(0);
   const [capturedImage, setCapturedImage] = useState('');
 
