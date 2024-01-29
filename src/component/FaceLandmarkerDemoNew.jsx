@@ -2,17 +2,17 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import * as vision from '@mediapipe/tasks-vision';
 
 const pipeline = [
-  { task: 'hadap-kiri', queryParamLabel: 'left' },
-  { task: 'hadap-kanan', queryParamLabel: 'right' },
-  { task: 'buka-mulut', queryParamLabel: 'open' },
-  { task: 'selesai', queryParamLabel: 'finish' }
+  { task: 'hadap-kiri', queryParamLabel: 'left', word: 'Silahkan Hadap Kiri' },
+  { task: 'hadap-kanan', queryParamLabel: 'right', word: 'Silahkan Hadap Kanan' },
+  { task: 'buka-mulut', queryParamLabel: 'open', word: 'Silahkan Buka Mulut' },
+  { task: 'selesai', queryParamLabel: 'finish', word: 'Selesai' }
 ];
 const handleApi = async (image) => {
   const action = await fetch('https://bigvision.id/api/ekyc/check', {
     body: JSON.stringify({
       image,
     }),
-    method: "POST", 
+    method: "POST",
     mode: "cors",
     cache: "no-cache",
     headers: {
@@ -42,7 +42,7 @@ const FaceLandmarker = () => {
     const status = new URL(window.location.href).searchParams.get('status');
     const piplineStart = (element) => element.queryParamLabel === status;
     // console.log(piplineStart);
-    let isIndex = (status && status !== '')  ? pipeline.findIndex(piplineStart) : 0;
+    let isIndex = (status && status !== '') ? pipeline.findIndex(piplineStart) : 0;
     piplieRef.current = isIndex;
     setPipelineIndex(isIndex)
     // setPipelineIndex(isIndex)
@@ -75,7 +75,7 @@ const FaceLandmarker = () => {
     if (!webcamRunning) {
       webcamRunningRef.current = true;
       try {
-        navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+        navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 300 }, height: { ideal: 500 } } }).then((stream) => {
           videoRef.current.srcObject = stream;
           cameraRef.current = stream;
           videoRef.current.addEventListener("loadeddata", predictWebcam);
@@ -110,10 +110,10 @@ const FaceLandmarker = () => {
     }
   };
   const updateQueryParam = (status) => {
-    
+
     if (window.history.pushState) {
       var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?status=' + status;
-      window.history.pushState({path:newurl},'',newurl);
+      window.history.pushState({ path: newurl }, '', newurl);
     }
   }
   const storeData = useCallback(() => {
@@ -190,18 +190,12 @@ const FaceLandmarker = () => {
     <div>
       <section id="demos">
         <div id="liveView" className="videoView">
-          <div>{JSON.stringify(pipeline[pipelineIndex].task)}</div>
-          {capturedImage && (
-            <div>
-              <h2>Captured Image</h2>
-              <img src={capturedImage} alt="Captured" />
-            </div>
-          )}
-          <div style={{ position: 'relative' }}>
-            <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0 }} autoPlay playsInline></video>
+          <img className="bg-image" alt="" src={require('../assets/bg-camera.png')} />
+          <div style={{ position: 'relative'}}>
+            <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%'}} autoPlay playsInline></video>
+            <div style={{marginTop: '750px'}} className="overlay-text">{(pipeline[pipelineIndex].word)}</div>
           </div>
         </div>
-
       </section>
     </div>
   );
