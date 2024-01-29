@@ -51,7 +51,7 @@ const FaceLandmarker = () => {
       webcamRunningRef.current = true;
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: { ideal: 300 }, height: { ideal: 300 }, frameRate: { ideal: 15 } }
+          video: { width: { ideal: 300 }, height: { ideal: 300 }, frameRate: { ideal: 30 } }
         });
         setVideoStream(stream);
         videoRef.current.srcObject = stream;
@@ -165,8 +165,10 @@ const FaceLandmarker = () => {
   return (
     <div>
       <section id="demos">
-        {webcamRunning ?
           <div>
+            <button id="webcamButton" onClick={enableCam} className="mdc-button mdc-button--raised">
+            <span className="mdc-button__label">{webcamRunning ? 'DISABLE WEBCAM' : 'ENABLE WEBCAM'}</span>
+          </button>
             <div>{JSON.stringify(pipeline[pipelineIndex].task)}</div>
             {capturedImage && (
               <div>
@@ -174,16 +176,10 @@ const FaceLandmarker = () => {
                 <img src={capturedImage} alt="Captured" />
               </div>
             )}
-            <img className="bg-image" alt="" src={require('../assets/bg-camera.png')} />
             <div style={{ position: 'relative'}}>
               <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0 }} autoPlay playsInline></video>
             </div>
           </div>
-          :
-          <button id="webcamButton" onClick={enableCam} className="mdc-button mdc-button--raised">
-            <span className="mdc-button__label">{webcamRunning ? 'DISABLE WEBCAM' : 'ENABLE WEBCAM'}</span>
-          </button>
-        }
       </section>
     </div>
   );
