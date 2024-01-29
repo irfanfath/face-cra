@@ -75,7 +75,7 @@ const FaceLandmarker = () => {
     if (!webcamRunning) {
       webcamRunningRef.current = true;
       try {
-        navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 300 }, height: { ideal: 700 } }}).then((stream) => {
+        navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
           videoRef.current.srcObject = stream;
           cameraRef.current = stream;
           videoRef.current.addEventListener("loadeddata", predictWebcam);
@@ -191,9 +191,20 @@ const FaceLandmarker = () => {
       <section id="demos">
         <div id="liveView" className="videoView">
           <img className="bg-image" alt="" src={require('../assets/bg-camera.png')} />
-          <div style={{ position: 'relative'}}>
-            <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%'}} autoPlay playsInline></video>
-            <div style={{marginTop: '750px'}} className="overlay-text">{(pipeline[pipelineIndex].word)}</div>
+          <div style={{ position: 'relative' }}>
+            <video
+              ref={videoRef}
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                width: '100%',
+                height: '100vh', 
+                objectFit: 'cover', 
+              }}
+              autoPlay
+              playsInline
+            />            <div style={{ marginTop: '700px' }} className="overlay-text">{(pipeline[pipelineIndex].word)}</div>
           </div>
         </div>
       </section>
