@@ -1,5 +1,5 @@
 body {
-  background: #181929;
+  background: transparent;
 }
 .App {
   text-align: center;
@@ -21,13 +21,6 @@ body {
   top: 0;
   left: 0;
   z-index: 1; 
-}
-
-.video-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh; 
 }
 
 .overlay-text {

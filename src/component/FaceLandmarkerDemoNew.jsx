@@ -80,7 +80,7 @@ const FaceLandmarker = () => {
     if (!webcamRunning) {
       webcamRunningRef.current = true;
       try {
-        navigator.mediaDevices.getUserMedia({ video: { width: { ideal: window.innerWidth }, height: { ideal: window.innerHeight } } }).then((stream) => {
+        navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 300 }, height: { ideal: 500 }, aspectRatio: 4/3 } }).then((stream) => {
           videoRef.current.srcObject = stream;
           cameraRef.current = stream;
           videoRef.current.addEventListener("loadeddata", predictWebcam);
@@ -158,22 +158,19 @@ const FaceLandmarker = () => {
         cameraRef.current.getTracks().forEach(track => track.stop());        
       } else {
         setPipelineIndex((val) => {
-          pipeline.current = val + 1;
+          pipelineRef.current = val + 1;
           return val + 1
         })
       }
     }
-    const currentTask = dynamicPipelineRef.current[pipelineRef.current]?.task;
     const pipelineCount = (dynamicPipelineRef.current.length - 1);
-    if(!isLoadingRef.current && pipelineRef.current < pipelineCount){
+    if(!isLoadingRef.current && pipelineRef.current <= pipelineCount){
+      const currentTask = dynamicPipelineRef.current[pipelineRef.current]?.task;
       if (eyelookinleftValue > 0.5 && currentTask === 'hadap-kiri') {
-        console.log('masuk sini 1')
         pipelineFunc(pipelineRef.current,pipelineCount)
       } else if (eyelookinrightValue > 0.5 && currentTask === 'hadap-kanan') {
-        console.log('masuk sini 2')
         pipelineFunc(pipelineRef.current,pipelineCount)
       } else if (jawopenValue > 0.4 && currentTask === 'buka-mulut') {
-        console.log('masuk sini 3')
         pipelineFunc(pipelineRef.current,pipelineCount)
       }
     }
@@ -189,7 +186,6 @@ const FaceLandmarker = () => {
       window.requestAnimationFrame(drawBlendShapesRealTime);
     }
   }, [drawBlendShapes]);
-
   console.log(message);
   return (
     <div>
@@ -197,8 +193,8 @@ const FaceLandmarker = () => {
         <div id="liveView" className="videoView">
           <img className="bg-image" alt="" src={require('../assets/bg-camera.png')} />
           <div style={{ position: 'relative'}}>
-            <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%'}} autoPlay playsInline></video>
-            <div style={{marginTop: '750px'}} className="overlay-text">{(pipeline[pipelineIndex].word)}</div>
+            <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden'}} autoPlay playsInline></video>
+            <div style={{marginTop: 40}} className="overlay-text">{(dynamicPipeline[pipelineIndex].word)}</div>
           </div>
         </div>
       </section>
