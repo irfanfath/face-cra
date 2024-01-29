@@ -13,9 +13,12 @@ export default function TestFace() {
 
     const initializefaceDetector = async () => {
         vision = await FilesetResolver.forVisionTasks(
-            process.env.PUBLIC_URL + "/wasm"
+            // "./node_modules/@mediapipe/tasks-vision/wasm"
+            "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/wasm"
         );
-        faceDetector = await FaceDetector.createFromModelPath(vision, process.env.PUBLIC_URL + '/lib/blaze_face_short_range.tflite');
+        faceDetector = await FaceDetector.createFromModelPath(vision,
+            './lib/blaze_face_short_range.tflite'
+        );
         handleLiveDetection();
     }
 
@@ -92,65 +95,65 @@ export default function TestFace() {
         if (webcamRef.current?.currentTime !== lastVideoTime) {
             lastVideoTime = webcamRef.current!.currentTime;
             const detections = faceDetector.detectForVideo(webcamRef.current!, startTimeMs).detections;
-            displayVideoDetections(detections, webcamRef.current!);
+            displayVideoDetections(detections);
         }
 
         window.requestAnimationFrame(predictWebcam);
     }
 
-    function displayVideoDetections(detections: any[], video: HTMLVideoElement) {
-        // Remove any highlighting from previous frame.
-        const liveView = document.getElementById("liveView") as HTMLDivElement;
+    // function displayVideoDetections(detections: any[], video: HTMLVideoElement) {
+    //     // Remove any highlighting from previous frame.
+    //     const liveView = document.getElementById("liveView") as HTMLDivElement;
 
-        for (let child of children) {
-            liveView.removeChild(child);
-        }
-        children.splice(0);
+    //     for (let child of children) {
+    //         liveView.removeChild(child);
+    //     }
+    //     children.splice(0);
 
-        // Iterate through predictions and draw them to the live view
-        for (let detection of detections) {
-            const p: HTMLParagraphElement = document.createElement("p");
-            console.log(Math.round(parseFloat(detection.categories[0].score) * 100) + "% .")
-            p.innerText = "Confidence: " + Math.round(parseFloat(detection.categories[0].score) * 100) + "% .";
-            p.setAttribute('style',
-                "left: " + (video.offsetWidth - detection.boundingBox.width - detection.boundingBox.originX) + "px;" +
-                "top: " + (detection.boundingBox.originY - 30) + "px;" +
-                "width: " + (detection.boundingBox.width - 10) + "px;"
-            )
-
-            // console.log(detection)
-            const highlighter: HTMLDivElement = document.createElement("div");
-            highlighter.setAttribute("class", "highlighter");
-            highlighter.setAttribute('style',
-                "left: " + (video.offsetWidth - detection.boundingBox.width - detection.boundingBox.originX) + "px;" +
-                "top: " + detection.boundingBox.originY + "px;" +
-                "width: " + (detection.boundingBox.width - 10) + "px;" +
-                "height: " + detection.boundingBox.height + "px;"
-            )
-
-            liveView.appendChild(highlighter);
-            liveView.appendChild(p);
-
-            // Store drawn objects in memory so they are queued to delete at next call
-            children.push(highlighter);
-            children.push(p);
-
-            for (let keypoint of detection.keypoints) {
-                const keypointEl: HTMLSpanElement = document.createElement("span");
-                keypointEl.className = "key-point";
-                keypointEl.style.top = `${keypoint.y * video.offsetHeight - 3}px`;
-                keypointEl.style.left = `${video.offsetWidth - keypoint.x * video.offsetWidth - 3}px`;
-                liveView.appendChild(keypointEl);
-                children.push(keypointEl);
-            }
-        }
-    }
-
-    // function displayVideoDetections(detections: any[]) {
+    //     // Iterate through predictions and draw them to the live view
     //     for (let detection of detections) {
-    //         console.log("Confidence: " + Math.round(parseFloat(detection.categories[0].score) * 100) + "% .");
+    //         const p: HTMLParagraphElement = document.createElement("p");
+    //         console.log(Math.round(parseFloat(detection.categories[0].score) * 100) + "% .")
+    //         p.innerText = "Confidence: " + Math.round(parseFloat(detection.categories[0].score) * 100) + "% .";
+    //         p.setAttribute('style',
+    //             "left: " + (video.offsetWidth - detection.boundingBox.width - detection.boundingBox.originX) + "px;" +
+    //             "top: " + (detection.boundingBox.originY - 30) + "px;" +
+    //             "width: " + (detection.boundingBox.width - 10) + "px;"
+    //         )
+
+    //         // console.log(detection)
+    //         const highlighter: HTMLDivElement = document.createElement("div");
+    //         highlighter.setAttribute("class", "highlighter");
+    //         highlighter.setAttribute('style',
+    //             "left: " + (video.offsetWidth - detection.boundingBox.width - detection.boundingBox.originX) + "px;" +
+    //             "top: " + detection.boundingBox.originY + "px;" +
+    //             "width: " + (detection.boundingBox.width - 10) + "px;" +
+    //             "height: " + detection.boundingBox.height + "px;"
+    //         )
+
+    //         liveView.appendChild(highlighter);
+    //         liveView.appendChild(p);
+
+    //         // Store drawn objects in memory so they are queued to delete at next call
+    //         children.push(highlighter);
+    //         children.push(p);
+
+    //         for (let keypoint of detection.keypoints) {
+    //             const keypointEl: HTMLSpanElement = document.createElement("span");
+    //             keypointEl.className = "key-point";
+    //             keypointEl.style.top = `${keypoint.y * video.offsetHeight - 3}px`;
+    //             keypointEl.style.left = `${video.offsetWidth - keypoint.x * video.offsetWidth - 3}px`;
+    //             liveView.appendChild(keypointEl);
+    //             children.push(keypointEl);
+    //         }
     //     }
     // }
+
+    function displayVideoDetections(detections: any[]) {
+        for (let detection of detections) {
+            console.log("Confidence: " + Math.round(parseFloat(detection.categories[0].score) * 100) + "% .");
+        }
+    }
 
     const capture = async () => {
         const canvas = document.createElement("canvas");
@@ -184,11 +187,10 @@ export default function TestFace() {
                         <img alt="" src={imageCapture} />
                     }
                 </section > */}
-                <section>
-                    {/* <img className="bg-image" alt="" src={require('../assets/bg-camera.png')} /> */}
-                    <div id="liveView" style={{ position: 'relative' }}>
-                        <video ref={webcamRef} id="webcam" autoPlay playsInline></video>
-                        {/* <video style={{ width: '100%', height: '100vh' }} ref={webcamRef} id="webcam" autoPlay playsInline></video> */}
+                <section className="stacked-section">
+                    <img className="bg-image" alt="" src={require('../assets/bg-camera.png')} />
+                    <div id="liveView" className="video-container">
+                        <video style={{ width: '100%', height: '100vh', objectFit: 'cover' }} ref={webcamRef} id="webcam" autoPlay playsInline></video>
                         {/* <video style={{width: '100%', height: '100vh'}} ref={webcamRef} id="webcam" autoPlay playsInline></video> */}
                     </div>
                     {/* <button className="bg-indigo-500 rounded-2xl px-5 py-3 text-white" onClick={capture} title="Click to live face detection">Capture</button>
