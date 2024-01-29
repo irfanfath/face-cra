@@ -11,7 +11,7 @@ const FaceLandmarker = () => {
   const canvasRef = useRef(null);
   const webcamRunningRef = useRef(false);
   const videoBlendShapesRef = useRef(null);
-  const videoWidth = 480;
+  const videoWidth = 400;
   const [pipelineIndex, setPipelineIndex] = useState(0);
   const [capturedImage, setCapturedImage] = useState('');
 
@@ -64,6 +64,14 @@ const FaceLandmarker = () => {
   };
 
   const predictWebcam = async () => {
+    const radio = videoRef.current.videoHeight / videoRef.current.videoWidth;
+    videoRef.current.style.width = videoWidth + "px";
+    videoRef.current.style.height = videoWidth * radio + "px";
+    canvasRef.current.style.width = videoWidth + "px";
+    canvasRef.current.style.height = videoWidth * radio + "px";
+    canvasRef.current.width = videoRef.current.videoWidth;
+    canvasRef.current.height = videoRef.current.videoHeight;
+
     if (runningMode === "IMAGE") {
       setRunningMode("VIDEO");
       await faceLandmarker.setOptions({ runningMode: "VIDEO" });
