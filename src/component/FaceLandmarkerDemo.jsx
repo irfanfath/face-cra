@@ -11,7 +11,7 @@ const FaceLandmarker = () => {
   const canvasRef = useRef(null);
   const webcamRunningRef = useRef(false);
   const videoBlendShapesRef = useRef(null);
-  const videoWidth = 480;
+  const videoWidth = 400;
 
   useEffect(() => {
     const createFaceLandmarker = async () => {
