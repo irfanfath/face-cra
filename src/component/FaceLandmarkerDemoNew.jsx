@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import * as vision from '@mediapipe/tasks-vision';
 
 const pipeline = [
@@ -183,7 +183,15 @@ const FaceLandmarker = () => {
       window.requestAnimationFrame(drawBlendShapesRealTime);
     }
   }, [drawBlendShapes]);
-  console.log(message);
+  const isLastMessage = useMemo(() => {
+    let text = '';
+    message.forEach((d) => {
+      if (!d.success) {
+        text = d.message;
+      }
+    })
+    return text;
+  }, [message]);
   return (
     <div>
       <section id="demos">
@@ -192,9 +200,12 @@ const FaceLandmarker = () => {
           <div style={{ position: 'relative'}}>
             <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden'}} autoPlay playsInline></video>
             <div style={{marginTop: 40}} className="overlay-text">
-              {(message && message[pipelineIndex]) || (dynamicPipeline[pipelineIndex]?.word)}
+              {(dynamicPipeline[pipelineIndex]?.word)}
             </div>
           </div>
+        </div>
+        <div style={{ position: 'fixed', bottom: 30, left: 0, right: 0, zIndex: 1000 }}>
+          <span style={{ color: 'white' }}>{isLastMessage}</span>
         </div>
       </section>
     </div>
