@@ -5,7 +5,7 @@ const pipeline = [
   { task: 'hadap-kiri', word: 'Silahkan Hadap Kiri' },
   { task: 'hadap-kanan', word: 'Silahkan Hadap Kanan' },
   { task: 'buka-mulut', word: 'Silahkan Buka Mulut' },
-  { task: 'selesai', word: 'Selesai' }
+  // { task: 'selesai', word: 'Selesai' }
 ];
 
 const handleApi = async (image) => {
