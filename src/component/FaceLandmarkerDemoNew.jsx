@@ -44,13 +44,13 @@ const FaceLandmarker = () => {
   const videoBlendShapesRef = useRef(null);
   const [pipelineIndex, setPipelineIndex] = useState(0);
   const [capturedImage, setCapturedImage] = useState('');
+  const [instructionMessage, setInstructionMessage] = useState('');
 
-  
   useEffect(() => {
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
     const messagesQueryParam = new URL(window.location.href).searchParams.get('messages');
 
-    const pipelineQueryParamArray = (pipelineQueryParam != null && pipelineQueryParam !== '') ? pipelineQueryParam.split(',').map((value) => pipeline[value]): pipeline ;
+    const pipelineQueryParamArray = (pipelineQueryParam != null && pipelineQueryParam !== '') ? pipelineQueryParam.split(',').map((value) => pipeline[value]) : pipeline;
     setDynamicPipeline(pipelineQueryParamArray);
     const messagesQueryParamArray = (messagesQueryParam != null && messagesQueryParam !== '') ? messagesQueryParam.split(',') : [];
     setMessage(messagesQueryParamArray);
@@ -85,7 +85,7 @@ const FaceLandmarker = () => {
     if (!webcamRunning) {
       webcamRunningRef.current = true;
       try {
-        navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 300 }, height: { ideal: 500 }, aspectRatio: 4/3 } }).then((stream) => {
+        navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 300 }, height: { ideal: 500 }, aspectRatio: 4 / 3 } }).then((stream) => {
           videoRef.current.srcObject = stream;
           cameraRef.current = stream;
           videoRef.current.addEventListener("loadeddata", predictWebcam);
@@ -152,9 +152,9 @@ const FaceLandmarker = () => {
     )?.score;
     const pipelineFunc = (activeIndex, pipelineCount) => {
       storeData();
-      if(activeIndex === pipelineCount) {
-        cameraRef.current.getTracks().forEach(track => track.stop());    
-        window.location.href = 'https://bigvision.id/';   
+      if (activeIndex === pipelineCount) {
+        cameraRef.current.getTracks().forEach(track => track.stop());
+        window.location.href = 'https://bigvision.id/';
       } else {
         setPipelineIndex((val) => {
           pipelineRef.current = val + 1;
@@ -163,21 +163,34 @@ const FaceLandmarker = () => {
       }
     }
     const pipelineCount = (dynamicPipelineRef.current.length - 1);
-    if(!isLoadingRef.current && pipelineRef.current <= pipelineCount){
+    if (!isLoadingRef.current && pipelineRef.current <= pipelineCount) {
       const currentTask = dynamicPipelineRef.current[pipelineRef.current]?.task;
       if (eyelookinleftValue > 0.5 && currentTask === 'hadap-kiri') {
-        pipelineFunc(pipelineRef.current,pipelineCount)
+        pipelineFunc(pipelineRef.current, pipelineCount)
       } else if (eyelookinrightValue > 0.5 && currentTask === 'hadap-kanan') {
-        pipelineFunc(pipelineRef.current,pipelineCount)
+        pipelineFunc(pipelineRef.current, pipelineCount)
       } else if (jawopenValue > 0.4 && currentTask === 'buka-mulut') {
-        pipelineFunc(pipelineRef.current,pipelineCount)
+        pipelineFunc(pipelineRef.current, pipelineCount)
       }
     }
-    
+
+
   }, []);
 
   const drawBlendShapesRealTime = useCallback((result) => {
     drawBlendShapes(videoBlendShapesRef.current, result.faceBlendshapes);
+
+    // console.log(result?.faceLandmarks?.[0]?.[4]?.x)
+    // console.log(result?.faceLandmarks?.[0]?.[4]?.y)
+
+    const faceAreaHorizontal = result?.faceLandmarks?.[0]?.[4]?.x
+    const faceAreaVertikal = result?.faceLandmarks?.[0]?.[4]?.y
+
+    if ((faceAreaHorizontal < 0.4 || faceAreaHorizontal > 0.6) && (faceAreaVertikal < 0.4 || faceAreaVertikal > 0.6)) {
+      setInstructionMessage("Posisikan Wajah Anda di tengah");
+    } else {
+      setInstructionMessage("")
+    }
 
     if (webcamRunningRef.current) {
       window.requestAnimationFrame(drawBlendShapesRealTime);
@@ -192,15 +205,16 @@ const FaceLandmarker = () => {
     })
     return text;
   }, [message]);
+
   return (
     <div>
       <section id="demos">
         <div id="liveView" className="videoView">
           <img className="bg-image" alt="" src={require('../assets/bg-camera.png')} />
-          <div style={{ position: 'relative'}}>
-            <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden'}} autoPlay playsInline></video>
-            <div style={{marginTop: 40}} className="overlay-text">
-              {(dynamicPipeline[pipelineIndex]?.word)}
+          <div style={{ position: 'relative' }}>
+            <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
+            <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
+              <span style={{ color: 'white' }}>{(dynamicPipeline[pipelineIndex]?.word)}<br/><span style={{fontSize: 20}}>{instructionMessage}</span></span>
             </div>
           </div>
         </div>
