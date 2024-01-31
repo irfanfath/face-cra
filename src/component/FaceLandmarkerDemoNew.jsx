@@ -207,6 +207,8 @@ const FaceLandmarker = () => {
     message.forEach((d) => {
       if (!d.success) {
         text = d.message;
+      } else {
+        text = ''
       }
     })
     return text;
