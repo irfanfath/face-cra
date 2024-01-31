@@ -48,12 +48,6 @@ const FaceLandmarker = () => {
   const [instructionMessage, setInstructionMessage] = useState('');
   const [loading, setLoading] = useState(true)
 
-  const Loader = () => {
-    return (
-      <div>Harap Tunggu</div>
-    )
-  }
-
   useEffect(() => {
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
     const messagesQueryParam = new URL(window.location.href).searchParams.get('messages');
@@ -220,7 +214,6 @@ const FaceLandmarker = () => {
 
   return (
     <div>
-      {loading && <Loader />}
       <section id="demos">
         <div id="liveView" className="videoView">
           <img className="bg-image" alt="" src={require('../assets/bg-camera.png')} />
