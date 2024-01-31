@@ -17,12 +17,20 @@ body {
 .bg-image {
   width: 100%;
   max-height: 100vh;
-  max-width: 300px;
   position: absolute;
-  top: 50%;
+  top: 0;
+  left: 0;
+  z-index: 1; 
+}
+
+.overlay-text {
+  position: absolute;
+  font-size: 20px;
+  font-weight: bold;
   left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
+  transform: translateX(-50%);
+  color: white;
+  z-index: 999;
 }
 
 @media (prefers-reduced-motion: no-preference) {
