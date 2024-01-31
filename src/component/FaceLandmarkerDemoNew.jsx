@@ -7,6 +7,7 @@ const pipeline = [
   { task: 'buka-mulut', word: 'Silahkan Buka Mulut' },
   { task: 'selesai', word: 'Selesai' }
 ];
+
 const handleApi = async (image) => {
   try {
     const action = await fetch('https://bigvision.id/api/ekyc/check', {
@@ -45,6 +46,13 @@ const FaceLandmarker = () => {
   const [pipelineIndex, setPipelineIndex] = useState(0);
   const [capturedImage, setCapturedImage] = useState('');
   const [instructionMessage, setInstructionMessage] = useState('');
+  const [loading, setLoading] = useState(true)
+
+  const Loader = () => {
+    return (
+      <div>Harap Tunggu</div>
+    )
+  }
 
   useEffect(() => {
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
@@ -88,7 +96,11 @@ const FaceLandmarker = () => {
         navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 300 }, height: { ideal: 500 }, aspectRatio: 4 / 3 } }).then((stream) => {
           videoRef.current.srcObject = stream;
           cameraRef.current = stream;
-          videoRef.current.addEventListener("loadeddata", predictWebcam);
+          // videoRef.current.addEventListener("loadeddata", predictWebcam);
+          videoRef.current.addEventListener("loadeddata", () => {
+            setLoading(false);
+            predictWebcam();
+          });
         });
       } catch (error) {
         console.error("Error accessing webcam:", error);
@@ -208,20 +220,22 @@ const FaceLandmarker = () => {
 
   return (
     <div>
-      <section id="demos">
-        <div id="liveView" className="videoView">
-          <img className="bg-image" alt="" src={require('../assets/bg-camera.png')} />
-          <div style={{ position: 'relative' }}>
-            <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
-            <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
-              <span style={{ color: 'white' }}>{(dynamicPipeline[pipelineIndex]?.word)}<br/><span style={{fontSize: 20}}>{instructionMessage}</span></span>
+      {loading ? <Loader /> :
+        <section id="demos">
+          <div id="liveView" className="videoView">
+            <img className="bg-image" alt="" src={require('../assets/bg-camera.png')} />
+            <div style={{ position: 'relative' }}>
+              <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
+              <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
+                <span style={{ color: 'white' }}>{(dynamicPipeline[pipelineIndex]?.word)}<br /><span style={{ fontSize: 20 }}>{instructionMessage}</span></span>
+              </div>
             </div>
           </div>
-        </div>
-        <div style={{ position: 'fixed', bottom: 30, left: 0, right: 0, zIndex: 1000 }}>
-          <span style={{ color: 'white' }}>{isLastMessage}</span>
-        </div>
-      </section>
+          <div style={{ position: 'fixed', bottom: 30, left: 0, right: 0, zIndex: 1000 }}>
+            <span style={{ color: 'white' }}>{isLastMessage}</span>
+          </div>
+        </section>
+      }
     </div>
   );
 };
