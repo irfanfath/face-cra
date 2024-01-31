@@ -215,23 +215,21 @@ const FaceLandmarker = () => {
   }, [message]);
 
   return (
-    <div>
+    <div style={{ maxWidth: '300px', margin: 'auto' }}>
       <section id="demos">
-        <div id="liveView" className="videoView">
-          <img className="bg-image" alt="" src={require('../assets/bg-camera.png')} />
-          <div style={{ position: 'relative' }}>
-            <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
-            {loading ?
-              <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
-                <span style={{ color: 'white' }}>Harap Tunggu<br /><span style={{ fontSize: 20 }}>sedang memproses kamera</span></span>
-              </div>
-              :
-              <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
-                <span style={{ color: 'white' }}>{(dynamicPipeline[pipelineIndex]?.word)}<br /><span style={{ fontSize: 20 }}>{instructionMessage}</span></span>
-              </div>
-            }
+        <img className="bg-image" alt="" src={require('../assets/bg-camera.png')} />
+        <div style={{ position: 'relative' }}>
+          <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
+          {loading ?
+            <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
+              <span style={{ color: 'white' }}>Harap Tunggu<br /><span style={{ fontSize: 20 }}>sedang memproses kamera</span></span>
+            </div>
+            :
+            <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
+              <span style={{ color: 'white' }}>{(dynamicPipeline[pipelineIndex]?.word)}<br /><span style={{ fontSize: 20 }}>{instructionMessage}</span></span>
+            </div>
+          }
 
-          </div>
         </div>
         <div style={{ position: 'fixed', bottom: 30, left: 0, right: 0, zIndex: 1000 }}>
           <span style={{ color: 'white' }}>{isLastMessage}</span>
