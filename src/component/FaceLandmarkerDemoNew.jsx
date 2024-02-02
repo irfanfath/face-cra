@@ -133,12 +133,21 @@ const FaceLandmarker = () => {
     ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
     isLoadingRef.current = true;
     const imageData = canvas.toDataURL('image/jpeg');
-    handleApi(imageData.split(',')[1]).then((res) => {
-      isLoadingRef.current = false;
-      setMessage((val) => [...val, res])
-    }).catch(() => {
-      isLoadingRef.current = false;
-    });
+    return new Promise((resolve, reject ) => {
+      handleApi(imageData.split(',')[1]).then((res) => {
+        isLoadingRef.current = false;
+        setMessage((val) => [...val, res])
+        if(res.succes) {
+          resolve();
+        } else {
+          reject();
+        }
+      }).catch(() => {
+        reject();
+
+        isLoadingRef.current = false;
+      });
+    })
   }, []);
 
   const drawBlendShapes = useCallback((el, blendShapes) => {
@@ -157,16 +166,17 @@ const FaceLandmarker = () => {
       (shape) => shape.categoryName === "jawOpen"
     )?.score;
     const pipelineFunc = (activeIndex, pipelineCount) => {
-      storeData();
-      if (activeIndex === pipelineCount) {
-        cameraRef.current.getTracks().forEach(track => track.stop());
-        window.location.href = 'https://bigvision.id/';
-      } else {
-        setPipelineIndex((val) => {
-          pipelineRef.current = val + 1;
-          return val + 1
-        })
-      }
+      storeData().then(() => {
+        if (activeIndex === pipelineCount) {
+          cameraRef.current.getTracks().forEach(track => track.stop());
+          window.location.href = 'https://bigvision.id/';
+        } else {
+          setPipelineIndex((val) => {
+            pipelineRef.current = val + 1;
+            return val + 1
+          })
+        }
+      }).catch(() => {});
     }
     const pipelineCount = (dynamicPipelineRef.current.length - 1);
     if (!isLoadingRef.current && pipelineRef.current <= pipelineCount) {
