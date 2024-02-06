@@ -40,6 +40,7 @@ const FaceLandmarker = () => {
   const videoRef = useRef(null);
   const cameraRef = useRef(null);
   const dynamicPipelineRef = useRef(pipeline);
+  const lastCaptureRef = useRef(null);
   const canvasRef = useRef(null);
   const webcamRunningRef = useRef(false);
   const videoBlendShapesRef = useRef(null);
@@ -134,11 +135,14 @@ const FaceLandmarker = () => {
     isLoadingRef.current = true;
     const imageData = canvas.toDataURL('image/jpeg');
     return new Promise((resolve, reject ) => {
-      handleApi(imageData.split(',')[1]).then((res) => {
+      const base64 = imageData.split(',')[1];
+      handleApi(base64).then((res) => {
         isLoadingRef.current = false;
         setMessage((val) => [...val, res])
         if(res.success) {
-          resolve();
+          resolve({
+            image: base64,
+          });
         } else {
           reject();
         }
@@ -166,10 +170,10 @@ const FaceLandmarker = () => {
       (shape) => shape.categoryName === "jawOpen"
     )?.score;
     const pipelineFunc = (activeIndex, pipelineCount) => {
-      storeData().then(() => {
+      storeData().then((res) => {
         if (activeIndex === pipelineCount) {
           cameraRef.current.getTracks().forEach(track => track.stop());
-          window.location.href = 'https://bigvision.id/';
+          window.location.href = 'https://bigvision.id?image=' + res.image;
         } else {
           setPipelineIndex((val) => {
             pipelineRef.current = val + 1;
