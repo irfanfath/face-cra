@@ -134,12 +134,12 @@ const FaceLandmarker = () => {
     ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
     isLoadingRef.current = true;
     const imageData = canvas.toDataURL('image/jpeg');
-    return new Promise((resolve, reject ) => {
+    return new Promise((resolve, reject) => {
       const base64 = imageData.split(',')[1];
       handleApi(base64).then((res) => {
         isLoadingRef.current = false;
         setMessage((val) => [...val, res])
-        if(res.success) {
+        if (res.success) {
           resolve({
             image: base64,
           });
@@ -158,39 +158,74 @@ const FaceLandmarker = () => {
     if (!blendShapes || !blendShapes.length) {
       return;
     }
-    const eyelookinleftValue = blendShapes[0]?.categories.find(
-      (shape) => shape.categoryName === "eyeLookInLeft"
-    )?.score;
-
-    const eyelookinrightValue = blendShapes[0]?.categories.find(
-      (shape) => shape.categoryName === "eyeLookInRight"
-    )?.score;
-
-    const jawopenValue = blendShapes[0]?.categories.find(
-      (shape) => shape.categoryName === "jawOpen"
-    )?.score;
-    const pipelineFunc = (activeIndex, pipelineCount) => {
-      storeData().then((res) => {
-        if (activeIndex === pipelineCount) {
-          cameraRef.current.getTracks().forEach(track => track.stop());
-          window.location.href = 'https://bigvision.id?image=' + res.image;
-        } else {
-          setPipelineIndex((val) => {
-            pipelineRef.current = val + 1;
-            return val + 1
-          })
-        }
-      }).catch(() => {});
-    }
     const pipelineCount = (dynamicPipelineRef.current.length - 1);
     if (!isLoadingRef.current && pipelineRef.current <= pipelineCount) {
+      const eyelookinleftValue = blendShapes[0]?.categories.find(
+        (shape) => shape.categoryName === "eyeLookInLeft"
+      )?.score;
+
+      const eyelookinrightValue = blendShapes[0]?.categories.find(
+        (shape) => shape.categoryName === "eyeLookInRight"
+      )?.score;
+
+      const jawopenValue = blendShapes[0]?.categories.find(
+        (shape) => shape.categoryName === "jawOpen"
+      )?.score;
+
+      // const pipelineFunc = (activeIndex, pipelineCount) => {
+      //   storeData().then((res) => {
+      //     if (activeIndex === pipelineCount) {
+      //       cameraRef.current.getTracks().forEach(track => track.stop());
+      //       window.location.href = 'https://bigvision.id?image=' + res.image;
+      //     } else {
+      //       setPipelineIndex((val) => {
+      //         pipelineRef.current = val + 1;
+      //         return val + 1
+      //       })
+      //     }
+      //   }).catch(() => { });
+      // }
+      
       const currentTask = dynamicPipelineRef.current[pipelineRef.current]?.task;
       if (eyelookinleftValue > 0.5 && currentTask === 'hadap-kiri') {
-        pipelineFunc(pipelineRef.current, pipelineCount)
+        // pipelineFunc(pipelineRef.current, pipelineCount)
+        storeData().then((res) => {
+          if (pipelineRef.current === pipelineCount) {
+            cameraRef.current.getTracks().forEach(track => track.stop());
+            window.location.href = 'https://bigvision.id?image=' + res.image;
+          } else {
+            setPipelineIndex((val) => {
+              pipelineRef.current = val + 1;
+              return val + 1
+            })
+          }
+        }).catch(() => { });
       } else if (eyelookinrightValue > 0.5 && currentTask === 'hadap-kanan') {
-        pipelineFunc(pipelineRef.current, pipelineCount)
+        // pipelineFunc(pipelineRef.current, pipelineCount)
+        storeData().then((res) => {
+          if (pipelineRef.current === pipelineCount) {
+            cameraRef.current.getTracks().forEach(track => track.stop());
+            window.location.href = 'https://bigvision.id?image=' + res.image;
+          } else {
+            setPipelineIndex((val) => {
+              pipelineRef.current = val + 1;
+              return val + 1
+            })
+          }
+        }).catch(() => { });
       } else if (jawopenValue > 0.4 && currentTask === 'buka-mulut') {
-        pipelineFunc(pipelineRef.current, pipelineCount)
+        // pipelineFunc(pipelineRef.current, pipelineCount)
+        storeData().then((res) => {
+          if (pipelineRef.current === pipelineCount) {
+            cameraRef.current.getTracks().forEach(track => track.stop());
+            window.location.href = 'https://bigvision.id?image=' + res.image;
+          } else {
+            setPipelineIndex((val) => {
+              pipelineRef.current = val + 1;
+              return val + 1
+            })
+          }
+        }).catch(() => { });
       }
     }
 
