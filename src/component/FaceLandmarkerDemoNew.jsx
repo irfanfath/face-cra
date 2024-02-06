@@ -137,7 +137,7 @@ const FaceLandmarker = () => {
       handleApi(imageData.split(',')[1]).then((res) => {
         isLoadingRef.current = false;
         setMessage((val) => [...val, res])
-        if(res.succes) {
+        if(res.success) {
           resolve();
         } else {
           reject();
