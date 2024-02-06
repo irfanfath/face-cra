@@ -7,6 +7,8 @@ const pipeline = [
   { task: 'buka-mulut', word: 'Silahkan Buka Mulut' },
   // { task: 'selesai', word: 'Selesai' }
 ];
+// let controller = new AbortController();
+// let loadingController = false;
 
 const handleApi = async (image) => {
   try {
@@ -40,8 +42,7 @@ const FaceLandmarker = () => {
   const videoRef = useRef(null);
   const cameraRef = useRef(null);
   const dynamicPipelineRef = useRef(pipeline);
-  const lastCaptureRef = useRef(null);
-  const canvasRef = useRef(null);
+  const requestAnimationRef = useRef(null);
   const webcamRunningRef = useRef(false);
   const videoBlendShapesRef = useRef(null);
   const [pipelineIndex, setPipelineIndex] = useState(0);
@@ -112,7 +113,7 @@ const FaceLandmarker = () => {
       faceLandmarkerRef.current.setOptions({ runningMode: "VIDEO" });
       // Call this function again to keep predicting when the browser is ready.
       if (webcamRunningRef.current) {
-        window.requestAnimationFrame(predictWebcam);
+        requestAnimationRef.current = window.requestAnimationFrame(predictWebcam);
       }
     } else {
       let startTimeMs = performance.now();
@@ -121,12 +122,12 @@ const FaceLandmarker = () => {
         drawBlendShapesRealTime(newResults);
       }
       // Call this function again to keep predicting when the browser is ready.
-      if (webcamRunningRef.current) {
-        window.requestAnimationFrame(predictWebcam);
+      if (webcamRunningRef.current && !isLoadingRef.current) {
+        requestAnimationRef.current = window.requestAnimationFrame(predictWebcam);
       }
     }
   };
-  const storeData = useCallback(() => {
+  const storeData = () => {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     canvas.width = videoRef.current.videoWidth;
@@ -137,6 +138,7 @@ const FaceLandmarker = () => {
     return new Promise((resolve, reject) => {
       const base64 = imageData.split(',')[1];
       handleApi(base64).then((res) => {
+        window.requestAnimationFrame(predictWebcam);
         isLoadingRef.current = false;
         setMessage((val) => [...val, res])
         if (res.success) {
@@ -147,12 +149,12 @@ const FaceLandmarker = () => {
           reject();
         }
       }).catch(() => {
-        reject();
-
+        window.requestAnimationFrame(predictWebcam);
         isLoadingRef.current = false;
+        reject();
       });
     })
-  }, []);
+  };
 
   const drawBlendShapes = useCallback((el, blendShapes) => {
     if (!blendShapes || !blendShapes.length) {
@@ -188,7 +190,6 @@ const FaceLandmarker = () => {
       
       const currentTask = dynamicPipelineRef.current[pipelineRef.current]?.task;
       if (eyelookinleftValue > 0.5 && currentTask === 'hadap-kiri') {
-        // pipelineFunc(pipelineRef.current, pipelineCount)
         storeData().then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
@@ -201,7 +202,6 @@ const FaceLandmarker = () => {
           }
         }).catch(() => { });
       } else if (eyelookinrightValue > 0.5 && currentTask === 'hadap-kanan') {
-        // pipelineFunc(pipelineRef.current, pipelineCount)
         storeData().then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
@@ -214,7 +214,6 @@ const FaceLandmarker = () => {
           }
         }).catch(() => { });
       } else if (jawopenValue > 0.4 && currentTask === 'buka-mulut') {
-        // pipelineFunc(pipelineRef.current, pipelineCount)
         storeData().then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
