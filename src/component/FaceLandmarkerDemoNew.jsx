@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import * as vision from '@mediapipe/tasks-vision';
+import frontImage from '../assets/front.svg';
+import leftImage from '../assets/left.svg';
+import rightImage from '../assets/right.svg';
 
 const pipeline = [
   { task: 'hadap-kiri', word: 'Silahkan Hadap Kiri' },
@@ -185,9 +188,9 @@ const FaceLandmarker = () => {
       //     }
       //   }).catch(() => { });
       // }
-      
+
       const currentTask = dynamicPipelineRef.current[pipelineRef.current]?.task;
-      if (eyelookinleftValue > 0.5 && currentTask === 'hadap-kiri') {
+      if (eyelookinleftValue > 0.7 && currentTask === 'hadap-kiri') {
         // pipelineFunc(pipelineRef.current, pipelineCount)
         storeData().then((res) => {
           if (pipelineRef.current === pipelineCount) {
@@ -200,7 +203,7 @@ const FaceLandmarker = () => {
             })
           }
         }).catch(() => { });
-      } else if (eyelookinrightValue > 0.5 && currentTask === 'hadap-kanan') {
+      } else if (eyelookinrightValue > 0.7 && currentTask === 'hadap-kanan') {
         // pipelineFunc(pipelineRef.current, pipelineCount)
         storeData().then((res) => {
           if (pipelineRef.current === pipelineCount) {
@@ -267,23 +270,31 @@ const FaceLandmarker = () => {
     <div>
       <section id="demos">
         <div id="liveView" className="videoView">
-          <img className="bg-image" alt="" src={require('../assets/bg-camera.png')} />
+          {/* <img className="bg-image" alt="" src={require('../assets/bg-camera.png')} /> */}
+          {dynamicPipelineRef.current[pipelineRef.current]?.task === 'hadap-kiri' ?
+            <img className="bg-image" alt="" src={leftImage} />
+            :
+            dynamicPipelineRef.current[pipelineRef.current]?.task === 'hadap-kanan' ? 
+            <img className="bg-image" alt="" src={rightImage} />
+            :
+            <img className="bg-image" alt="" src={frontImage} />
+          }
           <div style={{ position: 'relative' }}>
-            <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
+            <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'none', overflow: 'hidden' }} autoPlay playsInline></video>
             {loading ?
               <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
                 <span style={{ color: 'white' }}>Harap Tunggu<br /><span style={{ fontSize: 20 }}>sedang memproses kamera</span></span>
               </div>
               :
-              <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
+              <div style={{ position: 'fixed', fontSize: 22, fontWeight: 600, top: 50, left: 0, right: 0, width: '100%', zIndex: 1000, backgroundColor: 'red', padding: '10px' }}>
                 <span style={{ color: 'white' }}>{(dynamicPipeline[pipelineIndex]?.word)}<br /><span style={{ fontSize: 20 }}>{instructionMessage}</span></span>
               </div>
             }
 
           </div>
         </div>
-        <div style={{ position: 'fixed', bottom: 30, left: 0, right: 0, zIndex: 1000 }}>
-          <span style={{ color: 'white' }}>{isLastMessage}</span>
+        <div style={{ position: 'fixed', bottom: 70, left: 0, right: 0, zIndex: 1000 }}>
+          <span style={{ color: 'red' }}>{isLastMessage}</span>
         </div>
       </section>
     </div>
