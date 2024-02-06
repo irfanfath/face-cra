@@ -1,8 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import * as vision from '@mediapipe/tasks-vision';
-import frontImage from '../assets/front.svg';
-import leftImage from '../assets/left.svg';
-import rightImage from '../assets/right.svg';
 
 const pipeline = [
   { task: 'hadap-kiri', word: 'Silahkan Hadap Kiri' },
@@ -273,29 +270,30 @@ const FaceLandmarker = () => {
         <div id="liveView" className="videoView">
           {/* <img className="bg-image" alt="" src={require('../assets/bg-camera.png')} /> */}
           {dynamicPipelineRef.current[pipelineRef.current]?.task === 'hadap-kiri' ?
-            <img className="bg-image" alt="" src={leftImage} />
+            // <img className="bg-image" alt="" src={leftImage} />
+            <img className="bg-image" alt="" src={require('../assets/bg-camera1.png')} />
             :
             dynamicPipelineRef.current[pipelineRef.current]?.task === 'hadap-kanan' ?
-              <img className="bg-image" alt="" src={rightImage} />
+              <img className="bg-image" alt="" src={require('../assets/bg-camera2.png')} />
               :
-              <img className="bg-image" alt="" src={frontImage} />
+              <img className="bg-image" alt="" src={require('../assets/bg-camera3.png')} />
           }
           <div style={{ position: 'relative' }}>
             <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'none', overflow: 'hidden' }} autoPlay playsInline></video>
             {loading ?
               <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
-                <span style={{ color: 'red' }}>Harap Tunggu<br /><span style={{ fontSize: 20 }}>sedang memproses kamera</span></span>
+                <span style={{ color: '#000000' }}>Harap Tunggu<br /><span style={{ fontSize: 20 }}>sedang memproses kamera</span></span>
               </div>
               :
               <div style={{ position: 'fixed', fontSize: 22, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
-                <span style={{ color: 'red' }}>{(dynamicPipeline[pipelineIndex]?.word)}<br /><span style={{ fontSize: 20 }}>{instructionMessage}</span></span>
+                <span style={{ color: '#000000' }}>{(dynamicPipeline[pipelineIndex]?.word)}<br /><span style={{ fontSize: 20 }}>{instructionMessage}</span></span>
               </div>
             }
 
           </div>
         </div>
         <div style={{ position: 'fixed', bottom: 70, left: 0, right: 0, zIndex: 1000 }}>
-          <span style={{ color: 'red' }}>{isLastMessage}</span>
+          <span style={{ color: '#000000' }}>{isLastMessage}</span>
         </div>
       </section>
     </div>

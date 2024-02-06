@@ -14,15 +14,15 @@ body {
   position: relative;
 }
 
-/* .bg-image {
+.bg-image {
   width: 100%;
   max-height: 100vh;
   position: absolute;
   top: 0;
   left: 0;
   z-index: 1; 
-} */
-
+}
+/* 
 .bg-image {
   position: absolute;
   left: 50%;
@@ -30,7 +30,7 @@ body {
   transform: translate(-50%, -50%);
   width: 100%;
   z-index: 1;
-}
+} */
 
 .overlay-text {
   position: absolute;
