@@ -185,9 +185,9 @@ const FaceLandmarker = () => {
     const pipelineCount = (dynamicPipelineRef.current.length - 1);
     if (!isLoadingRef.current && pipelineRef.current <= pipelineCount) {
       const currentTask = dynamicPipelineRef.current[pipelineRef.current]?.task;
-      if (eyelookinleftValue > 0.7 && currentTask === 'hadap-kiri') {
+      if (eyelookinleftValue > 0.5 && currentTask === 'hadap-kiri') {
         pipelineFunc(pipelineRef.current, pipelineCount)
-      } else if (eyelookinrightValue > 0.7 && currentTask === 'hadap-kanan') {
+      } else if (eyelookinrightValue > 0.5 && currentTask === 'hadap-kanan') {
         pipelineFunc(pipelineRef.current, pipelineCount)
       } else if (jawopenValue > 0.4 && currentTask === 'buka-mulut') {
         pipelineFunc(pipelineRef.current, pipelineCount)
