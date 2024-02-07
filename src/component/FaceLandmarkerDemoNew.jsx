@@ -189,7 +189,7 @@ const FaceLandmarker = () => {
       // }
 
       const currentTask = dynamicPipelineRef.current[pipelineRef.current]?.task;
-      if (eyelookinleftValue > 0.7 && currentTask === 'hadap-kiri') {
+      if (eyelookinleftValue > 0.5 && currentTask === 'hadap-kiri') {
         // pipelineFunc(pipelineRef.current, pipelineCount)
         storeData().then((res) => {
           if (pipelineRef.current === pipelineCount) {
@@ -202,7 +202,7 @@ const FaceLandmarker = () => {
             })
           }
         }).catch(() => { });
-      } else if (eyelookinrightValue > 0.7 && currentTask === 'hadap-kanan') {
+      } else if (eyelookinrightValue > 0.5 && currentTask === 'hadap-kanan') {
         // pipelineFunc(pipelineRef.current, pipelineCount)
         storeData().then((res) => {
           if (pipelineRef.current === pipelineCount) {
@@ -268,8 +268,8 @@ const FaceLandmarker = () => {
     <div>
       <section id="demos">
         <div id="liveView" className="videoView">
-          {/* <img className="bg-image" alt="" src={require('../assets/bg-camera.png')} /> */}
-          {dynamicPipelineRef.current[pipelineRef.current]?.task === 'hadap-kiri' ?
+          <img className="bg-image" alt="" src={require('../assets/Subtract.png')} />
+          {/* {dynamicPipelineRef.current[pipelineRef.current]?.task === 'hadap-kiri' ?
             // <img className="bg-image" alt="" src={leftImage} />
             <img className="bg-image" alt="" src={require('../assets/bg-camera1.png')} />
             :
@@ -277,23 +277,23 @@ const FaceLandmarker = () => {
               <img className="bg-image" alt="" src={require('../assets/bg-camera2.png')} />
               :
               <img className="bg-image" alt="" src={require('../assets/bg-camera3.png')} />
-          }
+          } */}
           <div style={{ position: 'relative' }}>
             <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
             {loading ?
               <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
-                <span style={{ color: '#000000' }}>Harap Tunggu<br /><span style={{ fontSize: 20 }}>sedang memproses kamera</span></span>
+                <span style={{ color: 'white' }}>Harap Tunggu<br /><span style={{ fontSize: 20 }}>sedang memproses kamera</span></span>
               </div>
               :
               <div style={{ position: 'fixed', fontSize: 22, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
-                <span style={{ color: '#000000' }}>{(dynamicPipeline[pipelineIndex]?.word)}<br /><span style={{ fontSize: 20 }}>{instructionMessage}</span></span>
+                <span style={{ color: 'white' }}>{(dynamicPipeline[pipelineIndex]?.word)}<br /><span style={{ fontSize: 20 }}>{instructionMessage}</span></span>
               </div>
             }
 
           </div>
         </div>
         <div style={{ position: 'fixed', bottom: 70, left: 0, right: 0, zIndex: 1000 }}>
-          <span style={{ color: '#000000' }}>{isLastMessage}</span>
+          <span style={{ color: 'white' }}>{isLastMessage}</span>
         </div>
       </section>
     </div>
