@@ -5,6 +5,8 @@ const pipeline = [
   { task: 'hadap-kiri', word: 'Silahkan Hadap Kiri' },
   { task: 'hadap-kanan', word: 'Silahkan Hadap Kanan' },
   { task: 'buka-mulut', word: 'Silahkan Buka Mulut' },
+  { task: 'kedip-mata', word: 'Silahkan Kedipkan Mata Anda'},
+  { task: 'hadap-depan', word: 'Silahkan menghadap depan' },
   // { task: 'selesai', word: 'Selesai' }
 ];
 // let controller = new AbortController();
@@ -174,6 +176,10 @@ const FaceLandmarker = () => {
         (shape) => shape.categoryName === "jawOpen"
       )?.score;
 
+      const eyeBlink = blendShapes[0]?.categories.find(
+        (shape) => shape.categoryName === "eyeBlinkLeft"
+      )?.score;
+
       // const pipelineFunc = (activeIndex, pipelineCount) => {
       //   storeData().then((res) => {
       //     if (activeIndex === pipelineCount) {
@@ -227,6 +233,30 @@ const FaceLandmarker = () => {
             })
           }
         }).catch(() => { });
+      } else if (eyeBlink > 0.4 && currentTask === 'kedip-mata') {
+        storeData().then((res) => {
+          if (pipelineRef.current === pipelineCount) {
+            cameraRef.current.getTracks().forEach(track => track.stop());
+            window.location.href = 'https://bigvision.id?image=' + res.image;
+          } else {
+            setPipelineIndex((val) => {
+              pipelineRef.current = val + 1;
+              return val + 1
+            })
+          }
+        }).catch(() => { });
+      } else if (jawopenValue < 0.2 && currentTask === 'hadap-depan') {
+        storeData().then((res) => {
+          if (pipelineRef.current === pipelineCount) {
+            cameraRef.current.getTracks().forEach(track => track.stop());
+            window.location.href = 'https://bigvision.id?image=' + res.image;
+          } else {
+            setPipelineIndex((val) => {
+              pipelineRef.current = val + 1;
+              return val + 1
+            })
+          }
+        }).catch(() => { });
       }
     }
 
@@ -269,15 +299,6 @@ const FaceLandmarker = () => {
       <section id="demos">
         <div id="liveView" className="videoView">
           <img className="bg-image" alt="" src={require('../assets/Subtract.png')} />
-          {/* {dynamicPipelineRef.current[pipelineRef.current]?.task === 'hadap-kiri' ?
-            // <img className="bg-image" alt="" src={leftImage} />
-            <img className="bg-image" alt="" src={require('../assets/bg-camera1.png')} />
-            :
-            dynamicPipelineRef.current[pipelineRef.current]?.task === 'hadap-kanan' ?
-              <img className="bg-image" alt="" src={require('../assets/bg-camera2.png')} />
-              :
-              <img className="bg-image" alt="" src={require('../assets/bg-camera3.png')} />
-          } */}
           <div style={{ position: 'relative' }}>
             <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
             {loading ?
