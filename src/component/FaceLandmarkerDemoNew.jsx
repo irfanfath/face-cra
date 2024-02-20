@@ -312,7 +312,7 @@ const FaceLandmarker = () => {
           <img className="bg-image" alt="" src={require('../assets/Subtract.png')} />
           <div style={{ position: 'relative' }}>
             {videoRef &&
-              <video ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
+              <video  poster="noposter" ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
             }
             {loading ?
               <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
