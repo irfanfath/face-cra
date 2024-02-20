@@ -196,7 +196,7 @@ const FaceLandmarker = () => {
       const currentTask = dynamicPipelineRef.current[pipelineRef.current]?.task;
       if (eyelookinleftValue > 0.5 && currentTask === 'hadap-kiri') {
         // pipelineFunc(pipelineRef.current, pipelineCount)
-        
+
         isLoadingRef.current = true;
         storeData().then((res) => {
           if (pipelineRef.current === pipelineCount) {
@@ -239,7 +239,7 @@ const FaceLandmarker = () => {
       } else if (eyeBlink > 0.65 && currentTask === 'kedip-mata') {
         isLoadingRef.current = true;
         setTimeout(() => {
-            
+
           storeData().then((res) => {
             if (pipelineRef.current === pipelineCount) {
               cameraRef.current.getTracks().forEach(track => track.stop());
@@ -255,7 +255,7 @@ const FaceLandmarker = () => {
       } else if (jawopenValue < 0.2 && currentTask === 'hadap-depan') {
         isLoadingRef.current = true;
         setTimeout(() => {
-        
+
           storeData().then((res) => {
             if (pipelineRef.current === pipelineCount) {
               cameraRef.current.getTracks().forEach(track => track.stop());
@@ -320,7 +320,7 @@ const FaceLandmarker = () => {
               </div>
               :
               <div style={{ position: 'fixed', fontSize: 22, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
-                <span style={{ color: 'white' }}> {(message && message[pipelineIndex]) || (dynamicPipeline[pipelineIndex]?.word)}<br /><span style={{ fontSize: 20 }}>{instructionMessage}</span></span>
+                <span style={{ color: 'white' }}>{(message && message[pipelineIndex]) || (dynamicPipeline[pipelineIndex]?.word)}<br /><span style={{ fontSize: 20 }}>{instructionMessage}</span></span>
               </div>
             }
 
