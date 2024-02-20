@@ -236,7 +236,7 @@ const FaceLandmarker = () => {
             })
           }
         }).catch(() => { });
-      } else if (eyeBlink > 0.7 && currentTask === 'kedip-mata') {
+      } else if (eyeBlink > 0.65 && currentTask === 'kedip-mata') {
         isLoadingRef.current = true;
         setTimeout(() => {
             
