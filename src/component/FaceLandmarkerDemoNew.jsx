@@ -135,7 +135,6 @@ const FaceLandmarker = () => {
     canvas.width = videoRef.current.videoWidth;
     canvas.height = videoRef.current.videoHeight;
     ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-    isLoadingRef.current = true;
     const imageData = canvas.toDataURL('image/jpeg');
     return new Promise((resolve, reject) => {
       const base64 = imageData.split(',')[1];
@@ -197,6 +196,8 @@ const FaceLandmarker = () => {
       const currentTask = dynamicPipelineRef.current[pipelineRef.current]?.task;
       if (eyelookinleftValue > 0.5 && currentTask === 'hadap-kiri') {
         // pipelineFunc(pipelineRef.current, pipelineCount)
+        
+        isLoadingRef.current = true;
         storeData().then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
@@ -210,6 +211,7 @@ const FaceLandmarker = () => {
         }).catch(() => { });
       } else if (eyelookinrightValue > 0.5 && currentTask === 'hadap-kanan') {
         // pipelineFunc(pipelineRef.current, pipelineCount)
+        isLoadingRef.current = true;
         storeData().then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
@@ -222,6 +224,7 @@ const FaceLandmarker = () => {
           }
         }).catch(() => { });
       } else if (jawopenValue > 0.4 && currentTask === 'buka-mulut') {
+        isLoadingRef.current = true;
         storeData().then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
@@ -234,29 +237,37 @@ const FaceLandmarker = () => {
           }
         }).catch(() => { });
       } else if (eyeBlink > 0.4 && currentTask === 'kedip-mata') {
-        storeData().then((res) => {
-          if (pipelineRef.current === pipelineCount) {
-            cameraRef.current.getTracks().forEach(track => track.stop());
-            window.location.href = 'https://bigvision.id?image=' + res.image;
-          } else {
-            setPipelineIndex((val) => {
-              pipelineRef.current = val + 1;
-              return val + 1
-            })
-          }
-        }).catch(() => { });
+        isLoadingRef.current = true;
+        setTimeout(() => {
+            
+          storeData().then((res) => {
+            if (pipelineRef.current === pipelineCount) {
+              cameraRef.current.getTracks().forEach(track => track.stop());
+              window.location.href = 'https://bigvision.id?image=' + res.image;
+            } else {
+              setPipelineIndex((val) => {
+                pipelineRef.current = val + 1;
+                return val + 1
+              })
+            }
+          }).catch(() => { });
+        }, 1000)
       } else if (jawopenValue < 0.2 && currentTask === 'hadap-depan') {
-        storeData().then((res) => {
-          if (pipelineRef.current === pipelineCount) {
-            cameraRef.current.getTracks().forEach(track => track.stop());
-            window.location.href = 'https://bigvision.id?image=' + res.image;
-          } else {
-            setPipelineIndex((val) => {
-              pipelineRef.current = val + 1;
-              return val + 1
-            })
-          }
-        }).catch(() => { });
+        isLoadingRef.current = true;
+        setTimeout(() => {
+        
+          storeData().then((res) => {
+            if (pipelineRef.current === pipelineCount) {
+              cameraRef.current.getTracks().forEach(track => track.stop());
+              window.location.href = 'https://bigvision.id?image=' + res.image;
+            } else {
+              setPipelineIndex((val) => {
+                pipelineRef.current = val + 1;
+                return val + 1
+              })
+            }
+          }).catch(() => { });
+        }, 1000)
       }
     }
 
@@ -309,7 +320,7 @@ const FaceLandmarker = () => {
               </div>
               :
               <div style={{ position: 'fixed', fontSize: 22, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
-                <span style={{ color: 'white' }}>{(dynamicPipeline[pipelineIndex]?.word)}<br /><span style={{ fontSize: 20 }}>{instructionMessage}</span></span>
+                <span style={{ color: 'white' }}> {(message && message[pipelineIndex]) || (dynamicPipeline[pipelineIndex]?.word)}<br /><span style={{ fontSize: 20 }}>{instructionMessage}</span></span>
               </div>
             }
 
