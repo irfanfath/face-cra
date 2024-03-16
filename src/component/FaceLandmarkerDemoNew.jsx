@@ -30,6 +30,52 @@ const handleApi = async (image) => {
     return e;
   }
 }
+
+
+const handleLiveness = async (image) => {
+  try {
+    const token = 'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJ2Qk55YVpaU0dBVk5Zek12ZEp2ajhWUkdyOFVGUF9qUnh1dFdFd3Exa0RZIn0.eyJleHAiOi0xODAxNTkxNTU4LCJpYXQiOjE2MjkzNzU3MzgsImp0aSI6IjExYWVjZjJlLTNhNDMtNDEyMy05MDFjLTZkOGI0YjliMWMwOSIsImlzcyI6Imh0dHA6Ly9rZXljbG9hazo4MDgwL2F1dGgvcmVhbG1zL3BpY2Fzby1wbGF0Zm9ybSIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiIwYjU1OTNhMi03MTQ4LTRkNzAtOTBkMC0yMTI3NGQyMjdmMDEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhZG1pbiIsInNlc3Npb25fc3RhdGUiOiI4OTRhYmE4OS1hYTFjLTQwNDEtYmIyZC0yNGQ2YTEwMDQ2NDAiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHBzOi8vZHNjLW9jci51ZGF0YS5pZDo4MDgzIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiYWJkYW5tdWxpYTQgYWJkYW5tdWxpYTQiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJjZDMyN2U3ZS1kNDQ0LTRkZGMtOTMyZS04NGYyYjBhOTMyY2EiLCJnaXZlbl9uYW1lIjoiYWJkYW5tdWxpYTQiLCJmYW1pbHlfbmFtZSI6ImFiZGFubXVsaWE0IiwiZW1haWwiOiJqc3Vwb3lvQGdtYWlsLmNvbSJ9.QHe4RwUVmRhE8DunHEte5DSgJfjfJ7MjDPkQUsOVNFUW600bAmAssAsWSCDNogUw__161jv6LzzBaqa0dTNEhZOmfl3wVoRK7Km1ZJsnSmcm6y2y05WbKKChvdbDTGw8zyCmt5iFOtnZLh1Y-U2M1EvogjzFTLHGf_FPPAHtGRXR9w2GOOiXjvCCLq9Nng7rtVyLj0vRAQG4KThkjm0mCIsWyUBnl96lmicARsedEhOH44DyrlyoXs5rA8BKbgXJuMKAorI36I3U-4C9IbBKfYQeZg0lo5Z-V4tbPVgNYvTnSK9lNCR3Su8polqTt8dFgg8QIIf-kv7bDtJ42EEJrA'    
+    const blob = base64ToBlob(image, 'image/jpeg');
+    const formData = new FormData();
+    formData.append('image', blob, 'image.jpg');
+    
+    const action = await fetch('https://bigvision.id/upload/face-liveness', {
+      body: formData,
+      method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    })
+    const data = await action.json();
+
+    if (data.success) {
+      const results = data.message.results;
+      if (results.includes('fake')) {
+        alert('Alert: Fake detected!');
+      } else {
+        alert('Alert: Real person!');
+      }
+    } else {
+      alert('Alert: Error in liveness check!');
+    }
+    return data;
+  } catch (e) {
+    return e;
+  }
+}
+
+function base64ToBlob(base64, type = 'application/octet-stream') {
+  const binaryString = window.atob(base64);
+  const length = binaryString.length;
+  const bytes = new Uint8Array(length);
+  for (let i = 0; i < length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return new Blob([bytes], { type });
+}
+
 const DEFAULT_VALUE_PIPELINE = [0, 1, 2, 3];
 const FaceLandmarker = () => {
   const faceLandmarkerRef = useRef(false);
@@ -179,19 +225,6 @@ const FaceLandmarker = () => {
         (shape) => shape.categoryName === "eyeBlinkLeft"
       )?.score;
 
-      // const pipelineFunc = (activeIndex, pipelineCount) => {
-      //   storeData().then((res) => {
-      //     if (activeIndex === pipelineCount) {
-      //       cameraRef.current.getTracks().forEach(track => track.stop());
-      //       window.location.href = 'https://bigvision.id?image=' + res.image;
-      //     } else {
-      //       setPipelineIndex((val) => {
-      //         pipelineRef.current = val + 1;
-      //         return val + 1
-      //       })
-      //     }
-      //   }).catch(() => { });
-      // }
 
       const currentTask = dynamicPipelineRef.current[pipelineRef.current]?.task;
       if (eyelookinleftValue > 0.5 && currentTask === 'hadap-kiri') {
@@ -201,7 +234,8 @@ const FaceLandmarker = () => {
         storeData().then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
-            window.location.href = 'https://bigvision.id?image=' + res.image;
+            handleLiveness(res.image)
+            // window.location.href = 'https://bigvision.id?image=' + res.image;
           } else {
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
@@ -215,7 +249,8 @@ const FaceLandmarker = () => {
         storeData().then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
-            window.location.href = 'https://bigvision.id?image=' + res.image;
+            handleLiveness(res.image)
+            // window.location.href = 'https://bigvision.id?image=' + res.image;
           } else {
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
@@ -228,7 +263,8 @@ const FaceLandmarker = () => {
         storeData().then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
-            window.location.href = 'https://bigvision.id?image=' + res.image;
+            handleLiveness(res.image)
+            // window.location.href = 'https://bigvision.id?image=' + res.image;
           } else {
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
@@ -243,7 +279,8 @@ const FaceLandmarker = () => {
           storeData().then((res) => {
             if (pipelineRef.current === pipelineCount) {
               cameraRef.current.getTracks().forEach(track => track.stop());
-              window.location.href = 'https://bigvision.id?image=' + res.image;
+              handleLiveness(res.image)
+              // window.location.href = 'https://bigvision.id?image=' + res.image;
             } else {
               setPipelineIndex((val) => {
                 pipelineRef.current = val + 1;
@@ -259,7 +296,8 @@ const FaceLandmarker = () => {
           storeData().then((res) => {
             if (pipelineRef.current === pipelineCount) {
               cameraRef.current.getTracks().forEach(track => track.stop());
-              window.location.href = 'https://bigvision.id?image=' + res.image;
+              handleLiveness(res.image)
+              // window.location.href = 'https://bigvision.id?image=' + res.image;
             } else {
               setPipelineIndex((val) => {
                 pipelineRef.current = val + 1;
