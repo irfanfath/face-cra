@@ -12,12 +12,10 @@ const pipeline = [
 // let controller = new AbortController();
 // let loadingController = false;
 
-const handleApi = async (image) => {
+const handleApi = async (body) => {
   try {
     const action = await fetch('https://bigvision.id/api/ekyc/check', {
-      body: JSON.stringify({
-        image,
-      }),
+      body: JSON.stringify(body),
       method: "POST",
       mode: "cors",
       cache: "no-cache",
@@ -175,7 +173,7 @@ const FaceLandmarker = () => {
       }
     }
   };
-  const storeData = () => {
+  const storeData = (isLast) => {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     canvas.width = videoRef.current.videoWidth;
@@ -184,7 +182,13 @@ const FaceLandmarker = () => {
     const imageData = canvas.toDataURL('image/jpeg');
     return new Promise((resolve, reject) => {
       const base64 = imageData.split(',')[1];
-      handleApi(base64).then((res) => {
+      const obj = {
+        image: base64
+      };
+      if(isLast){
+        obj.transactionId = "EKYC_" + ((new Date()).getTime()) + "_bmsk";
+      }
+      handleApi(obj).then((res) => {
         window.requestAnimationFrame(predictWebcam);
         isLoadingRef.current = false;
         setMessage((val) => [...val, res])
@@ -231,7 +235,7 @@ const FaceLandmarker = () => {
         // pipelineFunc(pipelineRef.current, pipelineCount)
 
         isLoadingRef.current = true;
-        storeData().then((res) => {
+        storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
             handleLiveness(res.image)
@@ -246,7 +250,7 @@ const FaceLandmarker = () => {
       } else if (eyelookinrightValue > 0.5 && currentTask === 'hadap-kanan') {
         // pipelineFunc(pipelineRef.current, pipelineCount)
         isLoadingRef.current = true;
-        storeData().then((res) => {
+        storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
             handleLiveness(res.image)
@@ -260,7 +264,7 @@ const FaceLandmarker = () => {
         }).catch(() => { });
       } else if (jawopenValue > 0.4 && currentTask === 'buka-mulut') {
         isLoadingRef.current = true;
-        storeData().then((res) => {
+        storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
             handleLiveness(res.image)
@@ -276,7 +280,7 @@ const FaceLandmarker = () => {
         isLoadingRef.current = true;
         setTimeout(() => {
 
-          storeData().then((res) => {
+          storeData(pipelineRef.current === pipelineCount).then((res) => {
             if (pipelineRef.current === pipelineCount) {
               cameraRef.current.getTracks().forEach(track => track.stop());
               handleLiveness(res.image)
@@ -292,8 +296,7 @@ const FaceLandmarker = () => {
       } else if (jawopenValue < 0.2 && currentTask === 'hadap-depan') {
         isLoadingRef.current = true;
         setTimeout(() => {
-
-          storeData().then((res) => {
+          storeData(pipelineRef.current === pipelineCount).then((res) => {
             if (pipelineRef.current === pipelineCount) {
               cameraRef.current.getTracks().forEach(track => track.stop());
               handleLiveness(res.image)
