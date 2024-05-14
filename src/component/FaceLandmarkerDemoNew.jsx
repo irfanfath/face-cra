@@ -186,7 +186,7 @@ const FaceLandmarker = () => {
         image: base64
       };
       if(isLast){
-        obj.transactionId = "EKYC_" + ((new Date()).getTime()) + "_bmsk";
+        obj.transaction_id = "EKYC_" + ((new Date()).getTime()) + "_bmsk";
       }
       handleApi(obj).then((res) => {
         window.requestAnimationFrame(predictWebcam);
