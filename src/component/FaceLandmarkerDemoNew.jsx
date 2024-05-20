@@ -242,7 +242,7 @@ const FaceLandmarker = () => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
             handleLiveness(res.image)
-            // window.location.href = 'https://bigvision.id?image=' + res.image;
+            window.location.href = 'https://bigvision.id?image=' + res.image;
           } else {
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
@@ -257,7 +257,7 @@ const FaceLandmarker = () => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
             handleLiveness(res.image)
-            // window.location.href = 'https://bigvision.id?image=' + res.image;
+            window.location.href = 'https://bigvision.id?image=' + res.image;
           } else {
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
@@ -271,7 +271,7 @@ const FaceLandmarker = () => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
             handleLiveness(res.image)
-            // window.location.href = 'https://bigvision.id?image=' + res.image;
+            window.location.href = 'https://bigvision.id?image=' + res.image;
           } else {
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
@@ -287,7 +287,7 @@ const FaceLandmarker = () => {
             if (pipelineRef.current === pipelineCount) {
               cameraRef.current.getTracks().forEach(track => track.stop());
               handleLiveness(res.image)
-              // window.location.href = 'https://bigvision.id?image=' + res.image;
+              window.location.href = 'https://bigvision.id?image=' + res.image;
             } else {
               setPipelineIndex((val) => {
                 pipelineRef.current = val + 1;
@@ -303,7 +303,7 @@ const FaceLandmarker = () => {
             if (pipelineRef.current === pipelineCount) {
               cameraRef.current.getTracks().forEach(track => track.stop());
               handleLiveness(res.image)
-              // window.location.href = 'https://bigvision.id?image=' + res.image;
+              window.location.href = 'https://bigvision.id?image=' + res.image;
             } else {
               setPipelineIndex((val) => {
                 pipelineRef.current = val + 1;
