@@ -186,7 +186,10 @@ const FaceLandmarker = () => {
         image: base64
       };
       if(isLast){
-        obj.transaction_id = "EKYC_" + ((new Date()).getTime()) + "_bmsk";
+        const idRequest = new URL(window.location.href).searchParams.get('id_request');
+
+        obj.transactionId = "EKYC_" + ((new Date()).getTime()) + "_bmsk";
+        obj.idRequest = idRequest;
       }
       handleApi(obj).then((res) => {
         window.requestAnimationFrame(predictWebcam);
