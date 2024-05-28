@@ -198,9 +198,7 @@ const FaceLandmarker = () => {
         isLoadingRef.current = false;
         setMessage((val) => [...val, res])
         if (res.success) {
-          resolve({
-            image: base64,
-          });
+          resolve(obj);
         } else {
           reject();
         }
@@ -244,7 +242,7 @@ const FaceLandmarker = () => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
             handleLiveness(res.image)
-            window.location.href = 'https://bigvision.id?image=' + res.image;
+            window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
           } else {
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
@@ -259,7 +257,7 @@ const FaceLandmarker = () => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
             handleLiveness(res.image)
-            window.location.href = 'https://bigvision.id?image=' + res.image;
+            window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
           } else {
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
@@ -273,7 +271,7 @@ const FaceLandmarker = () => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
             handleLiveness(res.image)
-            window.location.href = 'https://bigvision.id?image=' + res.image;
+            window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
           } else {
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
@@ -289,7 +287,7 @@ const FaceLandmarker = () => {
             if (pipelineRef.current === pipelineCount) {
               cameraRef.current.getTracks().forEach(track => track.stop());
               handleLiveness(res.image)
-              window.location.href = 'https://bigvision.id?image=' + res.image;
+              window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
             } else {
               setPipelineIndex((val) => {
                 pipelineRef.current = val + 1;
@@ -305,7 +303,7 @@ const FaceLandmarker = () => {
             if (pipelineRef.current === pipelineCount) {
               cameraRef.current.getTracks().forEach(track => track.stop());
               handleLiveness(res.image)
-              window.location.href = 'https://bigvision.id?image=' + res.image;
+              window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
             } else {
               setPipelineIndex((val) => {
                 pipelineRef.current = val + 1;
