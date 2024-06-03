@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
-import * as vision from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3';
+import * as vision from '@mediapipe/tasks-vision';
 
 const pipeline = [
   { task: 'hadap-kiri', word: 'Silahkan Hadap Kiri' },
