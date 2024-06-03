@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
-import * as vision from '@mediapipe/tasks-vision';
+import * as vision from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3';
 
 const pipeline = [
   { task: 'hadap-kiri', word: 'Silahkan Hadap Kiri' },
@@ -84,6 +84,7 @@ const FaceLandmarker = () => {
   const [dynamicPipeline, setDynamicPipeline] = useState(DEFAULT_VALUE_PIPELINE);
   const [webcamRunning, setWebcamRunning] = useState(false);
   const [message, setMessage] = useState([]);
+  const [messageError, setMessageError] = useState([]);
   // const [results, setResults] = useState(null);
   const videoRef = useRef(null);
   const cameraRef = useRef(null);
@@ -96,7 +97,7 @@ const FaceLandmarker = () => {
   const [instructionMessage, setInstructionMessage] = useState('');
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
+  useEffect(() => { 
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
     const messagesQueryParam = new URL(window.location.href).searchParams.get('messages');
 
@@ -108,11 +109,11 @@ const FaceLandmarker = () => {
     dynamicPipelineRef.current = pipelineQueryParamArray;
     const createFaceLandmarker = async () => {
       const filesetResolver = await vision.FilesetResolver.forVisionTasks(
-        process.env.PUBLIC_URL + "/wasm"
+        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
       );
       const newFaceLandmarker = await vision.FaceLandmarker.createFromOptions(filesetResolver, {
         baseOptions: {
-          modelAssetPath: './lib/face_landmarker.task',
+          modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
           delegate: "GPU"
         },
         outputFaceBlendshapes: true,
@@ -121,7 +122,7 @@ const FaceLandmarker = () => {
       });
       faceLandmarkerRef.current = newFaceLandmarker;
       enableCam();
-    };
+    };   
     createFaceLandmarker();
   }, []);
 
@@ -196,7 +197,7 @@ const FaceLandmarker = () => {
       handleApi(obj).then((res) => {
         window.requestAnimationFrame(predictWebcam);
         isLoadingRef.current = false;
-        setMessage((val) => [...val, res])
+        setMessageError((val) => [...val, res])
         if (res.success) {
           resolve(obj);
         } else {
@@ -339,7 +340,7 @@ const FaceLandmarker = () => {
   }, [drawBlendShapes]);
   const isLastMessage = useMemo(() => {
     let text = '';
-    message.forEach((d) => {
+    messageError.forEach((d) => {
       if (!d.success) {
         text = d.message;
       } else {
@@ -364,7 +365,11 @@ const FaceLandmarker = () => {
               </div>
               :
               <div style={{ position: 'fixed', fontSize: 22, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
-                <span style={{ color: 'white' }}>{(message && message[pipelineIndex]) || (dynamicPipeline[pipelineIndex]?.word)}<br /><span style={{ fontSize: 20 }}>{instructionMessage}</span></span>
+                <span style={{ color: 'white' }}>
+                  {(message && message[pipelineIndex]) || (dynamicPipeline[pipelineIndex]?.word)}
+                  <br />
+                  <span style={{ fontSize: 20 }}>{instructionMessage}</span>
+                </span>
               </div>
             }
 
