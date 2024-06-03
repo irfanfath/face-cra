@@ -348,7 +348,7 @@ const FaceLandmarker = () => {
       }
     })
     return text;
-  }, [message]);
+  }, [messageError]);
 
   return (
     <div>
