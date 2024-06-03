@@ -244,10 +244,10 @@ const FaceLandmarker = () => {
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
-            handleLiveness(res.image)
-            .then(() => {
+            // handleLiveness(res.image)
+            // .then(() => {
               window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
-            })
+            // })
           } else {
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
@@ -261,10 +261,10 @@ const FaceLandmarker = () => {
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
-            handleLiveness(res.image)
-            .then(() => {
+            // handleLiveness(res.image)
+            // .then(() => {
               window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
-            })
+            // })
           } else {
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
@@ -277,10 +277,10 @@ const FaceLandmarker = () => {
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
-            handleLiveness(res.image)
-            .then(() => {
+            // handleLiveness(res.image)
+            // .then(() => {
               window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
-            })
+            // })
           } else {
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
@@ -295,10 +295,10 @@ const FaceLandmarker = () => {
           storeData(pipelineRef.current === pipelineCount).then((res) => {
             if (pipelineRef.current === pipelineCount) {
               cameraRef.current.getTracks().forEach(track => track.stop());
-              handleLiveness(res.image)
-              .then(() => {
+              // handleLiveness(res.image)
+              // .then(() => {
                 window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
-              })
+              // })
             } else {
               setPipelineIndex((val) => {
                 pipelineRef.current = val + 1;
@@ -313,10 +313,10 @@ const FaceLandmarker = () => {
           storeData(pipelineRef.current === pipelineCount).then((res) => {
             if (pipelineRef.current === pipelineCount) {
               cameraRef.current.getTracks().forEach(track => track.stop());
-              handleLiveness(res.image)
-              .then(() => {
+              // handleLiveness(res.image)
+              // .then(() => {
                 window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
-              })
+              // })
             } else {
               setPipelineIndex((val) => {
                 pipelineRef.current = val + 1;
