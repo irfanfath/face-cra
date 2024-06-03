@@ -48,16 +48,16 @@ const handleLiveness = async (image) => {
     })
     const data = await action.json();
 
-    if (data.success) {
-      const results = data.message.results;
-      if (results.includes('fake')) {
-        alert('Alert: Fake detected!');
-      } else {
-        alert('Alert: Real person!');
-      }
-    } else {
-      alert('Alert: Error in liveness check!');
-    }
+    // if (data.success) {
+    //   const results = data.message.results;
+    //   if (results.includes('fake')) {
+    //     alert('Alert: Fake detected!');
+    //   } else {
+    //     alert('Alert: Real person!');
+    //   }
+    // } else {
+    //   alert('Alert: Error in liveness check!');
+    // }
     return data;
   } catch (e) {
     return e;
