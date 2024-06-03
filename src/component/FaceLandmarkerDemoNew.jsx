@@ -97,6 +97,7 @@ const FaceLandmarker = () => {
   const [pipelineIndex, setPipelineIndex] = useState(0);
   const [capturedImage, setCapturedImage] = useState('');
   const [instructionMessage, setInstructionMessage] = useState('');
+  const [rejectMessage, setRejectMessage] = useState('');
   const [loading, setLoading] = useState(true)
 
   useEffect(() => { 
@@ -188,28 +189,36 @@ const FaceLandmarker = () => {
       const obj = {
         image: base64
       };
+      
+      const idRequest = new URL(window.location.href).searchParams.get('id_request');
+      const app = new URL(window.location.href).searchParams.get('app');
       if(isLast){
-        const idRequest = new URL(window.location.href).searchParams.get('id_request');
-        const app = new URL(window.location.href).searchParams.get('app');
-
         obj.transactionId = "EKYC_" + ((new Date()).getTime()) + "_bmsk";
         obj.idRequest = idRequest;
         obj.app = app;
       }
-      handleApi(obj).then((res) => {
-        window.requestAnimationFrame(predictWebcam);
-        isLoadingRef.current = false;
-        setMessageError((val) => [...val, res])
-        if (res.success) {
-          resolve(obj);
-        } else {
+      if(idRequest && app && app !== '' && idRequest !== ''){
+        setRejectMessage("")
+        handleApi(obj).then((res) => {
+          window.requestAnimationFrame(predictWebcam);
+          isLoadingRef.current = false;
+          setMessageError((val) => [...val, res])
+          if (res.success) {
+            resolve(obj);
+          } else {
+            setRejectMessage("Something Wrong !!")
+            reject();
+          }
+        }).catch(() => {
+          window.requestAnimationFrame(predictWebcam);
+          isLoadingRef.current = false;
+          setRejectMessage("Something Wrong !!")
           reject();
-        }
-      }).catch(() => {
-        window.requestAnimationFrame(predictWebcam);
-        isLoadingRef.current = false;
+        })
+      } else {
+        setRejectMessage("Parameter Invalid")
         reject();
-      });
+      }
     })
   };
 
@@ -370,6 +379,13 @@ const FaceLandmarker = () => {
           <div style={{ position: 'relative' }}>
             {videoRef &&
               <video  poster="noposter" ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
+            }
+            {
+              rejectMessage !== '' ? (
+                <div style={{ zIndex:"2000", background:"#C40C0C", position: 'absolute', top: 0, left: 0, right: 0, height: 'fit'}}>
+                  <span style={{ color: "white", padding: "10px", display: "block" }}>{rejectMessage}</span>
+                </div>
+              ): null
             }
             {loading ?
               <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
