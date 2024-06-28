@@ -299,22 +299,8 @@ const FaceLandmarker = () => {
         }).catch(() => { });
       } else if (eyeBlink > 0.65 && currentTask === 'kedip-mata') {
         isLoadingRef.current = true;
-        storeData(pipelineRef.current === pipelineCount).then((res) => {
-          if (pipelineRef.current === pipelineCount) {
-            cameraRef.current.getTracks().forEach(track => track.stop());
-            // handleLiveness(res.image)
-            // .then(() => {
-              window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
-            // })
-          } else {
-            setPipelineIndex((val) => {
-              pipelineRef.current = val + 1;
-              return val + 1
-            })
-          }
-        }).catch(() => { });
-      } else if (jawopenValue < 0.2 && currentTask === 'hadap-depan') {
-        isLoadingRef.current = true;
+        setTimeout(() => {
+
           storeData(pipelineRef.current === pipelineCount).then((res) => {
             if (pipelineRef.current === pipelineCount) {
               cameraRef.current.getTracks().forEach(track => track.stop());
@@ -329,6 +315,25 @@ const FaceLandmarker = () => {
               })
             }
           }).catch(() => { });
+        }, 1000)
+      } else if (jawopenValue < 0.2 && currentTask === 'hadap-depan') {
+        isLoadingRef.current = true;
+        setTimeout(() => {
+          storeData(pipelineRef.current === pipelineCount).then((res) => {
+            if (pipelineRef.current === pipelineCount) {
+              cameraRef.current.getTracks().forEach(track => track.stop());
+              // handleLiveness(res.image)
+              // .then(() => {
+                window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
+              // })
+            } else {
+              setPipelineIndex((val) => {
+                pipelineRef.current = val + 1;
+                return val + 1
+              })
+            }
+          }).catch(() => { });
+        }, 1000)
       }
     }
 
