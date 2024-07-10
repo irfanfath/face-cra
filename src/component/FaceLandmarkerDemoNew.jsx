@@ -100,7 +100,6 @@ const FaceLandmarker = () => {
   const [instructionMessage, setInstructionMessage] = useState('');
   const [rejectMessage, setRejectMessage] = useState('');
   const [loading, setLoading] = useState(true)
-  const [cameraFacingMode, setCameraFacingMode] = useState('user');
 
   useEffect(() => {
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
@@ -339,26 +338,31 @@ const FaceLandmarker = () => {
             cameraRef.current.getTracks().forEach(track => track.stop());
             handleLiveness(res.image)
               .then((res) => {
-                alert(res.message.results[0].liveness)
+                console.log(res)
               })
+            window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
           } else {
             handleLiveness(res.image)
               .then((res) => {
                 alert(res.message.results[0].liveness)
-                if (res.message.results[0].liveness === 'real') {
-                  alert(res.message.results[0].liveness)
-                  setPipelineIndex((val) => {
-                    pipelineRef.current = val + 1;
-                    return val + 1
-                  })
-                } else {
-                  alert(res.message.results[0].liveness)
-                }
+
+                // if (res.message.results[0].liveness === 'real') {
+                //   alert('Please Try Again, your face detected as' + res.message.results[0].liveness)
+                //   // setPipelineIndex((val) => {
+                //   //   pipelineRef.current = val + 1;
+                //   //   return val + 1
+                //   // })
+                // } else {
+                //   alert('Please Try Again, your face detected as' + res.message.results[0].liveness)
+                // }
               })
+
           }
         }).catch(() => { });
       }
     }
+
+
   }, []);
 
   const drawBlendShapesRealTime = useCallback((result) => {
@@ -444,32 +448,6 @@ const FaceLandmarker = () => {
     handleOCR();
   };
 
-  useEffect(() => {
-    initializeCamera();
-  }, [cameraFacingMode]);
-
-  const initializeCamera = async () => {
-    try {
-      const constraints = {
-        video: {
-          facingMode: cameraFacingMode,
-          mirror: false
-        }
-      };
-
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      videoRef.current.srcObject = stream;
-    } catch (error) {
-      console.error('Error accessing the camera:', error);
-    }
-  };
-
-  const switchCameraFacingMode = () => {
-    setCameraFacingMode(prevMode =>
-      prevMode === 'user' ? 'environment' : 'user'
-    );
-  };
-
   return (
     <div>
       <section id="demos">
@@ -511,10 +489,9 @@ const FaceLandmarker = () => {
             </div>
           )} */}
           {(dynamicPipeline[pipelineIndex]?.task) === 'ktp-extract' &&
-            <div>
-              <button onClick={handleCapture}>Capture</button>
-              <button onClick={switchCameraFacingMode}>Switch Camera</button>
-            </div>
+          <div>
+            <button onClick={handleCapture}>Capture</button>
+          </div>
           }
           <span style={{ color: 'white' }}>{isLastMessage}</span>
         </div>
