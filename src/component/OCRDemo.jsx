@@ -13,6 +13,7 @@ export default function WebcamCapture() {
     facingMode: 'environment',
     width: 270,
     height: 480,
+    aspectRatio: 16 / 9,
     // width: { min: 300 },
     // height: { min: 500 },
   };
