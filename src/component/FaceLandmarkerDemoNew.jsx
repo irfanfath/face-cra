@@ -129,7 +129,7 @@ const FaceLandmarker = () => {
       enableCam();
     };
     createFaceLandmarker();
-  }, []);
+  }, [camType]);
 
   const enableCam = () => {
     if (!faceLandmarkerRef.current) {
