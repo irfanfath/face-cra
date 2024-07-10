@@ -132,7 +132,7 @@ const FaceLandmarker = () => {
       enableCam();
     };
     createFaceLandmarker();
-  }, [facingMode]);
+  }, []);
 
   const enableCam = () => {
     if (!faceLandmarkerRef.current) {
