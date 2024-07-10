@@ -2,32 +2,29 @@ import { useEffect, useMemo, useState } from 'react';
 import './App.css';
 import FaceLandmarkerNew from './component/FaceLandmarkerDemoNew';
 import OCRDemo from './component/OCRDemo';
+import SuccessPage from './component/SuccessPage';
 
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const location = useMemo(() => {
-    const page = new URL(window.location.href).searchParams.get('step');
-    return page;
-  }, []);
-
-  const nextStep = () => {
-    const url = new URL(window.location.href);
-    url.searchParams.set('step', 'face-recognition');
-    url.searchParams.set('id_request', 'testing');
-    url.searchParams.set('app', 'b1gv1s10n');
-    window.location.href = url.toString();
-  };
-
   useEffect(() => {
-    if (location) {
-      setCurrentPage(Number(location));
+    const urlParams = new URLSearchParams(window.location.search);
+    const step = urlParams.get('step');
+
+    if (step === 'face-recognition') {
+      setCurrentPage('face-recognition');
+    } else if (step === 'success-page') {
+      setCurrentPage('success-page');
+    } else {
+      setCurrentPage(1);
     }
-  }, [location]);
+  }, []);
 
   return (
     <div className="App">
-      {currentPage === 1 ? <OCRDemo nextStep={nextStep} /> : <FaceLandmarkerNew />}
+      {currentPage === 1 && <OCRDemo />}
+      {currentPage === 'face-recognition' && <FaceLandmarkerNew />}
+      {currentPage === 'success-page' && <SuccessPage />}
     </div>
   );
 }

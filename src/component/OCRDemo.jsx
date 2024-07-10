@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback } from "react";
 import Webcam from "react-webcam";
 import bgImage from '../assets/bg-cover-ocr.svg';
 
-export default function WebcamCapture(props) {
+export default function OCRDemo() {
   const webcamRef = useRef(null);
   const [imageSrc, setImageSrc] = useState(null);
   const [dataOcr, setDataOcr] = useState([]);
@@ -51,6 +51,14 @@ export default function WebcamCapture(props) {
     }
   };
 
+  const nextStep = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('step', 'face-recognition');
+    url.searchParams.set('id_request', 'testing');
+    url.searchParams.set('app', 'b1gv1s10n');
+    window.location.href = url.toString();
+  };
+
   return (
     <div className="webcam-container">
       {result !== true ?
@@ -79,7 +87,7 @@ export default function WebcamCapture(props) {
             <div>Tanggal Lahir : {dataOcr.ttl}</div>
             <br />
             <img src={imageSrc} alt="captured" style={{ width: '100%' }} />
-            <button onClick={props.nextStep}>Lanjutkan</button>
+            <button onClick={nextStep}>Lanjutkan</button>
           </div>
         </div>
       }

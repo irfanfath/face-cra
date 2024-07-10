@@ -85,6 +85,8 @@ const FaceLandmarker = () => {
   const [instructionMessage, setInstructionMessage] = useState('');
   const [rejectMessage, setRejectMessage] = useState('');
   const [loading, setLoading] = useState(true)
+  const [isLiveness, setIsLiveness] = useState(false);
+  const [dataLiveness, setDataLiveness] = useState('');
 
   useEffect(() => {
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
@@ -320,7 +322,9 @@ const FaceLandmarker = () => {
             handleLiveness(res.image)
               .then((res) => {
                 setLoading(true)
-                alert(res.message.results[0].liveness)
+                // alert(res.message.results[0].liveness)
+                setDataLiveness(res.message.results[0].liveness)
+                setIsLiveness(true)
               })
           } else {
             handleLiveness(res.image)
@@ -373,6 +377,12 @@ const FaceLandmarker = () => {
     return text;
   }, [messageError]);
 
+  const successStep = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('step', 'success-page');
+    window.location.href = url.toString();
+  }
+
   return (
     <div>
       <section id="demos">
@@ -402,10 +412,17 @@ const FaceLandmarker = () => {
                 </span>
               </div>
             }
-
           </div>
         </div>
         <div style={{ position: 'fixed', bottom: 70, left: 0, right: 0, zIndex: 1000 }}>
+          {isLiveness &&
+            <div className="modal-content">
+              <div style={{ textAlign: 'left', paddingLeft: '20px', marginBottom: '20px' }}>
+                <div>Hasil deteksi wajah : {dataLiveness} Face!</div>
+              </div>
+              <button onClick={successStep}>Next Step</button>
+            </div>
+          }
           <span style={{ color: 'white' }}>{isLastMessage}</span>
         </div>
 
