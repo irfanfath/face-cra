@@ -101,6 +101,8 @@ const FaceLandmarker = () => {
   const [rejectMessage, setRejectMessage] = useState('');
   const [loading, setLoading] = useState(true)
   const [camType, setCamType] = useState('user');
+  const [isKTP, setIsKTP] = useState(false);
+  const [dataOcr, SetDataOcr] = useState([]);
 
   useEffect(() => {
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
@@ -144,8 +146,8 @@ const FaceLandmarker = () => {
         navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: 'user',
-            width: { min: 300 }, 
-            height: { min: 500 }, 
+            width: { min: 300 },
+            height: { min: 500 },
             aspectRatio: 16 / 9,
             mirror: false
           }
@@ -449,18 +451,23 @@ const FaceLandmarker = () => {
         //   'NIK: ' + data.message.results.nik + '\n' +
         //   'Tanggal Lahir: ' + data.message.results.ttl
         // );
+        SetDataOcr(data.message.results)
+        setIsKTP(true)
         setLoading(false);
-        setPipelineIndex((val) => {
-          pipelineRef.current = val + 1;
-          return val + 1
-        })
       } catch (error) {
         console.error('Error sending image:', error);
       }
     };
-
     handleOCR();
   };
+
+  const nextStep = () => {
+    setPipelineIndex((val) => {
+      pipelineRef.current = val + 1;
+      return val + 1
+    })
+    setIsKTP(false);
+  }
 
   return (
     <div>
@@ -502,13 +509,24 @@ const FaceLandmarker = () => {
               <img src={capturedImage} alt="Captured" style={{ maxWidth: 200, maxHeight: 200 }} />
             </div>
           )} */}
-          {(dynamicPipeline[pipelineIndex]?.task) === 'ktp-extract' &&
+          {isKTP &&
+            <div className="modal-content">
+              <div style={{ textAlign: 'left', paddingLeft: '20px', marginBottom: '20px' }}>
+                <div>Nama : {dataOcr.nama}</div>
+                <div>NIK : {dataOcr.nik}</div>
+                <div>Tanggal Lahir : {dataOcr.ttl}</div>
+              </div>
+              <button onClick={nextStep}>Next Step</button>
+            </div>
+          }
+          {(dynamicPipeline[pipelineIndex]?.task) === 'ktp-extract' && isKTP === false &&
             <div>
               <button disabled={loading} onClick={handleCapture}>Capture</button>
             </div>
           }
           <span style={{ color: 'white' }}>{isLastMessage}</span>
         </div>
+
       </section>
     </div>
   );

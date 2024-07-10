@@ -62,3 +62,16 @@ video {
   -webkit-transform: scaleX(-1);
   -moz-transform: scaleX(-1);
 }
+
+/* Style the modal content */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* Centered horizontally and 15% from the top vertically */
+  padding: 10px;
+  border: 1px solid #888;
+  width: 80%; /* Set the width of the modal */
+  max-width: 600px; /* Maximum width of the modal */
+  text-align: center;
+  position: relative; /* Relative positioning for close button */
+  border-radius: 20px;
+}
