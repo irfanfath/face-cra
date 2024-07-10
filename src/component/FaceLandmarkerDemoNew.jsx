@@ -498,7 +498,6 @@ const FaceLandmarker = () => {
                 </span>
               </div>
             }
-
           </div>
         </div>
         <div style={{ position: 'fixed', bottom: 70, left: 0, right: 0, zIndex: 1000 }}>
