@@ -11,10 +11,10 @@ function App() {
   }, [])
   return (
     <div className="App">
-      {/* {
+      {
         location === "1" ? <FaceLandmarker /> : <FaceLandmarkerNew />
-      } */}
-      <OCRDemo />
+      }
+      {/* <OCRDemo /> */}
       
     </div>
   );

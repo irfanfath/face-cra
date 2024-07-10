@@ -144,7 +144,7 @@ const FaceLandmarker = () => {
       try {
         navigator.mediaDevices.getUserMedia({
           video: {
-            facingMode: 'user',
+            facingMode: 'environment',
             width: { min: 300 },
             height: { min: 500 },
             aspectRatio: 16 / 9,
