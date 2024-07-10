@@ -485,7 +485,7 @@ const FaceLandmarker = () => {
           }
           <div style={{ position: 'relative' }}>
             {videoRef &&
-              <video poster="noposter" ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden', transform: facingMode === 'user' ? 'scaleX(-1)' : 'none' }} autoPlay playsInline></video>
+              <video poster="noposter" ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
             }
             {
               rejectMessage !== '' ? (
