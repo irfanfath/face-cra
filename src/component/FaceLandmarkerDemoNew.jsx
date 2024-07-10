@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import * as vision from '@mediapipe/tasks-vision';
 
 const pipeline = [
-  { task: 'ktp-extract', word: 'Silahkan Tunjukan KTP Anda' },
   { task: 'hadap-kiri', word: 'Silahkan Hadap Kiri' },
   { task: 'hadap-kanan', word: 'Silahkan Hadap Kanan' },
   { task: 'buka-mulut', word: 'Silahkan Buka Mulut' },
@@ -11,8 +10,6 @@ const pipeline = [
   { task: 'face-liveness', word: 'Silahkan Lihat Kamera' },
   // { task: 'selesai', word: 'Selesai' }
 ];
-// let controller = new AbortController();
-// let loadingController = false;
 
 const handleApi = async (body) => {
   try {
@@ -49,17 +46,6 @@ const handleLiveness = (image) => {
         },
       })
       const data = await action.json();
-
-      // if (data.success) {
-      //   const results = data.message.results;
-      //   if (results.includes('fake')) {
-      //     alert('Alert: Fake detected!');
-      //   } else {
-      //     alert('Alert: Real person!');
-      //   }
-      // } else {
-      //   alert('Alert: Error in liveness check!');
-      // }
       return resolve(data)
     } catch (e) {
       return reject(e)
@@ -96,12 +82,9 @@ const FaceLandmarker = () => {
   const webcamRunningRef = useRef(false);
   const videoBlendShapesRef = useRef(null);
   const [pipelineIndex, setPipelineIndex] = useState(0);
-  const [capturedImage, setCapturedImage] = useState('');
   const [instructionMessage, setInstructionMessage] = useState('');
   const [rejectMessage, setRejectMessage] = useState('');
   const [loading, setLoading] = useState(true)
-  const [isKTP, setIsKTP] = useState(false);
-  const [dataOcr, SetDataOcr] = useState([]);
 
   useEffect(() => {
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
@@ -144,7 +127,7 @@ const FaceLandmarker = () => {
       try {
         navigator.mediaDevices.getUserMedia({
           video: {
-            facingMode: 'environment',
+            facingMode: 'user',
             width: { min: 300 },
             height: { min: 500 },
             aspectRatio: 16 / 9,
@@ -232,8 +215,6 @@ const FaceLandmarker = () => {
     })
   };
 
-
-
   const drawBlendShapes = useCallback((el, blendShapes) => {
     if (!blendShapes || !blendShapes.length) {
       return;
@@ -261,12 +242,9 @@ const FaceLandmarker = () => {
         isLoadingRef.current = true;
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
-            // cameraRef.current.getTracks().forEach(track => track.stop());
+            cameraRef.current.getTracks().forEach(track => track.stop());
             alert('Thankyou for using our service')
-            // handleLiveness(res.image)
-            // .then(() => {
             // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
-            // })
           } else {
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
@@ -278,12 +256,9 @@ const FaceLandmarker = () => {
         isLoadingRef.current = true;
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
-            // cameraRef.current.getTracks().forEach(track => track.stop());
+            cameraRef.current.getTracks().forEach(track => track.stop());
             alert('Thankyou for using our service')
-            // handleLiveness(res.image)
-            // .then(() => {
             // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
-            // })
           } else {
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
@@ -295,12 +270,9 @@ const FaceLandmarker = () => {
         isLoadingRef.current = true;
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
-            // cameraRef.current.getTracks().forEach(track => track.stop());
+            cameraRef.current.getTracks().forEach(track => track.stop());
             alert('Thankyou for using our service')
-            // handleLiveness(res.image)
-            // .then(() => {
             // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
-            // })
           } else {
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
@@ -313,12 +285,9 @@ const FaceLandmarker = () => {
         setTimeout(() => {
           storeData(pipelineRef.current === pipelineCount).then((res) => {
             if (pipelineRef.current === pipelineCount) {
-              // cameraRef.current.getTracks().forEach(track => track.stop());
+              cameraRef.current.getTracks().forEach(track => track.stop());
               alert('Thankyou for using our service')
-              // handleLiveness(res.image)
-              // .then(() => {
               // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
-              // })
             } else {
               setPipelineIndex((val) => {
                 pipelineRef.current = val + 1;
@@ -332,12 +301,9 @@ const FaceLandmarker = () => {
         setTimeout(() => {
           storeData(pipelineRef.current === pipelineCount).then((res) => {
             if (pipelineRef.current === pipelineCount) {
-              // cameraRef.current.getTracks().forEach(track => track.stop());
+              cameraRef.current.getTracks().forEach(track => track.stop());
               alert('Thankyou for using our service')
-              // handleLiveness(res.image)
-              // .then(() => {
               // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
-              // })
             } else {
               setPipelineIndex((val) => {
                 pipelineRef.current = val + 1;
@@ -382,9 +348,6 @@ const FaceLandmarker = () => {
   const drawBlendShapesRealTime = useCallback((result) => {
     drawBlendShapes(videoBlendShapesRef.current, result.faceBlendshapes);
 
-    // console.log(result?.faceLandmarks?.[0]?.[4]?.x)
-    // console.log(result?.faceLandmarks?.[0]?.[4]?.y)
-
     const faceAreaHorizontal = result?.faceLandmarks?.[0]?.[4]?.x
     const faceAreaVertikal = result?.faceLandmarks?.[0]?.[4]?.y
 
@@ -410,71 +373,11 @@ const FaceLandmarker = () => {
     return text;
   }, [messageError]);
 
-  const handleCapture = async () => {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-
-    canvas.width = videoRef.current.videoWidth;
-    canvas.height = videoRef.current.videoHeight;
-
-    ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-
-    const imageData = canvas.toDataURL('image/jpeg');
-    const base64Response = await fetch(imageData);
-    const blob = await base64Response.blob();
-
-    const file = new File([blob], 'captured_image.jpeg', { type: 'image/jpeg' });
-
-    setCapturedImage(imageData);
-
-    const handleOCR = async () => {
-      try {
-        const token = 'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJ2Qk55YVpaU0dBVk5Zek12ZEp2ajhWUkdyOFVGUF9qUnh1dFdFd3Exa0RZIn0.eyJleHAiOi0xODAxNTkxNTU4LCJpYXQiOjE2MjkzNzU3MzgsImp0aSI6IjExYWVjZjJlLTNhNDMtNDEyMy05MDFjLTZkOGI0YjliMWMwOSIsImlzcyI6Imh0dHA6Ly9rZXljbG9hazo4MDgwL2F1dGgvcmVhbG1zL3BpY2Fzby1wbGF0Zm9ybSIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiIwYjU1OTNhMi03MTQ4LTRkNzAtOTBkMC0yMTI3NGQyMjdmMDEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhZG1pbiIsInNlc3Npb25fc3RhdGUiOiI4OTRhYmE4OS1hYTFjLTQwNDEtYmIyZC0yNGQ2YTEwMDQ2NDAiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHBzOi8vZHNjLW9jci51ZGF0YS5pZDo4MDgzIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiYWJkYW5tdWxpYTQgYWJkYW5tdWxpYTQiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJjZDMyN2U3ZS1kNDQ0LTRkZGMtOTMyZS04NGYyYjBhOTMyY2EiLCJnaXZlbl9uYW1lIjoiYWJkYW5tdWxpYTQiLCJmYW1pbHlfbmFtZSI6ImFiZGFubXVsaWE0IiwiZW1haWwiOiJqc3Vwb3lvQGdtYWlsLmNvbSJ9.QHe4RwUVmRhE8DunHEte5DSgJfjfJ7MjDPkQUsOVNFUW600bAmAssAsWSCDNogUw__161jv6LzzBaqa0dTNEhZOmfl3wVoRK7Km1ZJsnSmcm6y2y05WbKKChvdbDTGw8zyCmt5iFOtnZLh1Y-U2M1EvogjzFTLHGf_FPPAHtGRXR9w2GOOiXjvCCLq9Nng7rtVyLj0vRAQG4KThkjm0mCIsWyUBnl96lmicARsedEhOH44DyrlyoXs5rA8BKbgXJuMKAorI36I3U-4C9IbBKfYQeZg0lo5Z-V4tbPVgNYvTnSK9lNCR3Su8polqTt8dFgg8QIIf-kv7bDtJ42EEJrA';
-        const formData = new FormData();
-        formData.append('image', file);
-
-        const requestOptions = {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
-          body: formData
-        };
-        setLoading(true)
-        const response = await fetch('https://bigvision.id/upload/ktp-extraction  ', requestOptions);
-        const data = await response.json();
-
-        console.log('Response from server:', data);
-        // alert(
-        //   'Nama: ' + data.message.results.nama + '\n' +
-        //   'NIK: ' + data.message.results.nik + '\n' +
-        //   'Tanggal Lahir: ' + data.message.results.ttl
-        // );
-        SetDataOcr(data.message.results)
-        setIsKTP(true)
-        setLoading(false);
-      } catch (error) {
-        console.error('Error sending image:', error);
-      }
-    };
-    handleOCR();
-  };
-
-  const nextStep = () => {
-    setPipelineIndex((val) => {
-      pipelineRef.current = val + 1;
-      return val + 1
-    })
-    setIsKTP(false);
-  }
-
   return (
     <div>
       <section id="demos">
         <div id="liveView" className="videoView">
-          {(dynamicPipeline[pipelineIndex]?.task) !== 'ktp-extract' &&
-            <img className="bg-image" alt="" src={require('../assets/Subtract.png')} />
-          }
+          <img className="bg-image" alt="" src={require('../assets/Subtract.png')} />
           <div style={{ position: 'relative' }}>
             {videoRef &&
               <video className='video-face' poster="noposter" ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
@@ -503,26 +406,6 @@ const FaceLandmarker = () => {
           </div>
         </div>
         <div style={{ position: 'fixed', bottom: 70, left: 0, right: 0, zIndex: 1000 }}>
-          {/* {capturedImage && (
-            <div style={{ position: 'fixed', bottom: 10, left: 10, zIndex: 1000 }}>
-              <img src={capturedImage} alt="Captured" style={{ maxWidth: 200, maxHeight: 200 }} />
-            </div>
-          )} */}
-          {isKTP &&
-            <div className="modal-content">
-              <div style={{ textAlign: 'left', paddingLeft: '20px', marginBottom: '20px' }}>
-                <div>Nama : {dataOcr.nama}</div>
-                <div>NIK : {dataOcr.nik}</div>
-                <div>Tanggal Lahir : {dataOcr.ttl}</div>
-              </div>
-              <button onClick={nextStep}>Next Step</button>
-            </div>
-          }
-          {(dynamicPipeline[pipelineIndex]?.task) === 'ktp-extract' && isKTP === false &&
-            <div>
-              <button disabled={loading} onClick={handleCapture}>Capture</button>
-            </div>
-          }
           <span style={{ color: 'white' }}>{isLastMessage}</span>
         </div>
 
