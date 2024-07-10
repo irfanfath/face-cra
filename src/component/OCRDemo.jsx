@@ -80,7 +80,7 @@ export default function OCRDemo() {
           </div>
         </div>
         :
-        <div className="modal-content">
+        <div style={{marginTop: '20%'}} className="modal-content">
           <div style={{ textAlign: 'left', paddingLeft: '20px', marginBottom: '20px' }}>
             <div>Nama : {dataOcr.nama}</div>
             <div>NIK : {dataOcr.nik}</div>
