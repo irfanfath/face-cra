@@ -100,8 +100,7 @@ const FaceLandmarker = () => {
   const [instructionMessage, setInstructionMessage] = useState('');
   const [rejectMessage, setRejectMessage] = useState('');
   const [loading, setLoading] = useState(true)
-  const [cameraFacingMode, setCameraFacingMode] = useState('user');
-
+  
   useEffect(() => {
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
     const messagesQueryParam = new URL(window.location.href).searchParams.get('messages');
@@ -252,9 +251,10 @@ const FaceLandmarker = () => {
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
+            alert('Thankyou for using our service')
             // handleLiveness(res.image)
             // .then(() => {
-            window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
+            // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
             // })
           } else {
             setPipelineIndex((val) => {
@@ -264,14 +264,14 @@ const FaceLandmarker = () => {
           }
         }).catch(() => { });
       } else if (eyelookinrightValue > 0.5 && currentTask === 'hadap-kanan') {
-        // pipelineFunc(pipelineRef.current, pipelineCount)
         isLoadingRef.current = true;
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
+            alert('Thankyou for using our service')
             // handleLiveness(res.image)
             // .then(() => {
-            window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
+            // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
             // })
           } else {
             setPipelineIndex((val) => {
@@ -285,9 +285,10 @@ const FaceLandmarker = () => {
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
+            alert('Thankyou for using our service')
             // handleLiveness(res.image)
             // .then(() => {
-            window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
+            // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
             // })
           } else {
             setPipelineIndex((val) => {
@@ -302,9 +303,10 @@ const FaceLandmarker = () => {
           storeData(pipelineRef.current === pipelineCount).then((res) => {
             if (pipelineRef.current === pipelineCount) {
               cameraRef.current.getTracks().forEach(track => track.stop());
+              alert('Thankyou for using our service')
               // handleLiveness(res.image)
               // .then(() => {
-              window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
+              // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
               // })
             } else {
               setPipelineIndex((val) => {
@@ -320,9 +322,10 @@ const FaceLandmarker = () => {
           storeData(pipelineRef.current === pipelineCount).then((res) => {
             if (pipelineRef.current === pipelineCount) {
               cameraRef.current.getTracks().forEach(track => track.stop());
+              alert('Thankyou for using our service')
               // handleLiveness(res.image)
               // .then(() => {
-              window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
+              // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
               // })
             } else {
               setPipelineIndex((val) => {
@@ -336,12 +339,13 @@ const FaceLandmarker = () => {
         isLoadingRef.current = true;
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
-            // cameraRef.current.getTracks().forEach(track => track.stop());
+            cameraRef.current.getTracks().forEach(track => track.stop());
             handleLiveness(res.image)
               .then((res) => {
+                setLoading(true)
                 alert(res.message.results[0].liveness)
               })
-          } else {
+            } else {
             handleLiveness(res.image)
               .then((res) => {
                 alert(res.message.results[0].liveness)
@@ -355,6 +359,7 @@ const FaceLandmarker = () => {
                   alert(res.message.results[0].liveness)
                 }
               })
+
           }
         }).catch(() => { });
       }
@@ -424,9 +429,7 @@ const FaceLandmarker = () => {
           },
           body: formData
         };
-
-        setLoading(true);
-
+        setLoading(true)
         const response = await fetch('https://bigvision.id/upload/ktp-extraction  ', requestOptions);
         const data = await response.json();
 
@@ -447,31 +450,6 @@ const FaceLandmarker = () => {
     };
 
     handleOCR();
-  };
-
-  useEffect(() => {
-    initializeCamera();
-  }, [cameraFacingMode]);
-
-  const initializeCamera = async () => {
-    try {
-      const constraints = {
-        video: {
-          facingMode: cameraFacingMode
-        }
-      };
-
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      videoRef.current.srcObject = stream;
-    } catch (error) {
-      console.error('Error accessing the camera:', error);
-    }
-  };
-
-  const switchCameraFacingMode = () => {
-    setCameraFacingMode(prevMode =>
-      prevMode === 'user' ? 'environment' : 'user'
-    );
   };
 
   return (
@@ -515,11 +493,10 @@ const FaceLandmarker = () => {
             </div>
           )} */}
           {(dynamicPipeline[pipelineIndex]?.task) === 'ktp-extract' &&
-            <div>
-              <button disabled={loading} onClick={handleCapture}>Capture</button>
-            </div>
+          <div>
+            <button disabled={loading} onClick={handleCapture}>Capture</button>
+          </div>
           }
-          <button onClick={switchCameraFacingMode}>Switch Camera</button>
           <span style={{ color: 'white' }}>{isLastMessage}</span>
         </div>
       </section>
