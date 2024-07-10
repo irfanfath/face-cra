@@ -60,13 +60,14 @@ export default function WebcamCapture() {
           {/* <img className="bg-image" alt="" src={bgImage} /> */}
           <Webcam
             className="webcam"
+            style={{marginTop: '50%'}}
             audio={false}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
             videoConstraints={videoConstraints}
             screenshotQuality={1}
           />
-          <div style={{ position: 'fixed', bottom: 350, left: 0, right: 0, zIndex: 1000 }}>
+          <div style={{ marginTop: '10px' }}>
             <button
               onClick={capture}
             >
