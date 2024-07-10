@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback } from "react";
 import Webcam from "react-webcam";
+import bgImage from '../assets/bg-cover-ocr.svg';
 
 export default function WebcamCapture() {
   const webcamRef = useRef(null);
@@ -10,8 +11,8 @@ export default function WebcamCapture() {
 
   let videoConstraints = {
     facingMode: 'environment',
-    width: 270,
-    height: 480,
+    width: 400,
+    height: 600,
     // width: { min: 300 },
     // height: { min: 500 },
   };
@@ -54,8 +55,9 @@ export default function WebcamCapture() {
 
   return (
     <div className="webcam-container">
-      {imageSrc === null ?
+      {result !== true ?
         <div className="webcam-img">
+          <img className="bg-image" alt="" src={bgImage} />
           <Webcam
             className="webcam"
             audio={false}
@@ -64,12 +66,13 @@ export default function WebcamCapture() {
             videoConstraints={videoConstraints}
             screenshotQuality={1}
           />
-          <button
-            style={{ position: 'absolute' }}
-            onClick={capture}
-          >
-            Capture
-          </button>
+          <div style={{ position: 'fixed', bottom: 350, left: 0, right: 0, zIndex: 1000 }}>
+            <button
+              onClick={capture}
+            >
+              Capture
+            </button>
+          </div>
         </div>
         :
         <div className="modal-content">
