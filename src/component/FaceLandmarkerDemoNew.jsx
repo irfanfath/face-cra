@@ -129,7 +129,7 @@ const FaceLandmarker = () => {
       enableCam();
     };
     createFaceLandmarker();
-  }, [camType]);
+  }, []);
 
   const enableCam = () => {
     if (!faceLandmarkerRef.current) {
@@ -143,9 +143,9 @@ const FaceLandmarker = () => {
       try {
         navigator.mediaDevices.getUserMedia({
           video: {
-            facingMode: camType,
-            width: { min: 300 },
-            height: { min: 500 },
+            facingMode: 'environment',
+            width: { min: 300 }, 
+            height: { min: 500 }, 
             aspectRatio: 16 / 9,
             mirror: false
           }
@@ -230,6 +230,8 @@ const FaceLandmarker = () => {
       }
     })
   };
+
+
 
   const drawBlendShapes = useCallback((el, blendShapes) => {
     if (!blendShapes || !blendShapes.length) {
@@ -373,6 +375,7 @@ const FaceLandmarker = () => {
       }
     }
 
+
   }, []);
 
   const drawBlendShapesRealTime = useCallback((result) => {
@@ -459,13 +462,6 @@ const FaceLandmarker = () => {
     handleOCR();
   };
 
-  const switchCameraFacingMode = () => {
-    setCamType(prevMode =>
-      prevMode === 'user' ? 'environment' : 'user'
-    );
-  };
-
-
   return (
     <div>
       <section id="demos">
@@ -497,6 +493,7 @@ const FaceLandmarker = () => {
                 </span>
               </div>
             }
+
           </div>
         </div>
         <div style={{ position: 'fixed', bottom: 70, left: 0, right: 0, zIndex: 1000 }}>
@@ -510,7 +507,6 @@ const FaceLandmarker = () => {
               <button disabled={loading} onClick={handleCapture}>Capture</button>
             </div>
           }
-          <button onClick={switchCameraFacingMode}>Switch Camera</button>
           <span style={{ color: 'white' }}>{isLastMessage}</span>
         </div>
       </section>
