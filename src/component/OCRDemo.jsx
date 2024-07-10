@@ -1,34 +1,17 @@
 import React, { useState, useRef, useCallback } from "react";
 import Webcam from "react-webcam";
 
-const FACING_MODE_USER = "user";
-const FACING_MODE_ENVIRONMENT = "environment";
-
 export default function WebcamCapture() {
   const webcamRef = useRef(null);
   const [image, setImage] = useState("");
-  const [facingMode, setFacingMode] = useState(FACING_MODE_USER);
 
-  const capture = useCallback(() => {
-    const imageSrc = webcamRef.current.getScreenshot();
-    setImage(imageSrc);
-  }, [webcamRef]);
-
-  const handleClick = useCallback(() => {
-    setFacingMode((prevState) =>
-      prevState === FACING_MODE_USER
-        ? FACING_MODE_ENVIRONMENT
-        : FACING_MODE_USER
-    );
-  }, []);
 
   let videoConstraints = {
-    facingMode: facingMode,
+    facingMode: 'environment',
     width: 270,
-    height: 480
+    height: 480,
+    aspectRatio: 16 / 9,
   };
-
-  console.log(facingMode, videoConstraints);
 
   return (
     <div className="webcam-container">
@@ -50,7 +33,6 @@ export default function WebcamCapture() {
           />
         )}
       </div>
-      <button onClick={handleClick}>Switch camera</button>
     </div>
   );
 }
