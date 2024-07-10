@@ -61,13 +61,22 @@ const OCRDemo = () => {
 
     return (
         <div>
+            {/* <Webcam
+                audio={false}
+                mirrored={false}
+                ref={webcamRef}
+                screenshotFormat="image/jpeg"
+                videoConstraints={videoConstraints}
+                style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', objectFit: 'cover', overflow: 'hidden' }}
+            /> */}
             <Webcam
                 audio={false}
                 mirrored={false}
                 ref={webcamRef}
                 screenshotFormat="image/jpeg"
                 videoConstraints={videoConstraints}
-                style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', objectFit: 'cover', overflow: 'hidden' }} />
+                style={{ width: '100%', height: '100%', transform: 'scaleX(-1)' }}
+            />
             <button
                 style={{ position: 'absolute' }}
                 onClick={capture}
