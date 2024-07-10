@@ -129,10 +129,13 @@ const FaceLandmarker = () => {
         numFaces: 1
       });
       faceLandmarkerRef.current = newFaceLandmarker;
-      enableCam();
     };
     createFaceLandmarker();
   }, []);
+
+  useEffect(() => {
+    enableCam();
+  }, [facingMode]);
 
   const enableCam = () => {
     if (!faceLandmarkerRef.current) {
