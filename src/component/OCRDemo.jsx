@@ -27,16 +27,10 @@ export default function WebcamCapture() {
       }
 
       setLoading(true);
-
-      // Konversi base64 menjadi Blob
       const base64Image = imageSrc.split(',')[1];
       const blob = await fetch(`data:image/jpeg;base64,${base64Image}`).then(res => res.blob());
-
-      // Buat objek FormData dan tambahkan gambar sebagai file
       const formData = new FormData();
       formData.append('image', blob, 'captured-image.jpeg');
-
-      // Pengaturan request
       const requestOptions = {
         method: 'POST',
         headers: {
@@ -45,7 +39,6 @@ export default function WebcamCapture() {
         body: formData
       };
 
-      // Kirim permintaan ke server OCR
       const response = await fetch('https://bigvision.id/upload/ktp-extraction', requestOptions);
       const data = await response.json();
 
@@ -61,33 +54,34 @@ export default function WebcamCapture() {
 
   return (
     <div className="webcam-container">
-      <div className="webcam-img">
-        <Webcam
-          className="webcam"
-          audio={false}
-          ref={webcamRef}
-          screenshotFormat="image/jpeg"
-          videoConstraints={videoConstraints}
-          screenshotQuality={1}
-        />
-        <button
-          style={{ position: 'absolute' }}
-          onClick={capture}
-        >
-          Capture
-        </button>
-        {result && (
-          <div className="modal-content">
-            <div style={{ textAlign: 'left', paddingLeft: '20px', marginBottom: '20px' }}>
-              <div>Nama : {dataOcr.nama}</div>
-              <div>NIK : {dataOcr.nik}</div>
-              <div>Tanggal Lahir : {dataOcr.ttl}</div>
-              <img src={imageSrc} alt="captured" style={{ maxWidth: '100%' }} />
-
-            </div>
+      {imageSrc === "" ?
+        <div className="webcam-img">
+          <Webcam
+            className="webcam"
+            audio={false}
+            ref={webcamRef}
+            screenshotFormat="image/jpeg"
+            videoConstraints={videoConstraints}
+            screenshotQuality={1}
+          />
+          <button
+            style={{ position: 'absolute' }}
+            onClick={capture}
+          >
+            Capture
+          </button>
+        </div>
+        :
+        <div className="modal-content">
+          <div style={{ textAlign: 'left', paddingLeft: '20px', marginBottom: '20px' }}>
+            <div>Nama : {dataOcr.nama}</div>
+            <div>NIK : {dataOcr.nik}</div>
+            <div>Tanggal Lahir : {dataOcr.ttl}</div>
+            <br />
+            <img src={imageSrc} alt="captured" style={{ width: '100%' }} />
           </div>
-        )}
-      </div>
+        </div>
+      }
     </div>
   );
 }
