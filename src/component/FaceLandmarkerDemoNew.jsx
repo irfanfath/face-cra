@@ -100,6 +100,7 @@ const FaceLandmarker = () => {
   const [instructionMessage, setInstructionMessage] = useState('');
   const [rejectMessage, setRejectMessage] = useState('');
   const [loading, setLoading] = useState(true)
+  const [cameraFacingMode, setCameraFacingMode] = useState('user');
 
   useEffect(() => {
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
@@ -128,7 +129,7 @@ const FaceLandmarker = () => {
       enableCam();
     };
     createFaceLandmarker();
-  }, []);
+  }, [cameraFacingMode]);
 
   const enableCam = () => {
     if (!faceLandmarkerRef.current) {
@@ -140,7 +141,7 @@ const FaceLandmarker = () => {
     if (!webcamRunning) {
       webcamRunningRef.current = true;
       try {
-        navigator.mediaDevices.getUserMedia({ video: { width: { min: 300 }, height: { min: 500 }, aspectRatio: 16 / 9 } }).then((stream) => {
+        navigator.mediaDevices.getUserMedia({ video: {facingMode: cameraFacingMode, width: { min: 300 }, height: { min: 500 }, aspectRatio: 16 / 9 } }).then((stream) => {
           videoRef.current.srcObject = stream;
           cameraRef.current = stream;
           // videoRef.current.addEventListener("loadeddata", predictWebcam);
@@ -335,11 +336,12 @@ const FaceLandmarker = () => {
         isLoadingRef.current = true;
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
+            cameraRef.current.getTracks().forEach(track => track.stop());
             handleLiveness(res.image)
               .then((res) => {
-                alert(res.message.results[0].liveness)
-                cameraRef.current.getTracks().forEach(track => track.stop());
+                console.log(res)
               })
+              alert(res.message.results[0].liveness)
             } else {
             handleLiveness(res.image)
               .then((res) => {
@@ -434,7 +436,7 @@ const FaceLandmarker = () => {
           'NIK: ' + data.message.results.nik + '\n' +
           'Tanggal Lahir: ' + data.message.results.ttl
         );
-        setLoading(false)
+        setLoading(false);
         setPipelineIndex((val) => {
           pipelineRef.current = val + 1;
           return val + 1
@@ -445,6 +447,12 @@ const FaceLandmarker = () => {
     };
 
     handleOCR();
+  };
+
+  const switchCameraFacingMode = () => {
+    setCameraFacingMode(prevMode =>
+      prevMode === 'user' ? 'environment' : 'user'
+    );
   };
 
   return (
@@ -489,7 +497,8 @@ const FaceLandmarker = () => {
           )} */}
           {(dynamicPipeline[pipelineIndex]?.task) === 'ktp-extract' &&
           <div>
-            <button disabled={loading} onClick={handleCapture}>Capture</button>
+            <button onClick={handleCapture}>Capture</button>
+            <button onClick={switchCameraFacingMode}>Switch Camera</button>
           </div>
           }
           <span style={{ color: 'white' }}>{isLastMessage}</span>
