@@ -100,7 +100,6 @@ const FaceLandmarker = () => {
   const [instructionMessage, setInstructionMessage] = useState('');
   const [rejectMessage, setRejectMessage] = useState('');
   const [loading, setLoading] = useState(true)
-  const [cameraFacingMode, setCameraFacingMode] = useState('user');
 
   useEffect(() => {
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
@@ -141,7 +140,7 @@ const FaceLandmarker = () => {
     if (!webcamRunning) {
       webcamRunningRef.current = true;
       try {
-        navigator.mediaDevices.getUserMedia({ facingMode: cameraFacingMode, video: { width: { min: 300 }, height: { min: 500 }, aspectRatio: 16 / 9 } }).then((stream) => {
+        navigator.mediaDevices.getUserMedia({ video: { width: { min: 300 }, height: { min: 500 }, aspectRatio: 16 / 9 } }).then((stream) => {
           videoRef.current.srcObject = stream;
           cameraRef.current = stream;
           // videoRef.current.addEventListener("loadeddata", predictWebcam);
@@ -341,7 +340,7 @@ const FaceLandmarker = () => {
                 alert(res.message.results[0].liveness)
                 cameraRef.current.getTracks().forEach(track => track.stop());
               })
-          } else {
+            } else {
             handleLiveness(res.image)
               .then((res) => {
                 alert(res.message.results[0].liveness)
@@ -448,12 +447,6 @@ const FaceLandmarker = () => {
     handleOCR();
   };
 
-  const switchCameraFacingMode = () => {
-    setCameraFacingMode(prevMode =>
-      prevMode === 'user' ? 'environment' : 'user'
-    );
-  };
-
   return (
     <div>
       <section id="demos">
@@ -495,10 +488,9 @@ const FaceLandmarker = () => {
             </div>
           )} */}
           {(dynamicPipeline[pipelineIndex]?.task) === 'ktp-extract' &&
-            <div>
-              <button disabled={loading} onClick={handleCapture}>Capture</button>
-              <button onClick={switchCameraFacingMode}>Switch Camera</button>
-            </div>
+          <div>
+            <button disabled={loading} onClick={handleCapture}>Capture</button>
+          </div>
           }
           <span style={{ color: 'white' }}>{isLastMessage}</span>
         </div>
