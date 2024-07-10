@@ -457,7 +457,8 @@ const FaceLandmarker = () => {
     try {
       const constraints = {
         video: {
-          facingMode: cameraFacingMode
+          facingMode: cameraFacingMode,
+          mirror: false
         }
       };
 
