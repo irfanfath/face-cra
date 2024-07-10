@@ -100,6 +100,7 @@ const FaceLandmarker = () => {
   const [instructionMessage, setInstructionMessage] = useState('');
   const [rejectMessage, setRejectMessage] = useState('');
   const [loading, setLoading] = useState(true)
+  const [camType, setCamType] = useState('user');
 
   useEffect(() => {
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
@@ -142,10 +143,11 @@ const FaceLandmarker = () => {
       try {
         navigator.mediaDevices.getUserMedia({
           video: {
-            facingMode: 'environment',
-            width: { min: 300 }, 
-            height: { min: 500 }, 
-            aspectRatio: 16 / 9
+            facingMode: camType,
+            width: { min: 300 },
+            height: { min: 500 },
+            aspectRatio: 16 / 9,
+            mirror: false
           }
         }).then((stream) => {
           videoRef.current.srcObject = stream;
@@ -228,8 +230,6 @@ const FaceLandmarker = () => {
       }
     })
   };
-
-
 
   const drawBlendShapes = useCallback((el, blendShapes) => {
     if (!blendShapes || !blendShapes.length) {
@@ -373,7 +373,6 @@ const FaceLandmarker = () => {
       }
     }
 
-
   }, []);
 
   const drawBlendShapesRealTime = useCallback((result) => {
@@ -460,6 +459,14 @@ const FaceLandmarker = () => {
     handleOCR();
   };
 
+  const switchCameraFacingMode = () => {
+    if (camType === 'user') {
+      setCamType('environment');
+    } else {
+      setCamType('user');
+    }
+  };
+
   return (
     <div>
       <section id="demos">
@@ -505,6 +512,7 @@ const FaceLandmarker = () => {
               <button disabled={loading} onClick={handleCapture}>Capture</button>
             </div>
           }
+          <button onClick={switchCameraFacingMode}>Switch Camera</button>
           <span style={{ color: 'white' }}>{isLastMessage}</span>
         </div>
       </section>
