@@ -340,21 +340,20 @@ const FaceLandmarker = () => {
               .then((res) => {
                 console.log(res)
               })
-            window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
-          } else {
+              alert(res.message.results[0].liveness)
+            } else {
             handleLiveness(res.image)
               .then((res) => {
                 alert(res.message.results[0].liveness)
-
-                // if (res.message.results[0].liveness === 'real') {
-                //   alert('Please Try Again, your face detected as' + res.message.results[0].liveness)
-                //   // setPipelineIndex((val) => {
-                //   //   pipelineRef.current = val + 1;
-                //   //   return val + 1
-                //   // })
-                // } else {
-                //   alert('Please Try Again, your face detected as' + res.message.results[0].liveness)
-                // }
+                if (res.message.results[0].liveness === 'real') {
+                  alert(res.message.results[0].liveness)
+                  setPipelineIndex((val) => {
+                    pipelineRef.current = val + 1;
+                    return val + 1
+                  })
+                } else {
+                  alert(res.message.results[0].liveness)
+                }
               })
 
           }
