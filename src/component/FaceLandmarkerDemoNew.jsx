@@ -103,7 +103,6 @@ const FaceLandmarker = () => {
   const [camType, setCamType] = useState('user');
   const [isKTP, setIsKTP] = useState(false);
   const [dataOcr, SetDataOcr] = useState([]);
-  const [facingMode, setFacingMode] = useState('user');
 
   useEffect(() => {
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
@@ -149,7 +148,7 @@ const FaceLandmarker = () => {
       try {
         navigator.mediaDevices.getUserMedia({
           video: {
-            facingMode: facingMode,
+            facingMode: 'user',
             width: { min: 300 },
             height: { min: 500 },
             aspectRatio: 16 / 9,
@@ -172,9 +171,9 @@ const FaceLandmarker = () => {
     }
   };
 
-  const switchFacingMode = () => {
-    setFacingMode(prevMode => (prevMode === 'user' ? 'environment' : 'user'));
-  };
+  // const switchFacingMode = () => {
+  //   setFacingMode(prevMode => (prevMode === 'user' ? 'environment' : 'user'));
+  // };
 
   const predictWebcam = async (e) => {
     if (!isVideo.current) {
@@ -532,9 +531,9 @@ const FaceLandmarker = () => {
               <button disabled={loading} onClick={handleCapture}>Capture</button>
             </div>
           }
-          <button onClick={switchFacingMode}>
+          {/* <button onClick={switchFacingMode}>
             Switch Facing Mode ({facingMode})
-          </button>
+          </button> */}
           <span style={{ color: 'white' }}>{isLastMessage}</span>
         </div>
 
