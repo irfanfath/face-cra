@@ -103,7 +103,7 @@ const FaceLandmarker = () => {
   const [camType, setCamType] = useState('user');
   const [isKTP, setIsKTP] = useState(false);
   const [dataOcr, SetDataOcr] = useState([]);
-  const [facingMode, setFacingMode] = useState('environment');
+  const [facingMode, setFacingMode] = useState('user');
 
   useEffect(() => {
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
@@ -132,7 +132,7 @@ const FaceLandmarker = () => {
       enableCam();
     };
     createFaceLandmarker();
-  }, []);
+  }, [enableCam]);
 
   const enableCam = () => {
     if (!faceLandmarkerRef.current) {
@@ -529,9 +529,9 @@ const FaceLandmarker = () => {
               <button disabled={loading} onClick={handleCapture}>Capture</button>
             </div>
           }
-          {/* <button onClick={switchFacingMode}>
+          <button onClick={switchFacingMode}>
             Switch Facing Mode ({facingMode})
-          </button> */}
+          </button>
           <span style={{ color: 'white' }}>{isLastMessage}</span>
         </div>
 
