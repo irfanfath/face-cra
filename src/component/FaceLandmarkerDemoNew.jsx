@@ -100,7 +100,8 @@ const FaceLandmarker = () => {
   const [instructionMessage, setInstructionMessage] = useState('');
   const [rejectMessage, setRejectMessage] = useState('');
   const [loading, setLoading] = useState(true)
-  
+  const [cameraFacingMode, setCameraFacingMode] = useState('user');
+
   useEffect(() => {
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
     const messagesQueryParam = new URL(window.location.href).searchParams.get('messages');
@@ -143,6 +144,7 @@ const FaceLandmarker = () => {
         navigator.mediaDevices.getUserMedia({ video: { width: { min: 300 }, height: { min: 500 }, aspectRatio: 16 / 9 } }).then((stream) => {
           videoRef.current.srcObject = stream;
           cameraRef.current = stream;
+          // videoRef.current.addEventListener("loadeddata", predictWebcam);
           videoRef.current.addEventListener("loadeddata", () => {
             setLoading(false);
             predictWebcam();
@@ -221,8 +223,6 @@ const FaceLandmarker = () => {
       }
     })
   };
-
-
 
   const drawBlendShapes = useCallback((el, blendShapes) => {
     if (!blendShapes || !blendShapes.length) {
@@ -430,7 +430,9 @@ const FaceLandmarker = () => {
           },
           body: formData
         };
-        setLoading(true)
+
+        setLoading(true);
+
         const response = await fetch('https://bigvision.id/upload/ktp-extraction  ', requestOptions);
         const data = await response.json();
 
@@ -451,6 +453,31 @@ const FaceLandmarker = () => {
     };
 
     handleOCR();
+  };
+
+  useEffect(() => {
+    initializeCamera();
+  }, [cameraFacingMode]);
+
+  const initializeCamera = async () => {
+    try {
+      const constraints = {
+        video: {
+          facingMode: cameraFacingMode
+        }
+      };
+
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      videoRef.current.srcObject = stream;
+    } catch (error) {
+      console.error('Error accessing the camera:', error);
+    }
+  };
+
+  const switchCameraFacingMode = () => {
+    setCameraFacingMode(prevMode =>
+      prevMode === 'user' ? 'environment' : 'user'
+    );
   };
 
   return (
@@ -494,9 +521,10 @@ const FaceLandmarker = () => {
             </div>
           )} */}
           {(dynamicPipeline[pipelineIndex]?.task) === 'ktp-extract' &&
-          <div>
-            <button disabled={loading} onClick={handleCapture}>Capture</button>
-          </div>
+            <div>
+              <button disabled={loading} onClick={handleCapture}>Capture</button>
+              <button onClick={switchCameraFacingMode}>Switch Camera</button>
+            </div>
           }
           <span style={{ color: 'white' }}>{isLastMessage}</span>
         </div>
