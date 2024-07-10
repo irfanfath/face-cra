@@ -3,12 +3,12 @@ import * as vision from '@mediapipe/tasks-vision';
 
 const pipeline = [
   { task: 'ktp-extract', word: 'Silahkan Tunjukan KTP Anda' },
-  { task: 'face-liveness', word: 'Silahkan Lihat Kamera' },
   { task: 'hadap-kiri', word: 'Silahkan Hadap Kiri' },
   { task: 'hadap-kanan', word: 'Silahkan Hadap Kanan' },
   { task: 'buka-mulut', word: 'Silahkan Buka Mulut' },
   { task: 'kedip-mata', word: 'Silahkan Kedipkan Mata Anda' },
   { task: 'hadap-depan', word: 'Silahkan menghadap depan' },
+  { task: 'face-liveness', word: 'Silahkan Lihat Kamera' },
   // { task: 'selesai', word: 'Selesai' }
 ];
 // let controller = new AbortController();
@@ -339,31 +339,26 @@ const FaceLandmarker = () => {
             cameraRef.current.getTracks().forEach(track => track.stop());
             handleLiveness(res.image)
               .then((res) => {
-                console.log(res)
+                alert(res.message.results[0].liveness)
               })
-            window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
           } else {
             handleLiveness(res.image)
               .then((res) => {
                 alert(res.message.results[0].liveness)
-
-                // if (res.message.results[0].liveness === 'real') {
-                //   alert('Please Try Again, your face detected as' + res.message.results[0].liveness)
-                //   // setPipelineIndex((val) => {
-                //   //   pipelineRef.current = val + 1;
-                //   //   return val + 1
-                //   // })
-                // } else {
-                //   alert('Please Try Again, your face detected as' + res.message.results[0].liveness)
-                // }
+                if (res.message.results[0].liveness === 'real') {
+                  alert(res.message.results[0].liveness)
+                  setPipelineIndex((val) => {
+                    pipelineRef.current = val + 1;
+                    return val + 1
+                  })
+                } else {
+                  alert(res.message.results[0].liveness)
+                }
               })
-
           }
         }).catch(() => { });
       }
     }
-
-
   }, []);
 
   const drawBlendShapesRealTime = useCallback((result) => {
@@ -516,10 +511,10 @@ const FaceLandmarker = () => {
             </div>
           )} */}
           {(dynamicPipeline[pipelineIndex]?.task) === 'ktp-extract' &&
-          <div>
-            <button onClick={handleCapture}>Capture</button>
-            <button onClick={switchCameraFacingMode}>Switch Camera</button>
-          </div>
+            <div>
+              <button onClick={handleCapture}>Capture</button>
+              <button onClick={switchCameraFacingMode}>Switch Camera</button>
+            </div>
           }
           <span style={{ color: 'white' }}>{isLastMessage}</span>
         </div>
