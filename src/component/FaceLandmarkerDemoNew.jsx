@@ -414,15 +414,17 @@ const FaceLandmarker = () => {
             }
           </div>
         </div>
-        <div style={{ position: 'fixed', bottom: 70, left: 0, right: 0, zIndex: 1000 }}>
+        <div style={{ position: 'fixed', zIndex: 1000, width: '100%' }}>
           {isLiveness &&
-            <div className="modal-content">
-              <div style={{ textAlign: 'left', paddingLeft: '20px', marginBottom: '20px' }}>
-                <div>Hasil deteksi wajah : {dataLiveness} Face!</div>
+              <div className="modal-content" style={{marginTop: '40vh'}}>
+                <div style={{ textAlign: 'center', paddingLeft: '20px', marginBottom: '20px' }}>
+                  <div>Hasil deteksi wajah : {dataLiveness} Face!</div>
+                </div>
+                <button onClick={successStep}>Next Step</button>
               </div>
-              <button onClick={successStep}>Next Step</button>
-            </div>
           }
+        </div>
+        <div style={{ position: 'fixed', bottom: 70, left: 0, right: 0, zIndex: 1000 }}>
           <span style={{ color: 'white' }}>{isLastMessage}</span>
         </div>
 

@@ -72,7 +72,7 @@ body {
 /* Style the modal content */
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto; /* Centered horizontally and 15% from the top vertically */
+  margin-left: 20px;
   padding: 10px;
   border: 1px solid #888;
   width: 80%; /* Set the width of the modal */
