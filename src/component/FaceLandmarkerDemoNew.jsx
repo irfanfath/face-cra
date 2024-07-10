@@ -460,12 +460,11 @@ const FaceLandmarker = () => {
   };
 
   const switchCameraFacingMode = () => {
-    if (camType === 'user') {
-      setCamType('environment');
-    } else {
-      setCamType('user');
-    }
+    setCameraFacingMode(prevMode =>
+      prevMode === 'user' ? 'environment' : 'user'
+    );
   };
+
 
   return (
     <div>
