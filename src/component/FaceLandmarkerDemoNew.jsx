@@ -100,10 +100,8 @@ const FaceLandmarker = () => {
   const [instructionMessage, setInstructionMessage] = useState('');
   const [rejectMessage, setRejectMessage] = useState('');
   const [loading, setLoading] = useState(true)
-  const [camType, setCamType] = useState('user');
   const [isKTP, setIsKTP] = useState(false);
   const [dataOcr, SetDataOcr] = useState([]);
-  const [facingMode, setFacingMode] = useState('user');
 
   useEffect(() => {
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
@@ -132,7 +130,7 @@ const FaceLandmarker = () => {
       enableCam();
     };
     createFaceLandmarker();
-  }, [enableCam]);
+  }, []);
 
   const enableCam = () => {
     if (!faceLandmarkerRef.current) {
@@ -146,7 +144,7 @@ const FaceLandmarker = () => {
       try {
         navigator.mediaDevices.getUserMedia({
           video: {
-            facingMode: facingMode,
+            facingMode: 'user',
             width: { min: 300 },
             height: { min: 500 },
             aspectRatio: 16 / 9,
@@ -167,10 +165,6 @@ const FaceLandmarker = () => {
       webcamRunningRef.current = false;
       cameraRef.current.getTracks().forEach(track => track.stop());
     }
-  };
-
-  const switchFacingMode = () => {
-    setFacingMode(prevMode => (prevMode === 'user' ? 'environment' : 'user'));
   };
 
   const predictWebcam = async (e) => {
@@ -483,7 +477,7 @@ const FaceLandmarker = () => {
           }
           <div style={{ position: 'relative' }}>
             {videoRef &&
-              <video poster="noposter" ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden', transform: facingMode === 'user' ? 'scaleX(-1)' : 'none' }} autoPlay playsInline></video>
+              <video poster="noposter" ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
             }
             {
               rejectMessage !== '' ? (
@@ -529,9 +523,6 @@ const FaceLandmarker = () => {
               <button disabled={loading} onClick={handleCapture}>Capture</button>
             </div>
           }
-          <button onClick={switchFacingMode}>
-            Switch Facing Mode ({facingMode})
-          </button>
           <span style={{ color: 'white' }}>{isLastMessage}</span>
         </div>
 
