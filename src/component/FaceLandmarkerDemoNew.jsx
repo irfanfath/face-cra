@@ -103,7 +103,7 @@ const FaceLandmarker = () => {
   const [camType, setCamType] = useState('user');
   const [isKTP, setIsKTP] = useState(false);
   const [dataOcr, SetDataOcr] = useState([]);
-  const [facingMode, setFacingMode] = useState('environment');
+  const [facingMode, setFacingMode] = useState('user');
 
   useEffect(() => {
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
