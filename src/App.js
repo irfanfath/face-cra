@@ -14,6 +14,8 @@ function App() {
   const nextStep = () => {
     const url = new URL(window.location.href);
     url.searchParams.set('step', 'face-recognition');
+    url.searchParams.set('id_request', 'testing');
+    url.searchParams.set('app', 'b1gv1s10n');
     window.location.href = url.toString();
   };
 
