@@ -529,9 +529,9 @@ const FaceLandmarker = () => {
               <button disabled={loading} onClick={handleCapture}>Capture</button>
             </div>
           }
-          <button onClick={switchFacingMode}>
+          {/* <button onClick={switchFacingMode}>
             Switch Facing Mode ({facingMode})
-          </button>
+          </button> */}
           <span style={{ color: 'white' }}>{isLastMessage}</span>
         </div>
 
