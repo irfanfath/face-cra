@@ -11,8 +11,8 @@ export default function WebcamCapture() {
 
   let videoConstraints = {
     facingMode: 'environment',
-    width: 400,
-    height: 600,
+    width: 270,
+    height: 480,
     // width: { min: 300 },
     // height: { min: 500 },
   };
