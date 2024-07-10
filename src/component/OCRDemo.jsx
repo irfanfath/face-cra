@@ -62,6 +62,7 @@ const OCRDemo = () => {
         <div>
             <Webcam
                 audio={false}
+                mirrored={false}
                 ref={webcamRef}
                 screenshotFormat="image/jpeg"
                 videoConstraints={videoConstraints}
@@ -79,6 +80,8 @@ const OCRDemo = () => {
                         <div>Nama : {dataOcr.nama}</div>
                         <div>NIK : {dataOcr.nik}</div>
                         <div>Tanggal Lahir : {dataOcr.ttl}</div>
+                        <img src={imageSrc} alt="captured" style={{ maxWidth: '100%' }} />
+
                     </div>
                 </div>
             )}
