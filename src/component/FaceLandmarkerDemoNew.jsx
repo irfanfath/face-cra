@@ -129,7 +129,7 @@ const FaceLandmarker = () => {
       enableCam();
     };
     createFaceLandmarker();
-  }, [cameraFacingMode]);
+  }, []);
 
   const enableCam = () => {
     if (!faceLandmarkerRef.current) {
@@ -138,20 +138,13 @@ const FaceLandmarker = () => {
     }
 
     setWebcamRunning(!webcamRunning);
-
     if (!webcamRunning) {
       webcamRunningRef.current = true;
       try {
-        navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: cameraFacingMode,
-            width: { min: 300 },
-            height: { min: 500 },
-            aspectRatio: 16 / 9
-          }
-        }).then((stream) => {
+        navigator.mediaDevices.getUserMedia({ video: { width: { min: 300 }, height: { min: 500 }, aspectRatio: 16 / 9 } }).then((stream) => {
           videoRef.current.srcObject = stream;
           cameraRef.current = stream;
+          // videoRef.current.addEventListener("loadeddata", predictWebcam);
           videoRef.current.addEventListener("loadeddata", () => {
             setLoading(false);
             predictWebcam();
@@ -165,35 +158,6 @@ const FaceLandmarker = () => {
       cameraRef.current.getTracks().forEach(track => track.stop());
     }
   };
-
-
-  // const enableCam = () => {
-  //   if (!faceLandmarkerRef.current) {
-  //     console.log("Wait! faceLandmarker not loaded yet.");
-  //     return;
-  //   }
-
-  //   setWebcamRunning(!webcamRunning);
-  //   if (!webcamRunning) {
-  //     webcamRunningRef.current = true;
-  //     try {
-  //       navigator.mediaDevices.getUserMedia({ video: {facingMode: cameraFacingMode, width: { min: 300 }, height: { min: 500 }, aspectRatio: 16 / 9 } }).then((stream) => {
-  //         videoRef.current.srcObject = stream;
-  //         cameraRef.current = stream;
-  //         // videoRef.current.addEventListener("loadeddata", predictWebcam);
-  //         videoRef.current.addEventListener("loadeddata", () => {
-  //           setLoading(false);
-  //           predictWebcam();
-  //         });
-  //       });
-  //     } catch (error) {
-  //       console.error("Error accessing webcam:", error);
-  //     }
-  //   } else {
-  //     webcamRunningRef.current = false;
-  //     cameraRef.current.getTracks().forEach(track => track.stop());
-  //   }
-  // };
 
   const predictWebcam = async (e) => {
     if (!isVideo.current) {
@@ -375,24 +339,22 @@ const FaceLandmarker = () => {
             cameraRef.current.getTracks().forEach(track => track.stop());
             handleLiveness(res.image)
               .then((res) => {
-                console.log(res)
+                alert(res.message.results[0].liveness)
               })
-            alert(res.message.results[0].liveness)
           } else {
             handleLiveness(res.image)
               .then((res) => {
                 alert(res.message.results[0].liveness)
                 if (res.message.results[0].liveness === 'real') {
-                  alert(res.message.results[0].liveness)
+                  alert('Please Try Again, your face detected as' + res.message.results[0].liveness)
                   setPipelineIndex((val) => {
                     pipelineRef.current = val + 1;
                     return val + 1
                   })
                 } else {
-                  alert(res.message.results[0].liveness)
+                  alert('Please Try Again, your face detected as' + res.message.results[0].liveness)
                 }
               })
-
           }
         }).catch(() => { });
       }
@@ -462,7 +424,9 @@ const FaceLandmarker = () => {
           },
           body: formData
         };
-        setLoading(true)
+
+        setLoading(true);
+
         const response = await fetch('https://bigvision.id/upload/ktp-extraction  ', requestOptions);
         const data = await response.json();
 
@@ -483,6 +447,31 @@ const FaceLandmarker = () => {
     };
 
     handleOCR();
+  };
+
+  useEffect(() => {
+    initializeCamera();
+  }, [cameraFacingMode]);
+
+  const initializeCamera = async () => {
+    try {
+      const constraints = {
+        video: {
+          facingMode: cameraFacingMode
+        }
+      };
+
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      videoRef.current.srcObject = stream;
+    } catch (error) {
+      console.error('Error accessing the camera:', error);
+    }
+  };
+
+  const switchCameraFacingMode = () => {
+    setCameraFacingMode(prevMode =>
+      prevMode === 'user' ? 'environment' : 'user'
+    );
   };
 
   return (
@@ -527,12 +516,8 @@ const FaceLandmarker = () => {
           )} */}
           {(dynamicPipeline[pipelineIndex]?.task) === 'ktp-extract' &&
             <div>
-              <button onClick={handleCapture}>Capture</button>
-              <select value={cameraFacingMode} onChange={(e) => setCameraFacingMode(e.target.value)}>
-                <option value="user">Front Camera</option>
-                <option value="environment">Back Camera</option>
-              </select>
-
+              <button disabled={!loading} onClick={handleCapture}>Capture</button>
+              <button onClick={switchCameraFacingMode}>Switch Camera</button>
             </div>
           }
           <span style={{ color: 'white' }}>{isLastMessage}</span>
