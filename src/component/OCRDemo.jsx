@@ -60,7 +60,6 @@ export default function WebcamCapture() {
           {/* <img className="bg-image" alt="" src={bgImage} /> */}
           <Webcam
             className="webcam"
-            style={{marginTop: '50%'}}
             audio={false}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
