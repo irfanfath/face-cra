@@ -516,7 +516,7 @@ const FaceLandmarker = () => {
           )} */}
           {(dynamicPipeline[pipelineIndex]?.task) === 'ktp-extract' &&
             <div>
-              <button disabled={!loading} onClick={handleCapture}>Capture</button>
+              <button disabled={loading} onClick={handleCapture}>Capture</button>
               <button onClick={switchCameraFacingMode}>Switch Camera</button>
             </div>
           }
