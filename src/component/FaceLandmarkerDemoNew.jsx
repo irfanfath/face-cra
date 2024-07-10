@@ -139,20 +139,7 @@ const FaceLandmarker = () => {
       console.log("Wait! faceLandmarker not loaded yet.");
       return;
     }
-  
-    // Tambahkan kondisi untuk memeriksa apakah webcam sudah berjalan dan facingMode telah berubah
-    if (webcamRunningRef.current && cameraRef.current && cameraRef.current.getTracks().length > 0) {
-      const currentFacingMode = videoRef.current.srcObject.getVideoTracks()[0].getSettings().facingMode;
-      if (currentFacingMode !== facingMode) {
-        // Hentikan trek kamera sebelum memulai ulang dengan facingMode yang baru
-        cameraRef.current.getTracks().forEach(track => track.stop());
-        webcamRunningRef.current = false;
-      } else {
-        // Jika facingMode tidak berubah, tidak perlu lakukan apa-apa
-        return;
-      }
-    }
-  
+
     setWebcamRunning(!webcamRunning);
     if (!webcamRunning) {
       webcamRunningRef.current = true;
@@ -181,7 +168,6 @@ const FaceLandmarker = () => {
       cameraRef.current.getTracks().forEach(track => track.stop());
     }
   };
-  
 
   const switchFacingMode = () => {
     setFacingMode(prevMode => (prevMode === 'user' ? 'environment' : 'user'));
