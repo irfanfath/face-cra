@@ -12,7 +12,8 @@ const OCRDemo = () => {
         width: { min: 300 },
         height: { min: 500 },
         aspectRatio: 16 / 9,
-        facingMode: 'environment'
+        facingMode: 'environment',
+        mirror: false
     };
 
     const capture = async () => {
