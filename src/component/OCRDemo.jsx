@@ -57,7 +57,7 @@ export default function WebcamCapture() {
     <div className="webcam-container">
       {result !== true ?
         <div className="webcam-img">
-          <img className="bg-image" alt="" src={bgImage} />
+          {/* <img className="bg-image" alt="" src={bgImage} /> */}
           <Webcam
             className="webcam"
             audio={false}
