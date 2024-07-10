@@ -321,7 +321,8 @@ const FaceLandmarker = () => {
               cameraRef.current.getTracks().forEach(track => track.stop());
               // handleLiveness(res.image)
               // .then(() => {
-              window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
+              // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
+              alert('Sucess Verification Data')
               // })
             } else {
               setPipelineIndex((val) => {
