@@ -18,14 +18,18 @@ const OCRDemo = () => {
                     }
                 });
                 videoRef.current.srcObject = stream;
-                videoRef.current.play();
+    
+                // Wait for the loadedmetadata event to ensure video dimensions are known
+                videoRef.current.addEventListener('loadedmetadata', () => {
+                    videoRef.current.play();
+                });
             } catch (error) {
                 console.error('Error accessing the camera:', error);
             }
         };
-
+    
         startCamera();
-
+    
         return () => {
             if (videoRef.current.srcObject) {
                 const stream = videoRef.current.srcObject;
@@ -34,6 +38,7 @@ const OCRDemo = () => {
             }
         };
     }, []);
+    
 
     const capture = () => {
         const canvas = canvasRef.current;
