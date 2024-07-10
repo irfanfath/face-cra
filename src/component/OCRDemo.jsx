@@ -63,11 +63,12 @@ const OCRDemo = () => {
         <div>
             <Webcam
                 audio={false}
-                mirrored={false}
                 ref={webcamRef}
                 screenshotFormat="image/jpeg"
                 videoConstraints={videoConstraints}
-                style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: 'auto', objectFit: 'cover', overflow: 'hidden' }} />
+                style={{ position: 'absolute', width: '100%', height: '100%', transform: 'scaleX(-1)' }}
+            // style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: 'auto', objectFit: 'cover', overflow: 'hidden' }} 
+            />
             <button
                 style={{ position: 'absolute' }}
                 onClick={capture}
