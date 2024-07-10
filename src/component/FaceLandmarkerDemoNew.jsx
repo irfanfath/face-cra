@@ -335,12 +335,11 @@ const FaceLandmarker = () => {
         isLoadingRef.current = true;
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
-            cameraRef.current.getTracks().forEach(track => track.stop());
             handleLiveness(res.image)
               .then((res) => {
-                console.log(res)
+                alert(res.message.results[0].liveness)
+                cameraRef.current.getTracks().forEach(track => track.stop());
               })
-              alert(res.message.results[0].liveness)
             } else {
             handleLiveness(res.image)
               .then((res) => {
@@ -425,7 +424,7 @@ const FaceLandmarker = () => {
           },
           body: formData
         };
-
+        setLoading(true)
         const response = await fetch('https://bigvision.id/upload/ktp-extraction  ', requestOptions);
         const data = await response.json();
 
@@ -435,6 +434,7 @@ const FaceLandmarker = () => {
           'NIK: ' + data.message.results.nik + '\n' +
           'Tanggal Lahir: ' + data.message.results.ttl
         );
+        setLoading(false)
         setPipelineIndex((val) => {
           pipelineRef.current = val + 1;
           return val + 1
@@ -489,7 +489,7 @@ const FaceLandmarker = () => {
           )} */}
           {(dynamicPipeline[pipelineIndex]?.task) === 'ktp-extract' &&
           <div>
-            <button onClick={handleCapture}>Capture</button>
+            <button disabled={loading} onClick={handleCapture}>Capture</button>
           </div>
           }
           <span style={{ color: 'white' }}>{isLastMessage}</span>
