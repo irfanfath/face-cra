@@ -14,7 +14,6 @@ export default function WebcamCapture() {
     height: 480,
     // width: { min: 300 },
     // height: { min: 500 },
-    aspectRatio: 16 / 9,
   };
 
   const capture = async () => {
