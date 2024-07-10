@@ -143,7 +143,6 @@ const FaceLandmarker = () => {
         navigator.mediaDevices.getUserMedia({ video: { width: { min: 300 }, height: { min: 500 }, aspectRatio: 16 / 9 } }).then((stream) => {
           videoRef.current.srcObject = stream;
           cameraRef.current = stream;
-          // videoRef.current.addEventListener("loadeddata", predictWebcam);
           videoRef.current.addEventListener("loadeddata", () => {
             setLoading(false);
             predictWebcam();
@@ -222,6 +221,8 @@ const FaceLandmarker = () => {
       }
     })
   };
+
+
 
   const drawBlendShapes = useCallback((el, blendShapes) => {
     if (!blendShapes || !blendShapes.length) {
@@ -434,11 +435,11 @@ const FaceLandmarker = () => {
         const data = await response.json();
 
         console.log('Response from server:', data);
-        alert(
-          'Nama: ' + data.message.results.nama + '\n' +
-          'NIK: ' + data.message.results.nik + '\n' +
-          'Tanggal Lahir: ' + data.message.results.ttl
-        );
+        // alert(
+        //   'Nama: ' + data.message.results.nama + '\n' +
+        //   'NIK: ' + data.message.results.nik + '\n' +
+        //   'Tanggal Lahir: ' + data.message.results.ttl
+        // );
         setLoading(false);
         setPipelineIndex((val) => {
           pipelineRef.current = val + 1;
