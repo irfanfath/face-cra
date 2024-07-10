@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback } from "react";
 import Webcam from "react-webcam";
 import bgImage from '../assets/bg-cover-ocr.svg';
 
-export default function WebcamCapture() {
+export default function WebcamCapture(props) {
   const webcamRef = useRef(null);
   const [imageSrc, setImageSrc] = useState(null);
   const [dataOcr, setDataOcr] = useState([]);
@@ -13,9 +13,6 @@ export default function WebcamCapture() {
     facingMode: 'environment',
     width: 270,
     height: 480,
-    aspectRatio: 16 / 9,
-    // width: { min: 300 },
-    // height: { min: 500 },
   };
 
   const capture = async () => {
@@ -58,7 +55,6 @@ export default function WebcamCapture() {
     <div className="webcam-container">
       {result !== true ?
         <div className="webcam-img">
-          {/* <img className="bg-image" alt="" src={bgImage} /> */}
           <Webcam
             className="webcam"
             audio={false}
@@ -83,6 +79,7 @@ export default function WebcamCapture() {
             <div>Tanggal Lahir : {dataOcr.ttl}</div>
             <br />
             <img src={imageSrc} alt="captured" style={{ width: '100%' }} />
+            <button onClick={props.nextStep}>Lanjutkan</button>
           </div>
         </div>
       }
