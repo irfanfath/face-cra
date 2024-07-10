@@ -10,10 +10,10 @@ export default function WebcamCapture() {
 
   let videoConstraints = {
     facingMode: 'environment',
-    // width: 270,
-    // height: 480,
-    width: { min: 300 },
-    height: { min: 500 },
+    width: 270,
+    height: 480,
+    // width: { min: 300 },
+    // height: { min: 500 },
     aspectRatio: 16 / 9,
   };
 
@@ -70,7 +70,6 @@ export default function WebcamCapture() {
           screenshotFormat="image/jpeg"
           videoConstraints={videoConstraints}
           screenshotQuality={1}
-          style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', objectFit: 'cover', overflow: 'hidden' }}
         />
         <button
           style={{ position: 'absolute' }}
