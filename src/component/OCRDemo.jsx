@@ -54,7 +54,7 @@ export default function WebcamCapture() {
 
   return (
     <div className="webcam-container">
-      {imageSrc === "" ?
+      {imageSrc === null ?
         <div className="webcam-img">
           <Webcam
             className="webcam"
