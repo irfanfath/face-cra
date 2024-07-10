@@ -250,7 +250,7 @@ const FaceLandmarker = () => {
         isLoadingRef.current = true;
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
-            cameraRef.current.getTracks().forEach(track => track.stop());
+            // cameraRef.current.getTracks().forEach(track => track.stop());
             alert('Thankyou for using our service')
             // handleLiveness(res.image)
             // .then(() => {
@@ -267,7 +267,7 @@ const FaceLandmarker = () => {
         isLoadingRef.current = true;
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
-            cameraRef.current.getTracks().forEach(track => track.stop());
+            // cameraRef.current.getTracks().forEach(track => track.stop());
             alert('Thankyou for using our service')
             // handleLiveness(res.image)
             // .then(() => {
@@ -284,7 +284,7 @@ const FaceLandmarker = () => {
         isLoadingRef.current = true;
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
-            cameraRef.current.getTracks().forEach(track => track.stop());
+            // cameraRef.current.getTracks().forEach(track => track.stop());
             alert('Thankyou for using our service')
             // handleLiveness(res.image)
             // .then(() => {
@@ -302,7 +302,7 @@ const FaceLandmarker = () => {
         setTimeout(() => {
           storeData(pipelineRef.current === pipelineCount).then((res) => {
             if (pipelineRef.current === pipelineCount) {
-              cameraRef.current.getTracks().forEach(track => track.stop());
+              // cameraRef.current.getTracks().forEach(track => track.stop());
               alert('Thankyou for using our service')
               // handleLiveness(res.image)
               // .then(() => {
@@ -321,7 +321,7 @@ const FaceLandmarker = () => {
         setTimeout(() => {
           storeData(pipelineRef.current === pipelineCount).then((res) => {
             if (pipelineRef.current === pipelineCount) {
-              cameraRef.current.getTracks().forEach(track => track.stop());
+              // cameraRef.current.getTracks().forEach(track => track.stop());
               alert('Thankyou for using our service')
               // handleLiveness(res.image)
               // .then(() => {
