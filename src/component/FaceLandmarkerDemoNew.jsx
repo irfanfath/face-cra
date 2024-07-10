@@ -344,7 +344,7 @@ const FaceLandmarker = () => {
           } else {
             handleLiveness(res.image)
               .then((res) => {
-                alert('Please Try Again, your face detected as' + res.message.results[0].liveness)
+                alert(res.message.results[0].liveness)
 
                 // if (res.message.results[0].liveness === 'real') {
                 //   alert('Please Try Again, your face detected as' + res.message.results[0].liveness)
