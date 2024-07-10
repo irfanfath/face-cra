@@ -1,70 +1,56 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState, useRef, useCallback } from "react";
+import Webcam from "react-webcam";
 
-const OCRDemo = () => {
-    const videoRef = useRef(null);
-    const canvasRef = useRef(null);
-    const [imageSrc, setImageSrc] = useState(null);
+const FACING_MODE_USER = "user";
+const FACING_MODE_ENVIRONMENT = "environment";
 
-    useEffect(() => {
-        const startCamera = async () => {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: {
-                        facingMode: 'environment',
-                        width: { min: 300 },
-                        height: { min: 500 },
-                        aspectRatio: 16 / 9,
-                        mirror: false
-                    }
-                });
-                videoRef.current.srcObject = stream;
-    
-                // Wait for the loadedmetadata event to ensure video dimensions are known
-                videoRef.current.addEventListener('loadedmetadata', () => {
-                    videoRef.current.play();
-                });
-            } catch (error) {
-                console.error('Error accessing the camera:', error);
-            }
-        };
-    
-        startCamera();
-    
-        return () => {
-            if (videoRef.current.srcObject) {
-                const stream = videoRef.current.srcObject;
-                const tracks = stream.getTracks();
-                tracks.forEach(track => track.stop());
-            }
-        };
-    }, []);
-    
+export default function WebcamCapture() {
+  const webcamRef = useRef(null);
+  const [image, setImage] = useState("");
+  const [facingMode, setFacingMode] = useState(FACING_MODE_USER);
 
-    const capture = () => {
-        const canvas = canvasRef.current;
-        canvas.width = videoRef.current.videoWidth;
-        canvas.height = videoRef.current.videoHeight;
-        canvas.getContext('2d').drawImage(videoRef.current, 0, 0);
+  const capture = useCallback(() => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    setImage(imageSrc);
+  }, [webcamRef]);
 
-        const imageUrl = canvas.toDataURL('image/jpeg');
-        setImageSrc(imageUrl);
-    };
-
-    return (
-        <div>
-            <video ref={videoRef} style={{ width: '100%', height: 'auto', marginBottom: '10px' }} />
-
-            <canvas ref={canvasRef} style={{ display: 'none' }} />
-
-            <button onClick={capture}>Capture</button>
-            {imageSrc && (
-                <div>
-                    <h2>Preview:</h2>
-                    <img src={imageSrc} alt="captured" />
-                </div>
-            )}
-        </div>
+  const handleClick = useCallback(() => {
+    setFacingMode((prevState) =>
+      prevState === FACING_MODE_USER
+        ? FACING_MODE_ENVIRONMENT
+        : FACING_MODE_USER
     );
-};
+  }, []);
 
-export default OCRDemo;
+  let videoConstraints = {
+    facingMode: facingMode,
+    width: 270,
+    height: 480
+  };
+
+  console.log(facingMode, videoConstraints);
+
+  return (
+    <div className="webcam-container">
+      <div className="webcam-img">
+        {image === "" ? (
+          <Webcam
+            className="webcam"
+            audio={false}
+            ref={webcamRef}
+            screenshotFormat="image/jpeg"
+            videoConstraints={videoConstraints}
+            screenshotQuality={1}
+          />
+        ) : (
+          <img
+            src={image}
+            alt="Scan"
+            style={{ width: "500px", height: "auto" }}
+          />
+        )}
+      </div>
+      <button onClick={handleClick}>Switch camera</button>
+    </div>
+  );
+}
