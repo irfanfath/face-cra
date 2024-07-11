@@ -1,6 +1,6 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef } from "react";
 import Webcam from "react-webcam";
-import bgImage from '../assets/bg-cover-ocr.svg';
+import bgImage from '../assets/bg-ktp.png';
 
 export default function OCRDemo() {
   const webcamRef = useRef(null);
@@ -13,6 +13,7 @@ export default function OCRDemo() {
     facingMode: 'environment',
     // width: 270,
     // height: 480,
+    // width: { min: 480 },
     width: { min: 300 },
     height: { min: 720 },
     aspectRatio: 0.6666666667
@@ -66,6 +67,7 @@ export default function OCRDemo() {
     <div className="webcam-container">
       {result !== true ?
         <div className="webcam-img">
+          <img className="bg-image" alt="" src={bgImage} />
           <Webcam
             className="webcam"
             audio={false}
@@ -75,7 +77,7 @@ export default function OCRDemo() {
             screenshotQuality={1}
             style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }}
           />
-          <div style={{ marginTop: '10px' }}>
+          <div style={{ position: 'fixed', bottom: 70, left: 0, right: 0, zIndex: 1000 }}>
             <button
               onClick={capture}
             >
