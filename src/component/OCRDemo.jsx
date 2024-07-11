@@ -13,7 +13,7 @@ export default function OCRDemo() {
     facingMode: 'environment',
     // width: 270,
     // height: 480,
-    width: { min: 480 },
+    width: { min: 300 },
     height: { min: 720 },
     aspectRatio: 0.6666666667
   };
