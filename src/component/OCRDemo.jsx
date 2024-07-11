@@ -11,9 +11,11 @@ export default function OCRDemo() {
 
   let videoConstraints = {
     facingMode: 'environment',
-    width: 270,
-    height: 480,
-    aspectRatio: 16/9
+    // width: 270,
+    // height: 480,
+    width: { min: 480 },
+    height: { min: 720 },
+    aspectRatio: 0.6666666667
   };
 
   const capture = async () => {
@@ -81,7 +83,7 @@ export default function OCRDemo() {
           </div>
         </div>
         :
-        <div style={{marginTop: '20%'}} className="modal-content">
+        <div style={{ marginTop: '20%' }} className="modal-content">
           <div style={{ textAlign: 'left', paddingLeft: '20px', marginBottom: '20px' }}>
             <div>Nama : {dataOcr.nama}</div>
             <div>NIK : {dataOcr.nik}</div>
