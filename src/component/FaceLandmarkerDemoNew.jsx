@@ -387,7 +387,7 @@ const FaceLandmarker = () => {
     <div>
       <section id="demos">
         <div id="liveView" className="videoView">
-          <img className="bg-image" alt="" src={require('../assets/Subtract.png')} />
+          {!isLiveness && <img className="bg-image" alt="" src={require('../assets/Subtract.png')} />} 
           <div style={{ position: 'relative' }}>
             {videoRef &&
               <video className='video-face' poster="noposter" ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
@@ -416,12 +416,23 @@ const FaceLandmarker = () => {
         </div>
         <div style={{ position: 'fixed', zIndex: 1000, width: '100%' }}>
           {isLiveness &&
-              <div className="modal-content" style={{marginTop: '40vh'}}>
-                <div style={{ textAlign: 'center', paddingLeft: '20px', marginBottom: '20px' }}>
-                  <div>Hasil deteksi wajah : {dataLiveness} Face!</div>
+            // <div className="modal-content" style={{marginTop: '40vh'}}>
+            //   <div style={{ textAlign: 'center', paddingLeft: '20px', marginBottom: '20px' }}>
+            //     <div>Hasil deteksi wajah : {dataLiveness} Face!</div>
+            //   </div>
+            //   <button onClick={successStep}>Next Step</button>
+            // </div>
+            <div style={{ padding: '20px' }}>
+              <div className="bg-ktp-result" style={{ marginTop: '20px', padding: '20px', marginBottom: '5%' }}>
+                <div style={{ marginTop: '20px', fontSize: '30px', fontWeight: '600' }}>Verfikasi Wajah Berhasil</div>
+                <div style={{ marginTop: '50px' }}>
+                  <div style={{ fontSize: '20px' }}>Wajah yang terdeteksi adalah <br/><strong>{dataLiveness}</strong> Face!</div>
                 </div>
-                <button onClick={successStep}>Next Step</button>
+                <div style={{ marginTop: '50px' }}>
+                  <button className="next-button" onClick={successStep}>Menu utama</button>
+                </div>
               </div>
+            </div>
           }
         </div>
         <div style={{ position: 'fixed', bottom: 70, left: 0, right: 0, zIndex: 1000 }}>
