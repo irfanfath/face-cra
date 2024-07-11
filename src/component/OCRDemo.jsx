@@ -15,8 +15,8 @@ export default function OCRDemo() {
     // width: 270,
     // height: 480,
     // width: { min: 480 },
-    width: { min: 300 },
-    height: { min: 720 },
+    width: { min: 300, max: 400 },
+    height: { min: 500 },
     aspectRatio: 0.6666666667
   };
 
@@ -80,9 +80,10 @@ export default function OCRDemo() {
             screenshotFormat="image/jpeg"
             videoConstraints={videoConstraints}
             screenshotQuality={1}
-            style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }}
+            style={{marginTop: '20vh'}}
+            // style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }}
           />
-          <div style={{ position: 'fixed', bottom: 70, left: 0, right: 0, zIndex: 1000 }}>
+          <div style={{ position: 'fixed', bottom: 30, left: 0, right: 0, zIndex: 1000 }}>
             <button
               className="circle-button"
               onClick={capture}
