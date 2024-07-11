@@ -10,15 +10,21 @@ export default function OCRDemo() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(false);
 
+  // let videoConstraints = {
+  //   facingMode: 'environment',
+  //   // width: 270,
+  //   // height: 480,
+  //   width: { min: 300 },
+  //   height: { min: 500 },
+  //   aspectRatio: 0.6666666667
+  // };
   let videoConstraints = {
     facingMode: 'environment',
-    // width: 270,
-    // height: 480,
-    // width: { min: 480 },
-    width: { min: 300 },
-    height: { min: 500 },
-    aspectRatio: 0.6666666667
+    width: { ideal: 1280 },  
+    height: { ideal: 720 },   
+    aspectRatio: 16/9         
   };
+  
 
   const capture = async () => {
     const imageSrc = webcamRef.current.getScreenshot();
