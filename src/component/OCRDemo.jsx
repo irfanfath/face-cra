@@ -11,8 +11,8 @@ export default function OCRDemo() {
 
   let videoConstraints = {
     facingMode: 'environment',
-    width: 270,
-    height: 480,
+    width: 400,
+    height: 800,
   };
 
   const capture = async () => {
