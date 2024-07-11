@@ -1,3 +1,4 @@
+import { CircleCheck } from "lucide-react";
 import React from "react";
 
 export default function SuccessPage() {
@@ -8,10 +9,17 @@ export default function SuccessPage() {
   }
 
   return (
-    <div style={{marginTop: '20px'}}>
-      <div style={{fontWeight: 'bold', fontSize: '30px'}}>Verifikasi Data Berhasil</div>
-      <div style={{fontSize: '20px', marginTop: '10px'}}>Terima kasih telah menggunakan layanan kami.</div>
-      <button onClick={restartStep} style={{marginTop: '20px'}}>Kembali ke menu utama</button>
+    <div style={{ padding: '20px' }}>
+      <div className="bg-ktp-result" style={{ marginTop: '20px', padding: '20px', marginBottom: '5%' }}>
+        <CircleCheck color="#0a8053" size={100} />
+        <div style={{ marginTop: '20px', fontSize: '30px', fontWeight: '600' }}>Verfikasi Data Berhasil</div>
+        <div style={{ marginTop: '50px' }}>
+          <div style={{ fontSize: '20px' }}>Terima kasih telah menggunakan layanan kami.</div>
+        </div>
+        <div style={{ marginTop: '50px' }}>
+          <button className="next-button" onClick={restartStep}>Menu utama</button>
+        </div>
+      </div>
     </div>
   );
 }
