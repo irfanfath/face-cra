@@ -82,7 +82,7 @@ export default function OCRDemo() {
             screenshotQuality={1}
             style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }}
           />
-          <div style={{ position: 'fixed', bottom: 100, left: 0, right: 0, zIndex: 1000 }}>
+          <div style={{ position: 'fixed', bottom: 70, left: 0, right: 0, zIndex: 1000 }}>
             <button
               className="circle-button"
               onClick={capture}
@@ -98,8 +98,8 @@ export default function OCRDemo() {
             <div style={{ fontSize: '30px', fontWeight: '600' }}>Ocr Extraction Berhasil</div>
             <div style={{ marginTop: '50px' }}>
               <img src={imageSrc} alt="captured" style={{ width: '150px' }} />
-              <div style={{ marginTop: '50px', fontWeight: '600', fontSize: '20px' }}>Hasil ocr extraction</div>
-              <div style={{ textAlign: 'left', padding: '30px 30px 30px 60px' }}>
+              <div style={{ marginTop: '20px', fontWeight: '600', fontSize: '20px' }}>Hasil ocr extraction</div>
+              <div style={{ textAlign: 'left', padding: '10px 30px 30px 60px' }}>
                 <div>Nama : {dataOcr.nama}</div>
                 <div>NIK : {dataOcr.nik}</div>
                 <div>Tanggal Lahir : {dataOcr.ttl}</div>
