@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import Webcam from "react-webcam";
 import bgImage from '../assets/bg-ktp.png';
+import { Camera } from "lucide-react";
 
 export default function OCRDemo() {
   const webcamRef = useRef(null);
@@ -68,8 +69,12 @@ export default function OCRDemo() {
       {result !== true ?
         <div className="webcam-img">
           <img className="bg-image" alt="" src={bgImage} />
+          <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
+            <span style={{ color: 'white' }}>Foto KTP Anda<br /><span style={{ fontSize: 20 }}>sesuaikan posisi ktp anda</span></span>
+          </div>
           <Webcam
             className="webcam"
+            scale={1}
             audio={false}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
@@ -77,23 +82,32 @@ export default function OCRDemo() {
             screenshotQuality={1}
             style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }}
           />
-          <div style={{ position: 'fixed', bottom: 70, left: 0, right: 0, zIndex: 1000 }}>
+          <div style={{ position: 'fixed', bottom: 100, left: 0, right: 0, zIndex: 1000 }}>
             <button
+              className="circle-button"
               onClick={capture}
             >
-              Capture
+              <Camera size={"60px"} color="#ffff" />
             </button>
+
           </div>
         </div>
         :
-        <div style={{ marginTop: '20%' }} className="modal-content">
-          <div style={{ textAlign: 'left', paddingLeft: '20px', marginBottom: '20px' }}>
-            <div>Nama : {dataOcr.nama}</div>
-            <div>NIK : {dataOcr.nik}</div>
-            <div>Tanggal Lahir : {dataOcr.ttl}</div>
-            <br />
-            <img src={imageSrc} alt="captured" style={{ width: '100%' }} />
-            <button onClick={nextStep}>Lanjutkan</button>
+        <div style={{ padding: '20px' }}>
+          <div className="bg-ktp-result" style={{ marginTop: '20px', padding: '20px', marginBottom: '5%' }}>
+            <div style={{ fontSize: '30px', fontWeight: '600' }}>Ocr Extraction Berhasil</div>
+            <div style={{ marginTop: '50px' }}>
+              <img src={imageSrc} alt="captured" style={{ width: '150px' }} />
+              <div style={{ marginTop: '50px', fontWeight: '600', fontSize: '20px' }}>Hasil ocr extraction</div>
+              <div style={{ textAlign: 'left', padding: '30px 30px 30px 60px' }}>
+                <div>Nama : {dataOcr.nama}</div>
+                <div>NIK : {dataOcr.nik}</div>
+                <div>Tanggal Lahir : {dataOcr.ttl}</div>
+              </div>
+            </div>
+            <div>
+              <button className="next-button" onClick={nextStep}>Lanjutkan</button>
+            </div>
           </div>
         </div>
       }
