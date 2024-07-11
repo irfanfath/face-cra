@@ -17,7 +17,6 @@ export default function OCRDemo() {
     // width: { min: 480 },
     width: { min: 300 },
     height: { min: 500 },
-    aspectRatio: 0.6666666667
   };
 
   const capture = async () => {
