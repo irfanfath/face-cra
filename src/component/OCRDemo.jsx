@@ -20,9 +20,9 @@ export default function OCRDemo() {
   // };
   let videoConstraints = {
     facingMode: 'environment',
-    width: { ideal: 1280 },  
-    height: { ideal: 720 },   
-    aspectRatio: 16/9         
+    width: { ideal: 720 },  
+    height: { ideal: 1280 },   
+    aspectRatio: 9/16        
   };
   
 
