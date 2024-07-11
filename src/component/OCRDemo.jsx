@@ -13,6 +13,7 @@ export default function OCRDemo() {
     facingMode: 'environment',
     width: 270,
     height: 480,
+    aspectRatio: 16/9
   };
 
   const capture = async () => {
