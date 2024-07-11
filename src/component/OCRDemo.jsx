@@ -15,7 +15,7 @@ export default function OCRDemo() {
     // width: 270,
     // height: 480,
     // width: { min: 480 },
-    width: { max: 300 },
+    width: { max: 250 },
     height: { max: 720 },
     aspectRatio: 0.6666666667
   };
