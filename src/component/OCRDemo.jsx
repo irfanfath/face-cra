@@ -73,6 +73,7 @@ export default function OCRDemo() {
             screenshotFormat="image/jpeg"
             videoConstraints={videoConstraints}
             screenshotQuality={1}
+            style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }}
           />
           <div style={{ marginTop: '10px' }}>
             <button
