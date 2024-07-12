@@ -104,7 +104,7 @@ body {
   border: 2px solid #dedede;
   padding: 15px;
   font-size: 20px;
-  width: 70%;
+  width: 90%;
   cursor: pointer;
 }
 
@@ -117,6 +117,8 @@ body {
 .bg-ktp-result {
   background: #ffff;
   border-radius: 10px;
+  box-shadow: 0px 10px 10px 0px #C5C8E43B;
+  padding: 20px;
 }
 
 .bg-welcoming {

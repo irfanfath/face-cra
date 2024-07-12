@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import Webcam from "react-webcam";
 import bgImage from '../assets/bg-ktp.png';
-import { Camera } from "lucide-react";
+import { Camera, CircleCheck } from "lucide-react";
 
 export default function OCRDemo() {
   const webcamRef = useRef(null);
@@ -20,11 +20,11 @@ export default function OCRDemo() {
   // };
   let videoConstraints = {
     facingMode: 'environment',
-    width: { ideal: 720 },  
-    height: { ideal: 1280 },   
-    aspectRatio: 9/16        
+    width: { ideal: 720 },
+    height: { ideal: 1280 },
+    aspectRatio: 9 / 16
   };
-  
+
 
   const capture = async () => {
     const imageSrc = webcamRef.current.getScreenshot();
@@ -100,12 +100,15 @@ export default function OCRDemo() {
         </div>
         :
         <div style={{ padding: '20px' }}>
-          <div className="bg-ktp-result" style={{ marginTop: '20px', padding: '20px', marginBottom: '5%' }}>
-            <div style={{ fontSize: '30px', fontWeight: '600' }}>Ocr Extraction Berhasil</div>
+          <div className="bg-welcoming" style={{ marginTop: '20px', padding: '20px', marginBottom: '5%' }}>
+            <div className="bg-ktp-result" style={{display: 'inline-flex', placeItems: 'center'}}>
+              <CircleCheck color="#0a8053" size={50} />
+              <div style={{ fontSize: '20px', fontWeight: '600', textAlign: 'left', marginLeft: '10px' }}>OCR Extraction <br /><strong>Berhasil</strong></div>
+            </div>
             <div style={{ marginTop: '50px' }}>
               <img src={imageSrc} alt="captured" style={{ width: '150px' }} />
-              <div style={{ marginTop: '20px', fontWeight: '600', fontSize: '20px' }}>Hasil ocr extraction</div>
-              <div style={{ textAlign: 'left', padding: '10px 30px 30px 60px' }}>
+              <div style={{ marginTop: '20px', fontWeight: '600', fontSize: '20px' }}>Detail</div>
+              <div style={{ textAlign: 'left', padding: '10px 30px 30px 60px', marginTop: '20px' }}>
                 <div>Nama : {dataOcr.nama}</div>
                 <div>NIK : {dataOcr.nik}</div>
                 <div>Tanggal Lahir : {dataOcr.ttl}</div>
@@ -114,6 +117,9 @@ export default function OCRDemo() {
             <div>
               <button className="next-button" onClick={nextStep}>Lanjutkan</button>
             </div>
+          </div>
+          <div style={{ marginTop: '40px' }}>
+            <img style={{ width: '50%' }} src={require('../assets/bigvision.png')} alt="Welcoming" />
           </div>
         </div>
       }
