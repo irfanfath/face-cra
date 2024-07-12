@@ -24,7 +24,7 @@ export default function SuccessPage() {
         <div style={{ fontSize: '20px' }}>Perhatian</div>
         <ul style={{ textAlign: 'left', listStyleType: 'decimal' }}>
           <li style={{ color: '#8F92A1' }}>Siapkan ktp anda</li>
-          <li style={{ color: '#8F92A1' }}>Tidak menggunakan kacamata, topi, atau aksesoris lain</li>
+          <li style={{ color: '#8F92A1' }}>Tidak menggunakan kacamata, topi, atau aksesoris lain pada wajah</li>
           <li style={{ color: '#8F92A1' }}>Ikuti instruksi dengan benar</li>
         </ul>
         <div style={{ marginTop: '50px', padding: '20px' }}>
