@@ -101,14 +101,14 @@ export default function OCRDemo() {
         :
         <div style={{ padding: '20px' }}>
           <div className="bg-welcoming" style={{ marginTop: '20px', padding: '20px', marginBottom: '5%' }}>
-            <div className="bg-ktp-result" style={{display: 'inline-flex', placeItems: 'center'}}>
+            <div className="bg-ktp-result" style={{ display: 'inline-flex', placeItems: 'center', width: '80%' }}>
               <CircleCheck color="#0a8053" size={50} />
-              <div style={{ fontSize: '20px', fontWeight: '600', textAlign: 'left', marginLeft: '10px' }}>OCR Extraction <br /><strong>Berhasil</strong></div>
+              <div style={{ fontSize: '20px', fontWeight: '600', textAlign: 'left', marginLeft: '20px' }}>OCR Extraction <br /><strong>Berhasil</strong></div>
             </div>
             <div style={{ marginTop: '50px' }}>
               <img src={imageSrc} alt="captured" style={{ width: '150px' }} />
-              <div style={{ marginTop: '20px', fontWeight: '600', fontSize: '20px' }}>Detail</div>
-              <div style={{ textAlign: 'left', padding: '10px 30px 30px 60px', marginTop: '20px' }}>
+              <div style={{ marginTop: '40px', fontWeight: '600', fontSize: '20px' }}>Detail</div>
+              <div style={{ textAlign: 'left', padding: '10px 30px 30px 60px' }}>
                 <div>Nama : {dataOcr.nama}</div>
                 <div>NIK : {dataOcr.nik}</div>
                 <div>Tanggal Lahir : {dataOcr.ttl}</div>
