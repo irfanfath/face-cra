@@ -409,7 +409,7 @@ const FaceLandmarker = () => {
             {!isLiveness ?
               <video className='video-face' poster="noposter" ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
               :
-              <div style={{ padding: '20px' }}>
+              <div style={{ marginTop: '10vh' }}>
                 <div className="bg-welcoming" style={{ marginTop: '20px', padding: '20px', marginBottom: '5%' }}>
                   <div className="bg-ktp-result" style={{ display: 'inline-flex', placeItems: 'center', width: '80%' }}>
                     <CircleCheck color="#0a8053" size={50} />
@@ -418,12 +418,12 @@ const FaceLandmarker = () => {
                   <div style={{ marginTop: '50px' }}>
                     <div style={{ fontSize: '20px' }}>Wajah yang terdeteksi adalah <br /><strong>{dataLiveness}</strong> Face!</div>
                   </div>
-                  <div style={{marginTop: '50px'}}>
+                  <div style={{ marginTop: '50px' }}>
                     <button className="next-button" onClick={restartStep}>Menu utama</button>
                   </div>
                 </div>
-                <div style={{ marginTop: '40px' }}>
-                  <img style={{ width: '50%' }} src={require('../assets/bigvision.png')} alt="Welcoming" />
+                <div style={{ marginTop: '40px', marginBottom: '20px' }}>
+                  <img src={require('../assets/bigvision.png')} alt="Welcoming" />
                 </div>
               </div>
             }

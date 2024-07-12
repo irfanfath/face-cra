@@ -99,16 +99,16 @@ export default function OCRDemo() {
           </div>
         </div>
         :
-        <div style={{ padding: '20px' }}>
+        <div style={{ marginTop: '10vh'}}>
           <div className="bg-welcoming" style={{ marginTop: '20px', padding: '20px', marginBottom: '5%' }}>
             <div className="bg-ktp-result" style={{ display: 'inline-flex', placeItems: 'center', width: '80%' }}>
               <CircleCheck color="#0a8053" size={50} />
               <div style={{ fontSize: '20px', fontWeight: '600', textAlign: 'left', marginLeft: '20px' }}>OCR Extraction <br /><strong>Berhasil</strong></div>
             </div>
             <div style={{ marginTop: '50px' }}>
-              <img src={imageSrc} alt="captured" style={{ width: '150px' }} />
+              <img src={imageSrc} alt="captured" style={{ width: '200px', borderRadius: '15px'}} />
               <div style={{ marginTop: '40px', fontWeight: '600', fontSize: '20px' }}>Detail</div>
-              <div style={{ textAlign: 'left', padding: '10px 30px 30px 60px' }}>
+              <div style={{ textAlign: 'left', padding: '10px 10px 30px 30px' }}>
                 <div>Nama : {dataOcr.nama}</div>
                 <div>NIK : {dataOcr.nik}</div>
                 <div>Tanggal Lahir : {dataOcr.ttl}</div>
@@ -118,8 +118,8 @@ export default function OCRDemo() {
               <button className="next-button" onClick={nextStep}>Lanjutkan</button>
             </div>
           </div>
-          <div style={{ marginTop: '40px' }}>
-            <img style={{ width: '50%' }} src={require('../assets/bigvision.png')} alt="Welcoming" />
+          <div style={{ marginTop: '40px', marginBottom: '20px' }}>
+            <img src={require('../assets/bigvision.png')} alt="Welcoming" />
           </div>
         </div>
       }
