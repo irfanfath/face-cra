@@ -119,3 +119,8 @@ body {
   border-radius: 10px;
 }
 
+.bg-welcoming {
+  background: #ffff;
+  border-radius: 40px 40px 0px 0px;
+}
+

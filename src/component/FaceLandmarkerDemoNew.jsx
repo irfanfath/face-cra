@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import * as vision from '@mediapipe/tasks-vision';
+import { CircleCheck } from 'lucide-react';
 
 const pipeline = [
   { task: 'hadap-kiri', word: 'Silahkan Hadap Kiri' },
@@ -377,9 +378,15 @@ const FaceLandmarker = () => {
     return text;
   }, [messageError]);
 
-  const successStep = () => {
+  // const successStep = () => {
+  //   const url = new URL(window.location.href);
+  //   url.searchParams.set('step', 'success-page');
+  //   window.location.href = url.toString();
+  // }
+
+  const restartStep = () => {
     const url = new URL(window.location.href);
-    url.searchParams.set('step', 'success-page');
+    url.searchParams.set('step', '1');
     window.location.href = url.toString();
   }
 
@@ -387,7 +394,7 @@ const FaceLandmarker = () => {
     <div>
       <section id="demos">
         <div id="liveView" className="videoView">
-          {!isLiveness && <img className="bg-image" alt="" src={require('../assets/bg-face.png')} />} 
+          {!isLiveness && <img className="bg-image" alt="" src={require('../assets/bg-face.png')} />}
           <div style={{ position: 'relative' }}>
             {videoRef &&
               <video className='video-face' poster="noposter" ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
@@ -424,12 +431,13 @@ const FaceLandmarker = () => {
             // </div>
             <div style={{ padding: '20px' }}>
               <div className="bg-ktp-result" style={{ marginTop: '20px', padding: '20px', marginBottom: '5%' }}>
+                <CircleCheck color="#0a8053" size={100} />
                 <div style={{ marginTop: '20px', fontSize: '30px', fontWeight: '600' }}>Verfikasi Wajah Berhasil</div>
                 <div style={{ marginTop: '50px' }}>
-                  <div style={{ fontSize: '20px' }}>Wajah yang terdeteksi adalah <br/><strong>{dataLiveness}</strong> Face!</div>
+                  <div style={{ fontSize: '20px' }}>Wajah yang terdeteksi adalah <br /><strong>{dataLiveness}</strong> Face!</div>
                 </div>
                 <div style={{ marginTop: '50px' }}>
-                  <button className="next-button" onClick={successStep}>Menu utama</button>
+                  <button className="next-button" onClick={restartStep}>Menu utama</button>
                 </div>
               </div>
             </div>

@@ -11,10 +11,10 @@ function App() {
     const urlParams = new URLSearchParams(window.location.search);
     const step = urlParams.get('step');
 
-    if (step === 'face-recognition') {
+    if (step === 'ocr-extract') {
+      setCurrentPage('ocr-extract');
+    } else if (step === 'face-recognition') {
       setCurrentPage('face-recognition');
-    } else if (step === 'success-page') {
-      setCurrentPage('success-page');
     } else {
       setCurrentPage(1);
     }
@@ -22,9 +22,9 @@ function App() {
 
   return (
     <div className="App">
-      {currentPage === 1 && <OCRDemo />}
+      {currentPage === 1 && <SuccessPage />}
+      {currentPage === 'ocr-extract' && <OCRDemo />}
       {currentPage === 'face-recognition' && <FaceLandmarkerNew />}
-      {currentPage === 'success-page' && <SuccessPage />}
     </div>
   );
 }
