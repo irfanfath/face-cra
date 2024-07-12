@@ -29,7 +29,7 @@ export default function OCRDemo() {
   const capture = async () => {
     const imageSrc = webcamRef.current.getScreenshot();
     setImageSrc(imageSrc);
-    localStorage.setItem('ktp', imageSrc)
+    // localStorage.setItem('ktp', imageSrc)
 
     try {
       if (!imageSrc) {
