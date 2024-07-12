@@ -387,7 +387,7 @@ const FaceLandmarker = () => {
     <div>
       <section id="demos">
         <div id="liveView" className="videoView">
-          {!isLiveness && <img className="bg-image" alt="" src={require('../assets/Subtract.png')} />} 
+          {!isLiveness && <img className="bg-image" alt="" src={require('../assets/bg-face.png')} />} 
           <div style={{ position: 'relative' }}>
             {videoRef &&
               <video className='video-face' poster="noposter" ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
