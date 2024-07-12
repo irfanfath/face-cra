@@ -153,6 +153,14 @@ const FaceLandmarker = () => {
     }
   };
 
+  const disableCam = () => {
+    webcamRunningRef.current = false;
+    if (cameraRef.current) {
+      cameraRef.current.getTracks().forEach(track => track.stop());
+      videoRef.current.srcObject = null;
+    }
+  };
+
   const predictWebcam = async (e) => {
     if (!isVideo.current) {
       isVideo.current = true;
@@ -246,7 +254,7 @@ const FaceLandmarker = () => {
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
-            alert('Thankyou for using our service')
+            disableCam();
             // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
           } else {
             setPipelineIndex((val) => {
@@ -260,7 +268,7 @@ const FaceLandmarker = () => {
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
-            alert('Thankyou for using our service')
+            disableCam();
             // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
           } else {
             setPipelineIndex((val) => {
@@ -274,7 +282,7 @@ const FaceLandmarker = () => {
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
-            alert('Thankyou for using our service')
+            disableCam();
             // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
           } else {
             setPipelineIndex((val) => {
@@ -289,7 +297,7 @@ const FaceLandmarker = () => {
           storeData(pipelineRef.current === pipelineCount).then((res) => {
             if (pipelineRef.current === pipelineCount) {
               cameraRef.current.getTracks().forEach(track => track.stop());
-              alert('Thankyou for using our service')
+              disableCam();
               // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
             } else {
               setPipelineIndex((val) => {
@@ -305,7 +313,7 @@ const FaceLandmarker = () => {
           storeData(pipelineRef.current === pipelineCount).then((res) => {
             if (pipelineRef.current === pipelineCount) {
               cameraRef.current.getTracks().forEach(track => track.stop());
-              alert('Thankyou for using our service')
+              disableCam();
               // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
             } else {
               setPipelineIndex((val) => {
@@ -320,9 +328,11 @@ const FaceLandmarker = () => {
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
+            disableCam()
             handleLiveness(res.image)
               .then((res) => {
                 setLoading(true)
+                disableCam()
                 // alert(res.message.results[0].liveness)
                 setDataLiveness(res.message.results[0].liveness)
                 setIsLiveness(true)
@@ -396,9 +406,28 @@ const FaceLandmarker = () => {
         <div id="liveView" className="videoView">
           {!isLiveness && <img className="bg-image" alt="" src={require('../assets/bg-face.png')} />}
           <div style={{ position: 'relative' }}>
-            {videoRef &&
+            {!isLiveness ?
               <video className='video-face' poster="noposter" ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
+              :
+              <div style={{ padding: '20px' }}>
+                <div className="bg-welcoming" style={{ marginTop: '20px', padding: '20px', marginBottom: '5%' }}>
+                  <div className="bg-ktp-result" style={{ display: 'inline-flex', placeItems: 'center', width: '80%' }}>
+                    <CircleCheck color="#0a8053" size={50} />
+                    <div style={{ fontSize: '20px', fontWeight: '600', textAlign: 'left', marginLeft: '20px' }}>Face Recognition <br /><strong>Berhasil</strong></div>
+                  </div>
+                  <div style={{ marginTop: '50px' }}>
+                    <div style={{ fontSize: '20px' }}>Wajah yang terdeteksi adalah <br /><strong>{dataLiveness}</strong> Face!</div>
+                  </div>
+                  <div style={{marginTop: '50px'}}>
+                    <button className="next-button" onClick={restartStep}>Menu utama</button>
+                  </div>
+                </div>
+                <div style={{ marginTop: '40px' }}>
+                  <img style={{ width: '50%' }} src={require('../assets/bigvision.png')} alt="Welcoming" />
+                </div>
+              </div>
             }
+
             {
               rejectMessage !== '' ? (
                 <div style={{ zIndex: "2000", background: "#C40C0C", position: 'absolute', top: 0, left: 0, right: 0, height: 'fit' }}>
@@ -406,42 +435,25 @@ const FaceLandmarker = () => {
                 </div>
               ) : null
             }
-            {loading ?
-              <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
-                <span style={{ color: 'white' }}>Harap Tunggu<br /><span style={{ fontSize: 20 }}>sedang memproses kamera</span></span>
-              </div>
-              :
-              <div style={{ position: 'fixed', fontSize: 22, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
-                <span style={{ color: 'white' }}>
-                  {(message && message[pipelineIndex]) || (dynamicPipeline[pipelineIndex]?.word)}
-                  <br />
-                  <span style={{ fontSize: 20 }}>{instructionMessage}</span>
-                </span>
-              </div>
+
+            {
+              !isLiveness ?
+                loading ?
+                  <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
+                    <span style={{ color: 'white' }}>Harap Tunggu<br /><span style={{ fontSize: 20 }}>sedang memproses kamera</span></span>
+                  </div>
+                  :
+                  <div style={{ position: 'fixed', fontSize: 22, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
+                    <span style={{ color: 'white' }}>
+                      {(message && message[pipelineIndex]) || (dynamicPipeline[pipelineIndex]?.word)}
+                      <br />
+                      <span style={{ fontSize: 20 }}>{instructionMessage}</span>
+                    </span>
+                  </div>
+                :
+                ''
             }
           </div>
-        </div>
-        <div style={{ position: 'fixed', zIndex: 1000, width: '100%' }}>
-          {isLiveness &&
-            // <div className="modal-content" style={{marginTop: '40vh'}}>
-            //   <div style={{ textAlign: 'center', paddingLeft: '20px', marginBottom: '20px' }}>
-            //     <div>Hasil deteksi wajah : {dataLiveness} Face!</div>
-            //   </div>
-            //   <button onClick={successStep}>Next Step</button>
-            // </div>
-            <div style={{ padding: '20px' }}>
-              <div className="bg-ktp-result" style={{ marginTop: '20px', padding: '20px', marginBottom: '5%' }}>
-                <CircleCheck color="#0a8053" size={100} />
-                <div style={{ marginTop: '20px', fontSize: '30px', fontWeight: '600' }}>Verfikasi Wajah Berhasil</div>
-                <div style={{ marginTop: '50px' }}>
-                  <div style={{ fontSize: '20px' }}>Wajah yang terdeteksi adalah <br /><strong>{dataLiveness}</strong> Face!</div>
-                </div>
-                <div style={{ marginTop: '50px' }}>
-                  <button className="next-button" onClick={restartStep}>Menu utama</button>
-                </div>
-              </div>
-            </div>
-          }
         </div>
         <div style={{ position: 'fixed', bottom: 70, left: 0, right: 0, zIndex: 1000 }}>
           <span style={{ color: 'white' }}>{isLastMessage}</span>
