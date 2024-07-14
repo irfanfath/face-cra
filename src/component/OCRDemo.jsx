@@ -50,7 +50,7 @@ export default function OCRDemo() {
         body: formData
       };
 
-      const response = await fetch('https://bigvision.id/upload/ktp-extraction', requestOptions);
+      const response = await fetch('https://bigvision.id/upload/ktp-extraction2', requestOptions);
       const data = await response.json();
 
       console.log('Response from server:', data);
