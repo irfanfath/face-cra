@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import Webcam from "react-webcam";
 import bgImage from '../assets/bg-ktp.png';
-import { Camera, CircleCheck } from "lucide-react";
+import { Camera, CircleCheck, Undo2 } from "lucide-react";
 
 export default function OCRDemo() {
   const webcamRef = useRef(null);
@@ -90,24 +90,30 @@ export default function OCRDemo() {
             style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
           />
           <div style={{ position: 'fixed', bottom: 30, left: 0, right: 0, zIndex: 1000 }}>
-            <button
-              className="circle-button"
-              onClick={capture}
-            >
-              <Camera size={"60px"} color="#ffff" />
-            </button>
-
+            {loading ?
+              <div style={{ color: '#ffff' }}>Harap tunggu sedang proses ekstrasi..</div>
+              :
+              <button
+                className="circle-button"
+                onClick={capture}
+              >
+                <Camera size={"60px"} color="#ffff" />
+              </button>
+            }
           </div>
         </div>
         :
-        <div style={{ marginTop: '10vh'}}>
-          <div className="bg-welcoming" style={{ marginTop: '20px', padding: '20px', marginBottom: '5%' }}>
+        <div>
+          <div style={{ padding: '20px', textAlign: 'left' }} onClick={()=>setResult(false)}>
+            <Undo2 size={35} color="#ffff" strokeWidth={2} />
+          </div>
+          <div className="bg-welcoming" style={{ padding: '20px', marginBottom: '5%' }}>
             <div className="bg-ktp-result" style={{ display: 'inline-flex', placeItems: 'center', width: '80%' }}>
               <CircleCheck color="#0a8053" size={50} />
               <div style={{ fontSize: '20px', fontWeight: '600', textAlign: 'left', marginLeft: '20px' }}>OCR Extraction <br /><strong>Berhasil</strong></div>
             </div>
             <div style={{ marginTop: '50px' }}>
-              <img src={imageSrc} alt="captured" style={{ width: '200px', borderRadius: '15px'}} />
+              <img src={imageSrc} alt="captured" style={{ width: '200px', borderRadius: '15px' }} />
               <div style={{ marginTop: '40px', fontWeight: '600', fontSize: '20px' }}>Detail</div>
               <div style={{ textAlign: 'left', padding: '10px 10px 30px 30px' }}>
                 <div>Nama : {dataOcr.nama}</div>
