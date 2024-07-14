@@ -472,7 +472,7 @@ const FaceLandmarker = () => {
                     <div style={{ fontSize: '20px' }}>Hasil Similarity KTP dan wajah terdeteksi sebagai <br /><strong>{dataSimilarity}</strong> Face!</div>
                   </div>
                   <div style={{ marginTop: '50px' }}>
-                    <button className="next-button" onClick={restartStep}>Lanjutkan</button>
+                    <button className="next-button" onClick={restartStep}>Menu Utama</button>
                   </div>
                 </div>
                 <div style={{ marginTop: '40px', marginBottom: '20px' }}>
