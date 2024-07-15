@@ -362,8 +362,8 @@ const FaceLandmarker = () => {
             disableCam()
             handleLiveness(res.image)
               .then((res) => {
-                setLoading(true)
-                disableCam()
+                // setLoading(true)
+                // disableCam()
                 // alert(res.message.results[0].liveness)
                 setDataLiveness(res.message.results[0].liveness)
                 // setIsLiveness(true)
@@ -372,11 +372,11 @@ const FaceLandmarker = () => {
             handleLiveness(res.image)
               .then((res) => {
                 setDataLiveness(res.message.results[0].liveness)
-                setPipelineIndex((val) => {
-                  pipelineRef.current = val + 1;
-                  return val + 1
-                })
               })
+            setPipelineIndex((val) => {
+              pipelineRef.current = val + 1;
+              return val + 1
+            })
           }
         }).catch(() => { });
       } else if (jawopenValue < 0.2 && currentTask === 'face-similarity') {
@@ -388,14 +388,15 @@ const FaceLandmarker = () => {
             handleSimilarity(res.image)
               .then((res) => {
                 setLoading(true)
-                setIsLiveness(true)
                 disableCam()
                 setDataSimilarity(res.message.results.status)
+                setIsLiveness(true)
               })
           } else {
             handleSimilarity(res.image)
               .then((res) => {
                 setDataSimilarity(res.message.results.status)
+
               })
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
