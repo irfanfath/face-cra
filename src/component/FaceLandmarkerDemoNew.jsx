@@ -376,7 +376,7 @@ const FaceLandmarker = () => {
             })
           }
         }).catch(() => { });
-      } else if (jawopenValue < 0.2 && currentTask === 'face-similarity') {
+      } else if (eyelookinrightValue > 0.5 && currentTask === 'face-similarity') {
         isLoadingRef.current = true;
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
