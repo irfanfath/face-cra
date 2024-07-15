@@ -369,11 +369,11 @@ const FaceLandmarker = () => {
             handleLiveness(res.image)
               .then((res) => {
                 setDataLiveness(res.message.results[0].liveness)
+                setPipelineIndex((val) => {
+                  pipelineRef.current = val + 1;
+                  return val + 1
+                })
               })
-            setPipelineIndex((val) => {
-              pipelineRef.current = val + 1;
-              return val + 1
-            })
           }
         }).catch(() => { });
       } else if (eyelookinrightValue > 0.5 && currentTask === 'face-similarity') {
