@@ -363,7 +363,7 @@ const FaceLandmarker = () => {
             handleLiveness(res.image)
               .then((res) => {
                 setLoading(true)
-                // disableCam()
+                disableCam()
                 // alert(res.message.results[0].liveness)
                 setDataLiveness(res.message.results[0].liveness)
                 // setIsLiveness(true)
@@ -388,9 +388,9 @@ const FaceLandmarker = () => {
             handleSimilarity(res.image)
               .then((res) => {
                 setLoading(true)
+                setIsLiveness(true)
                 disableCam()
                 setDataSimilarity(res.message.results.status)
-                setIsLiveness(true)
               })
           } else {
             handleSimilarity(res.image)
