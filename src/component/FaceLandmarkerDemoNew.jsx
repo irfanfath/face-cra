@@ -364,7 +364,6 @@ const FaceLandmarker = () => {
               .then((res) => {
                 setLoading(true)
                 disableCam()
-                // alert(res.message.results[0].liveness)
                 setDataLiveness(res.message.results[0].liveness)
                 setIsLiveness(true)
               })
@@ -388,15 +387,14 @@ const FaceLandmarker = () => {
             handleSimilarity(res.image)
               .then((res) => {
                 setLoading(true)
-                disableCam()
                 setDataSimilarity(res.message.results.status)
                 setIsLiveness(true)
+                disableCam()
               })
           } else {
             handleSimilarity(res.image)
               .then((res) => {
                 setDataSimilarity(res.message.results.status)
-
               })
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
