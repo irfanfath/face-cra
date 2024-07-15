@@ -94,7 +94,7 @@ function base64ToBlob(base64, type = 'application/octet-stream') {
   return new Blob([bytes], { type });
 }
 
-const DEFAULT_VALUE_PIPELINE = [0, 1, 2, 3, 4, 6, 5];
+const DEFAULT_VALUE_PIPELINE = [0, 1, 2, 3, 4, 5, 6];
 const FaceLandmarker = () => {
   const faceLandmarkerRef = useRef(false);
   const pipelineRef = useRef(0);
@@ -363,20 +363,20 @@ const FaceLandmarker = () => {
             handleLiveness(res.image)
               .then((res) => {
                 setLoading(true)
-                disableCam()
+                // disableCam()
                 // alert(res.message.results[0].liveness)
                 setDataLiveness(res.message.results[0].liveness)
-                setIsLiveness(true)
+                // setIsLiveness(true)
               })
           } else {
             handleLiveness(res.image)
               .then((res) => {
                 setDataLiveness(res.message.results[0].liveness)
+                setPipelineIndex((val) => {
+                  pipelineRef.current = val + 1;
+                  return val + 1
+                })
               })
-            setPipelineIndex((val) => {
-              pipelineRef.current = val + 1;
-              return val + 1
-            })
           }
         }).catch(() => { });
       } else if (jawopenValue < 0.2 && currentTask === 'face-similarity') {
@@ -396,7 +396,6 @@ const FaceLandmarker = () => {
             handleSimilarity(res.image)
               .then((res) => {
                 setDataSimilarity(res.message.results.status)
-
               })
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
