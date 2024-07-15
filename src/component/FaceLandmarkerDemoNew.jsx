@@ -8,8 +8,8 @@ const pipeline = [
   { task: 'buka-mulut', word: 'Silahkan Buka Mulut' },
   { task: 'kedip-mata', word: 'Silahkan Kedipkan Mata Anda' },
   { task: 'hadap-depan', word: 'Silahkan Menghadap depan' },
-  { task: 'face-liveness', word: 'Silahkan Lihat Kamera' },
-  { task: 'face-similarity', word: 'Tetap Lihat Kamera' },
+  { task: 'face-active', word: 'Silahkan Lihat Kamera' },
+  // { task: 'face-similarity', word: 'Tetap Lihat Kamera' },
   // { task: 'selesai', word: 'Selesai' }
 ];
 
@@ -60,7 +60,7 @@ const handleSimilarity = (image) => {
     try {
       const token = 'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJ2Qk55YVpaU0dBVk5Zek12ZEp2ajhWUkdyOFVGUF9qUnh1dFdFd3Exa0RZIn0.eyJleHAiOi0xODAxNTkxNTU4LCJpYXQiOjE2MjkzNzU3MzgsImp0aSI6IjExYWVjZjJlLTNhNDMtNDEyMy05MDFjLTZkOGI0YjliMWMwOSIsImlzcyI6Imh0dHA6Ly9rZXljbG9hazo4MDgwL2F1dGgvcmVhbG1zL3BpY2Fzby1wbGF0Zm9ybSIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiIwYjU1OTNhMi03MTQ4LTRkNzAtOTBkMC0yMTI3NGQyMjdmMDEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhZG1pbiIsInNlc3Npb25fc3RhdGUiOiI4OTRhYmE4OS1hYTFjLTQwNDEtYmIyZC0yNGQ2YTEwMDQ2NDAiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHBzOi8vZHNjLW9jci51ZGF0YS5pZDo4MDgzIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiYWJkYW5tdWxpYTQgYWJkYW5tdWxpYTQiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJjZDMyN2U3ZS1kNDQ0LTRkZGMtOTMyZS04NGYyYjBhOTMyY2EiLCJnaXZlbl9uYW1lIjoiYWJkYW5tdWxpYTQiLCJmYW1pbHlfbmFtZSI6ImFiZGFubXVsaWE0IiwiZW1haWwiOiJqc3Vwb3lvQGdtYWlsLmNvbSJ9.QHe4RwUVmRhE8DunHEte5DSgJfjfJ7MjDPkQUsOVNFUW600bAmAssAsWSCDNogUw__161jv6LzzBaqa0dTNEhZOmfl3wVoRK7Km1ZJsnSmcm6y2y05WbKKChvdbDTGw8zyCmt5iFOtnZLh1Y-U2M1EvogjzFTLHGf_FPPAHtGRXR9w2GOOiXjvCCLq9Nng7rtVyLj0vRAQG4KThkjm0mCIsWyUBnl96lmicARsedEhOH44DyrlyoXs5rA8BKbgXJuMKAorI36I3U-4C9IbBKfYQeZg0lo5Z-V4tbPVgNYvTnSK9lNCR3Su8polqTt8dFgg8QIIf-kv7bDtJ42EEJrA'
       const blob = base64ToBlob(image, 'image/jpeg');
-      const fotoktp = localStorage.getItem('ktp')?.split(',')[1];
+      const fotoktp = localStorage.getItem('ktp').split(',')[1];
       const blob2 = await fetch(`data:image/jpeg;base64,${fotoktp}`).then(res => res.blob());
       const formData = new FormData();
       formData.append('image_1', blob, 'image.jpg');
@@ -94,7 +94,7 @@ function base64ToBlob(base64, type = 'application/octet-stream') {
   return new Blob([bytes], { type });
 }
 
-const DEFAULT_VALUE_PIPELINE = [0, 1, 2, 3, 4, 5, 6];
+const DEFAULT_VALUE_PIPELINE = [0, 1, 2, 3, 4, 5];
 const FaceLandmarker = () => {
   const faceLandmarkerRef = useRef(false);
   const pipelineRef = useRef(0);
@@ -354,7 +354,7 @@ const FaceLandmarker = () => {
             }
           }).catch(() => { });
         }, 1000)
-      } else if (jawopenValue < 0.2 && currentTask === 'face-liveness') {
+      } else if (jawopenValue < 0.2 && currentTask === 'face-active') {
         isLoadingRef.current = true;
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
@@ -362,45 +362,24 @@ const FaceLandmarker = () => {
             disableCam()
             handleLiveness(res.image)
               .then((res) => {
-                setLoading(true)
+                disableCam()
                 setDataLiveness(res.message.results[0].liveness)
               })
-          } else {
-            handleLiveness(res.image)
-              .then((res) => {
-                setDataLiveness(res.message.results[0].liveness)
-                setPipelineIndex((val) => {
-                  pipelineRef.current = val + 1;
-                  return val + 1
-                })
-              })
-          }
-        }).catch(() => { });
-      } else if (eyelookinrightValue > 0.5 && currentTask === 'face-similarity') {
-        isLoadingRef.current = true;
-        storeData(pipelineRef.current === pipelineCount).then((res) => {
-          if (pipelineRef.current === pipelineCount) {
-            cameraRef.current.getTracks().forEach(track => track.stop());
-            disableCam()
             handleSimilarity(res.image)
               .then((res) => {
-                setLoading(true)
+                disableCam()
                 setDataSimilarity(res.message.results.status)
                 setIsLiveness(true)
-                disableCam()
               })
           } else {
-            handleSimilarity(res.image)
-              .then((res) => {
-                setDataSimilarity(res.message.results.status)
-              })
+            disableCam()
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
               return val + 1
             })
           }
         }).catch(() => { });
-      }
+      } 
     }
 
 
