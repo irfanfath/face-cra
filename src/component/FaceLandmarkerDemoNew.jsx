@@ -363,9 +363,7 @@ const FaceLandmarker = () => {
             handleLiveness(res.image)
               .then((res) => {
                 setLoading(true)
-                disableCam()
                 setDataLiveness(res.message.results[0].liveness)
-                setIsLiveness(true)
               })
           } else {
             handleLiveness(res.image)
