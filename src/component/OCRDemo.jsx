@@ -121,9 +121,9 @@ export default function OCRDemo() {
                 <div>Tanggal Lahir : {dataOcr.ttl}</div>
               </div>
             </div>
-            <div>
+            {/* <div>
               <button className="next-button" onClick={nextStep}>Lanjutkan</button>
-            </div>
+            </div> */}
           </div>
           <div style={{ marginTop: '40px', marginBottom: '20px' }}>
             <img src={require('../assets/bigvision.png')} alt="Welcoming" />
