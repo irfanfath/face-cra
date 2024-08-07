@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import './App.css';
 import FaceLandmarkerNew from './component/FaceLandmarkerDemoNew';
 import OCRDemo from './component/OCRDemo';
-import SuccessPage from './component/SuccessPage';
+import WelcomingKTP from './component/WelcomingKTP';
 import ManufactureDemo from './component/ManufactureDemo';
 import WelcomingOCR from './component/WelcomingOCR';
 
@@ -26,7 +26,7 @@ function App() {
 
   return (
     <div className="App">
-      {/* {currentPage === 1 && <SuccessPage />} */}
+      {/* {currentPage === 1 && <WelcomingKTP />} */}
       {currentPage === 1 && <WelcomingOCR />}
       {currentPage === 'ocr-extract' && <OCRDemo />}
       {currentPage === 'manufacture-extract' && <ManufactureDemo />}

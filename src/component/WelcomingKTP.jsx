@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function SuccessPage() {
+export default function WelcomingKTP() {
   const startStep = () => {
     const url = new URL(window.location.href);
     url.searchParams.set('step', 'manufacture-extract');
