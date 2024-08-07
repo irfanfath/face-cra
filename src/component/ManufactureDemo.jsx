@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 import Webcam from "react-webcam";
 import bgImage from '../assets/bg-ktp.png';
-import { Camera, CircleCheck, Undo2 } from "lucide-react";
+import { ArrowLeft, Camera, CircleCheck } from "lucide-react";
 
-export default function OCRDemo() {
+export default function ManufactureDemo() {
   const webcamRef = useRef(null);
   const [imageSrc, setImageSrc] = useState(null);
   const [dataOcr, setDataOcr] = useState([]);
@@ -50,7 +50,7 @@ export default function OCRDemo() {
         body: formData
       };
 
-      const response = await fetch('https://bigvision.id/upload/ktp-extraction2', requestOptions);
+      const response = await fetch('https://bigvision.id/upload/free-form-ocr-extract', requestOptions);
       const data = await response.json();
 
       console.log('Response from server:', data);
@@ -63,21 +63,13 @@ export default function OCRDemo() {
     }
   };
 
-  const nextStep = () => {
-    const url = new URL(window.location.href);
-    url.searchParams.set('step', 'face-recognition');
-    url.searchParams.set('id_request', 'testing');
-    url.searchParams.set('app', 'b1gv1s10n');
-    window.location.href = url.toString();
-  };
-
   return (
     <div className="webcam-container">
       {result !== true ?
         <div className="webcam-img">
           <img className="bg-image" alt="" src={bgImage} />
           <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
-            <span style={{ color: 'white' }}>Foto KTP Anda<br /><span style={{ fontSize: 20 }}>sesuaikan posisi KTP anda</span></span>
+            <span style={{ color: 'white' }}>Foto Manufaktur Anda<br /><span style={{ fontSize: 20 }}>sesuaikan posisi manufaktur anda</span></span>
           </div>
           <Webcam
             className="webcam"
@@ -105,7 +97,7 @@ export default function OCRDemo() {
         :
         <div>
           <div style={{ padding: '20px', textAlign: 'left' }} onClick={() => setResult(false)}>
-            <Undo2 size={35} color="#ffff" strokeWidth={2} />
+            <ArrowLeft size={35} color="#ffff" strokeWidth={2} />
           </div>
           <div className="bg-welcoming" style={{ padding: '20px', marginBottom: '5%' }}>
             <div className="bg-ktp-result" style={{ display: 'inline-flex', placeItems: 'center', width: '80%' }}>
@@ -113,16 +105,17 @@ export default function OCRDemo() {
               <div style={{ fontSize: '20px', fontWeight: '600', textAlign: 'left', marginLeft: '20px' }}>OCR Extraction <br /><strong>Berhasil</strong></div>
             </div>
             <div style={{ marginTop: '50px' }}>
-              <img src={imageSrc} alt="captured" style={{ width: '200px', borderRadius: '15px' }} />
-              <div style={{ marginTop: '40px', fontWeight: '600', fontSize: '20px' }}>Detail</div>
-              <div style={{ textAlign: 'left', padding: '10px 10px 30px 30px' }}>
-                <div>Nama : {dataOcr.nama}</div>
-                <div>NIK : {dataOcr.nik}</div>
-                <div>Tanggal Lahir : {dataOcr.ttl}</div>
+              <img src={imageSrc} alt="captured" style={{ width: '100%', borderRadius: '15px' }} />
+              <div style={{ margin: '20px', fontWeight: '600', fontSize: '18px' }}>Detail</div>
+              <div style={{ textAlign: 'left', padding: '10px', background: '#F5F8FF', borderRadius: 10 }}>
+                {Object.entries(dataOcr).map(([key, value]) => (
+                  <div key={key}>
+                    <span style={{color: '#272D4E', fontWeight: '600',  wordWrap: 'break-word'}}>{key.replace('_', ' ').toUpperCase()} : </span>
+                    <span style={{color: '#8F92A1', fontWeight: '400',  wordWrap: 'break-word'}}>{value}</span>
+                    {/* <strong>{key.replace('_', ' ').toUpperCase()} : </strong> {value} */}
+                  </div>
+                ))}
               </div>
-            </div>
-            <div>
-              <button className="next-button" onClick={nextStep}>Lanjutkan</button>
             </div>
           </div>
           <div style={{ marginTop: '40px', marginBottom: '20px' }}>

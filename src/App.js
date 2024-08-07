@@ -3,6 +3,7 @@ import './App.css';
 import FaceLandmarkerNew from './component/FaceLandmarkerDemoNew';
 import OCRDemo from './component/OCRDemo';
 import SuccessPage from './component/SuccessPage';
+import ManufactureDemo from './component/ManufactureDemo';
 
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,6 +16,8 @@ function App() {
       setCurrentPage('ocr-extract');
     } else if (step === 'face-recognition') {
       setCurrentPage('face-recognition');
+    } else if (step === 'manufacture-extract') {
+      setCurrentPage('manufacture-extract')
     } else {
       setCurrentPage(1);
     }
@@ -24,6 +27,7 @@ function App() {
     <div className="App">
       {currentPage === 1 && <SuccessPage />}
       {currentPage === 'ocr-extract' && <OCRDemo />}
+      {currentPage === 'manufacture-extract' && <ManufactureDemo />}
       {currentPage === 'face-recognition' && <FaceLandmarkerNew />}
     </div>
   );

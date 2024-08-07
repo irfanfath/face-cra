@@ -3,7 +3,7 @@ import React from "react";
 export default function SuccessPage() {
   const startStep = () => {
     const url = new URL(window.location.href);
-    url.searchParams.set('step', 'ocr-extract');
+    url.searchParams.set('step', 'manufacture-extract');
     window.location.href = url.toString();
   }
 
