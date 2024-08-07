@@ -50,7 +50,8 @@ export default function OCRDemo() {
         body: formData
       };
 
-      const response = await fetch('https://bigvision.id/upload/ktp-extraction2', requestOptions);
+      // const response = await fetch('https://bigvision.id/upload/ktp-extraction2', requestOptions);
+      const response = await fetch('https://bigvision.id/upload/free-form-ocr-extract', requestOptions);
       const data = await response.json();
 
       console.log('Response from server:', data);
@@ -77,7 +78,7 @@ export default function OCRDemo() {
         <div className="webcam-img">
           <img className="bg-image" alt="" src={bgImage} />
           <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
-            <span style={{ color: 'white' }}>Foto KTP Anda<br /><span style={{ fontSize: 20 }}>sesuaikan posisi ktp anda</span></span>
+            <span style={{ color: 'white' }}>Foto Manufaktur Anda<br /><span style={{ fontSize: 20 }}>sesuaikan posisi manufaktur anda</span></span>
           </div>
           <Webcam
             className="webcam"
@@ -104,7 +105,7 @@ export default function OCRDemo() {
         </div>
         :
         <div>
-          <div style={{ padding: '20px', textAlign: 'left' }} onClick={()=>setResult(false)}>
+          <div style={{ padding: '20px', textAlign: 'left' }} onClick={() => setResult(false)}>
             <Undo2 size={35} color="#ffff" strokeWidth={2} />
           </div>
           <div className="bg-welcoming" style={{ padding: '20px', marginBottom: '5%' }}>
@@ -116,9 +117,14 @@ export default function OCRDemo() {
               <img src={imageSrc} alt="captured" style={{ width: '200px', borderRadius: '15px' }} />
               <div style={{ marginTop: '40px', fontWeight: '600', fontSize: '20px' }}>Detail</div>
               <div style={{ textAlign: 'left', padding: '10px 10px 30px 30px' }}>
-                <div>Nama : {dataOcr.nama}</div>
+                {/* <div>Nama : {dataOcr.nama}</div>
                 <div>NIK : {dataOcr.nik}</div>
-                <div>Tanggal Lahir : {dataOcr.ttl}</div>
+                <div>Tanggal Lahir : {dataOcr.ttl}</div> */}
+                {Object.entries(dataOcr).map(([key, value]) => (
+                  <div key={key}>
+                    <strong>{key.replace('_', ' ').toUpperCase()} : </strong> {value}
+                  </div>
+                ))}
               </div>
             </div>
             {/* <div>
