@@ -109,7 +109,7 @@ export default function ManufactureDemo() {
               <div style={{ margin: '20px', fontWeight: '600', fontSize: '18px' }}>Detail</div>
               <div style={{ textAlign: 'left', padding: '10px', background: '#F5F8FF', borderRadius: 10 }}>
                 {Object.entries(dataOcr).map(([key, value]) => (
-                  <div key={key}>
+                  <div style={{lineHeight: '30px'}} key={key}>
                     <span style={{color: '#272D4E', fontWeight: '600',  wordWrap: 'break-word'}}>{key.replace('_', ' ').toUpperCase()} : </span>
                     <span style={{color: '#8F92A1', fontWeight: '400',  wordWrap: 'break-word'}}>{value}</span>
                     {/* <strong>{key.replace('_', ' ').toUpperCase()} : </strong> {value} */}
