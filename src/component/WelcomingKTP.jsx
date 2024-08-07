@@ -3,7 +3,7 @@ import React from "react";
 export default function WelcomingKTP() {
   const startStep = () => {
     const url = new URL(window.location.href);
-    url.searchParams.set('step', 'manufacture-extract');
+    url.searchParams.set('step', 'ktp-extract');
     window.location.href = url.toString();
   }
 
