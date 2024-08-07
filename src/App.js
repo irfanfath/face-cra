@@ -4,6 +4,7 @@ import FaceLandmarkerNew from './component/FaceLandmarkerDemoNew';
 import OCRDemo from './component/OCRDemo';
 import SuccessPage from './component/SuccessPage';
 import ManufactureDemo from './component/ManufactureDemo';
+import WelcomingOCR from './component/WelcomingOCR';
 
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,7 +26,8 @@ function App() {
 
   return (
     <div className="App">
-      {currentPage === 1 && <SuccessPage />}
+      {/* {currentPage === 1 && <SuccessPage />} */}
+      {currentPage === 1 && <WelcomingOCR />}
       {currentPage === 'ocr-extract' && <OCRDemo />}
       {currentPage === 'manufacture-extract' && <ManufactureDemo />}
       {currentPage === 'face-recognition' && <FaceLandmarkerNew />}
