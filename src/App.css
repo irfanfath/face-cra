@@ -114,6 +114,23 @@ body {
   border: 2px solid #2D5988;
 }
 
+.cancel-button {
+  border-radius: 10px;
+  background: #ffff;
+  color: #002e5e;
+  border: 2px solid #002e5e;
+  padding: 15px;
+  font-size: 20px;
+  width: 90%;
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  background: linear-gradient(262.22deg, #002E5E 22.04%, #2D5988 69.46%);
+  color: #ffff;
+  border: 2px solid #2D5988;
+}
+
 .bg-ktp-result {
   background: #ffff;
   border-radius: 10px;

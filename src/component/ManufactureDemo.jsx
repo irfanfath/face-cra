@@ -1,23 +1,19 @@
 import React, { useState, useRef } from "react";
 import Webcam from "react-webcam";
 import bgImage from '../assets/bg-ktp.png';
-import { ArrowLeft, Camera, CircleCheck } from "lucide-react";
+import { ArrowLeft, Camera, CircleCheck, Pencil } from "lucide-react";
+import { Editor, EditorState, ContentState, convertFromRaw, convertToRaw } from 'draft-js';
+import 'draft-js/dist/Draft.css';
 
 export default function ManufactureDemo() {
   const webcamRef = useRef(null);
   const [imageSrc, setImageSrc] = useState(null);
-  const [dataOcr, setDataOcr] = useState([]);
+  const [dataOcr, setDataOcr] = useState({});
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
-  // let videoConstraints = {
-  //   facingMode: 'environment',
-  //   // width: 270,
-  //   // height: 480,
-  //   width: { min: 300 },
-  //   height: { min: 500 },
-  //   aspectRatio: 0.6666666667
-  // };
   let videoConstraints = {
     facingMode: 'environment',
     width: { ideal: 720 },
@@ -25,11 +21,10 @@ export default function ManufactureDemo() {
     aspectRatio: 9 / 16
   };
 
-
   const capture = async () => {
     const imageSrc = webcamRef.current.getScreenshot();
     setImageSrc(imageSrc);
-    localStorage.setItem('ktp', imageSrc)
+    localStorage.setItem('ktp', imageSrc);
 
     try {
       if (!imageSrc) {
@@ -53,14 +48,51 @@ export default function ManufactureDemo() {
       const response = await fetch('https://bigvision.id/upload/free-form-ocr-extract', requestOptions);
       const data = await response.json();
 
-      console.log('Response from server:', data);
+      const formattedText = formatOcrData(data.message.results);
       setDataOcr(data.message.results);
-      setResult(true)
+      setEditorState(EditorState.createWithContent(ContentState.createFromText(formattedText)));
+      setResult(true);
       setLoading(false);
     } catch (error) {
       console.error('Error sending image:', error);
       setLoading(false);
     }
+  };
+
+  const formatOcrData = (dataOcr) => {
+    return Object.entries(dataOcr).map(([key, value]) => {
+      const formattedKey = key.replace('_', ' ').toUpperCase();
+      return `${formattedKey} : ${value}`;
+    }).join('\n');
+  };
+
+  const handleEditorChange = (state) => {
+    setEditorState(state);
+  };
+
+  const handleSave = () => {
+    const contentState = editorState.getCurrentContent();
+    const rawData = convertToRaw(contentState);
+    const updatedData = {};
+
+    rawData.blocks.forEach(block => {
+      if (block.text) {
+        const [key, ...valueParts] = block.text.split(' : ');
+        if (key && valueParts.length > 0) {
+          const formattedKey = key.toLowerCase().replace(/ /g, '_');
+          updatedData[formattedKey] = valueParts.join(' : ').trim();
+        }
+      }
+    });
+
+    setDataOcr(updatedData);
+    setShowEdit(false);
+  };
+
+  const handleCancel = () => {
+    const formattedText = formatOcrData(dataOcr);
+    setEditorState(EditorState.createWithContent(ContentState.createFromText(formattedText)));
+    setShowEdit(false);
   };
 
   return (
@@ -100,23 +132,39 @@ export default function ManufactureDemo() {
             <ArrowLeft size={35} color="#ffff" strokeWidth={2} />
           </div>
           <div className="bg-welcoming" style={{ padding: '20px', marginBottom: '5%' }}>
-            <div className="bg-ktp-result" style={{ display: 'inline-flex', placeItems: 'center', width: '80%' }}>
-              <CircleCheck color="#0a8053" size={50} />
-              <div style={{ fontSize: '20px', fontWeight: '600', textAlign: 'left', marginLeft: '20px' }}>OCR Extraction <br /><strong>Berhasil</strong></div>
-            </div>
-            <div style={{ marginTop: '50px' }}>
-              <img src={imageSrc} alt="captured" style={{ width: '100%', borderRadius: '15px' }} />
-              <div style={{ margin: '20px', fontWeight: '600', fontSize: '18px' }}>Detail</div>
-              <div style={{ textAlign: 'left', padding: '10px', background: '#F5F8FF', borderRadius: 10 }}>
-                {Object.entries(dataOcr).map(([key, value]) => (
-                  <div style={{lineHeight: '30px'}} key={key}>
-                    <span style={{color: '#272D4E', fontWeight: '600',  wordWrap: 'break-word'}}>{key.replace('_', ' ').toUpperCase()} : </span>
-                    <span style={{color: '#8F92A1', fontWeight: '400',  wordWrap: 'break-word'}}>{value}</span>
-                    {/* <strong>{key.replace('_', ' ').toUpperCase()} : </strong> {value} */}
-                  </div>
-                ))}
+            {!showEdit &&
+              <div className="bg-ktp-result" style={{ display: 'inline-flex', placeItems: 'center', width: '80%' }}>
+                <CircleCheck color="#0a8053" size={50} />
+                <div style={{ fontSize: '20px', fontWeight: '600', textAlign: 'left', marginLeft: '20px' }}>OCR Extraction <br /><strong>Berhasil</strong></div>
               </div>
-            </div>
+            }
+            {!showEdit ?
+              <div style={{ marginTop: '50px' }}>
+                <img src={imageSrc} alt="captured" style={{ width: '100%', borderRadius: '15px' }} />
+                <div style={{ margin: '20px', fontWeight: '600', fontSize: '18px', color: '#272D4E', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Detail<span style={{ marginLeft: '10px', cursor: 'pointer' }} onClick={() => setShowEdit(true)}><Pencil color="#002E5E" size={18} /></span></div>
+                <div style={{ textAlign: 'left', padding: '10px', background: '#F5F8FF', borderRadius: 10 }}>
+                  <Editor
+                    editorState={EditorState.createWithContent(ContentState.createFromText(formatOcrData(dataOcr)))}
+                    onChange={handleEditorChange}
+                    readOnly={!showEdit}
+                  />
+                </div>
+              </div>
+              :
+              <div>
+                <div style={{ marginBottom: '20px', fontWeight: '600', fontSize: '18px', color: '#272D4E', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Detail</div>
+                <div style={{ width: '90%', borderRadius: '20px', padding: '15px', resize: 'vertical', background: '#FAFAFA', border: '2px solid #E8E8E8', maxHeight: '300px', overflowY: 'auto', color: '#5e5e5e' }}>
+                  <Editor
+                    editorState={editorState}
+                    onChange={handleEditorChange}
+                  />
+                </div>
+                <div style={{ marginTop: '20px', display: 'inline-flex', gap: 10, width: '100%' }}>
+                  <button className="cancel-button" onClick={handleCancel}>Batal</button>
+                  <button className="next-button" onClick={handleSave}>Simpan</button>
+                </div>
+              </div>
+            }
           </div>
           <div style={{ marginTop: '40px', marginBottom: '20px' }}>
             <img src={require('../assets/bigvision.png')} alt="Welcoming" />
