@@ -19,7 +19,10 @@ function App() {
       setCurrentPage('face-recognition');
     } else if (step === 'manufacture-extract') {
       setCurrentPage('manufacture-extract')
-    } else {
+    } else if (step === 'welcoming-ktp') {
+      setCurrentPage('welcoming-ktp')
+    }
+     else {
       setCurrentPage(1);
     }
   }, []);
