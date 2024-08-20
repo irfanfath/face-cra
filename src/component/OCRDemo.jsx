@@ -79,16 +79,22 @@ export default function OCRDemo() {
           <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
             <span style={{ color: 'white' }}>Foto KTP Anda<br /><span style={{ fontSize: 20 }}>sesuaikan posisi KTP anda</span></span>
           </div>
-          <Webcam
-            className="webcam"
-            scale={1}
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            videoConstraints={videoConstraints}
-            screenshotQuality={1}
-            style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
-          />
+          {loading ?
+            <img src={imageSrc} alt="captured" 
+              style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
+            />
+            :
+            <Webcam
+              className="webcam"
+              scale={1}
+              audio={false}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              videoConstraints={videoConstraints}
+              screenshotQuality={1}
+              style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
+            />
+          }
           <div style={{ position: 'fixed', bottom: 30, left: 0, right: 0, zIndex: 1000 }}>
             {loading ?
               <div style={{ color: '#ffff' }}>Harap tunggu sedang proses ekstrasi..</div>
