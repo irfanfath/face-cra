@@ -26,8 +26,8 @@ function App() {
 
   return (
     <div className="App">
-      {/* {currentPage === 1 && <WelcomingKTP />} */}
-      {currentPage === 1 && <WelcomingOCR />}
+      {currentPage === 1 && <WelcomingKTP />}
+      {/* {currentPage === 1 && <WelcomingOCR />} */}
       {currentPage === 'ktp-extract' && <OCRDemo />}
       {currentPage === 'manufacture-extract' && <ManufactureDemo />}
       {currentPage === 'face-recognition' && <FaceLandmarkerNew />}
