@@ -147,16 +147,16 @@ const FaceLandmarker = () => {
           // modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
           delegate: "GPU"
         },
-        outputFaceBlendshapes: false,
+        outputFaceBlendshapes: true,
         runningMode,
         numFaces: 1
       });
       console.timeEnd('newFaceLandmarker'); // End timing
 
-      // console.time('enableCam'); // Start timing
+      console.time('enableCam'); // Start timing
       faceLandmarkerRef.current = newFaceLandmarker;
       enableCam();
-      // console.timeEnd('enableCam'); // End timing
+      console.timeEnd('enableCam'); // End timing
 
     };
     createFaceLandmarker();
