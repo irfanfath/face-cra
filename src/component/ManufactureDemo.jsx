@@ -213,7 +213,7 @@ export default function ManufactureDemo() {
                     <div>{dataGivaudan === dataVendor ? 'Match Data' : 'Not Match Data'}</div>
                     <br />
                     {dataGivaudan !== dataVendor &&
-                      <button className="next-button" onClick={() => { setCurrentStep(2); setResult(false) }}>Ulangi</button>
+                      <button className="next-button" onClick={() => { setCurrentStep(2); setResult(false); setMatchResult(false) }}>Ulangi</button>
                     }
                   </div>
                 }
