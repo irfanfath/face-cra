@@ -131,20 +131,33 @@ const FaceLandmarker = () => {
 
     dynamicPipelineRef.current = pipelineQueryParamArray;
     const createFaceLandmarker = async () => {
+      console.time('filesetResolver'); // Start timing
+      // const filesetResolver = await vision.FilesetResolver.forVisionTasks(
+      //   "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
+      // );
       const filesetResolver = await vision.FilesetResolver.forVisionTasks(
-        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
+        "/wasm" 
       );
+      console.timeEnd('filesetResolver'); // End timing
+
+      console.time('newFaceLandmarker'); // Start timing
       const newFaceLandmarker = await vision.FaceLandmarker.createFromOptions(filesetResolver, {
         baseOptions: {
-          modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
+          modelAssetPath: '/wasm/models/face_landmarker.task', 
+          // modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
           delegate: "GPU"
         },
-        outputFaceBlendshapes: true,
+        outputFaceBlendshapes: false,
         runningMode,
         numFaces: 1
       });
+      console.timeEnd('newFaceLandmarker'); // End timing
+
+      // console.time('enableCam'); // Start timing
       faceLandmarkerRef.current = newFaceLandmarker;
       enableCam();
+      // console.timeEnd('enableCam'); // End timing
+
     };
     createFaceLandmarker();
   }, []);
