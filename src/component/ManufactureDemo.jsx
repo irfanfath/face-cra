@@ -2,17 +2,21 @@ import React, { useState, useRef } from "react";
 import Webcam from "react-webcam";
 import bgImage from '../assets/bg-ktp.png';
 import { ArrowLeft, Camera, CircleCheck, Pencil } from "lucide-react";
-import { Editor, EditorState, ContentState, convertFromRaw, convertToRaw } from 'draft-js';
+import { Editor, EditorState, ContentState, convertToRaw } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 
 export default function ManufactureDemo() {
   const webcamRef = useRef(null);
   const [imageSrc, setImageSrc] = useState(null);
   const [dataOcr, setDataOcr] = useState({});
+  const [dataGivaudan, setDataGivaudan] = useState({});
+  const [dataVendor, setDataVendor] = useState({});
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(false);
+  const [matchResult, setMatchResult] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [currentStep, setCurrentStep] = useState(1); // Step state
 
   let videoConstraints = {
     facingMode: 'environment',
@@ -53,6 +57,12 @@ export default function ManufactureDemo() {
       setEditorState(EditorState.createWithContent(ContentState.createFromText(formattedText)));
       setResult(true);
       setLoading(false);
+
+      if (currentStep === 1) {
+        setDataGivaudan(data.message.results);
+      } else if (currentStep === 2) {
+        setDataVendor(data.message.results);
+      }
     } catch (error) {
       console.error('Error sending image:', error);
       setLoading(false);
@@ -85,7 +95,12 @@ export default function ManufactureDemo() {
       }
     });
 
-    setDataOcr(updatedData);
+    if (currentStep === 1) {
+      setDataGivaudan(updatedData);
+    } else if (currentStep === 2) {
+      setDataVendor(updatedData);
+    }
+
     setShowEdit(false);
   };
 
@@ -95,16 +110,49 @@ export default function ManufactureDemo() {
     setShowEdit(false);
   };
 
+  const handleStepChange = async () => {
+    if (currentStep === 1) {
+      setCurrentStep(2);
+      setResult(false);
+    } else if (currentStep === 2) {
+      await sendDataConsole();
+    }
+  };
+
+  const sendDataConsole = () => {
+    console.log('Sending dataGivaudan:', dataGivaudan);
+    console.log('Sending dataVendor:', dataVendor);
+    setMatchResult(true)
+  }
+
+  const sendDataToApi = async () => {
+    try {
+      const response = await fetch('https://bigvision.id/upload/matching-data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer your-token-here',
+        },
+        body: JSON.stringify({ dataGivaudan, dataVendor })
+      });
+
+      const result = await response.json();
+      console.log('Data successfully sent to API:', result);
+    } catch (error) {
+      console.error('Error sending data to API:', error);
+    }
+  };
+
   return (
     <div className="webcam-container">
       {result !== true ?
         <div className="webcam-img">
           <img className="bg-image" alt="" src={bgImage} />
           <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
-            <span style={{ color: 'white' }}>Foto Manufaktur Anda<br /><span style={{ fontSize: 20 }}>sesuaikan posisi manufaktur anda</span></span>
+            <span style={{ color: 'white' }}>{currentStep === 1 ? 'Foto Manufaktur Givaudan Anda' : 'Foto Manufaktur Vendor Anda'}<br /><span style={{ fontSize: 20 }}>sesuaikan posisi manufaktur anda</span></span>
           </div>
           {loading ?
-            <img src={imageSrc} alt="captured" 
+            <img src={imageSrc} alt="captured"
               style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
             />
             :
@@ -146,15 +194,30 @@ export default function ManufactureDemo() {
             }
             {!showEdit ?
               <div style={{ marginTop: '50px' }}>
-                <img src={imageSrc} alt="captured" style={{ width: '100%', borderRadius: '15px' }} />
-                <div style={{ margin: '20px', fontWeight: '600', fontSize: '18px', color: '#272D4E', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Detail<span style={{ marginLeft: '10px', cursor: 'pointer' }} onClick={() => setShowEdit(true)}><Pencil color="#002E5E" size={18} /></span></div>
-                <div style={{ textAlign: 'left', padding: '10px', background: '#F5F8FF', borderRadius: 10 }}>
-                  <Editor
-                    editorState={EditorState.createWithContent(ContentState.createFromText(formatOcrData(dataOcr)))}
-                    onChange={handleEditorChange}
-                    readOnly={!showEdit}
-                  />
-                </div>
+                {!matchResult ?
+                  <div>
+                    <img src={imageSrc} alt="captured" style={{ width: '100%', borderRadius: '15px' }} />
+                    <div style={{ margin: '20px', fontWeight: '600', fontSize: '18px', color: '#272D4E', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Detail<span style={{ marginLeft: '10px', cursor: 'pointer' }} onClick={() => setShowEdit(true)}><Pencil color="#002E5E" size={18} /></span></div>
+                    <div style={{ textAlign: 'left', padding: '10px', background: '#F5F8FF', borderRadius: 10 }}>
+                      <Editor
+                        editorState={EditorState.createWithContent(ContentState.createFromText(formatOcrData(currentStep === 1 ? dataGivaudan : dataVendor)))}
+                        onChange={handleEditorChange}
+                        readOnly={!showEdit}
+                      />
+                    </div>
+                    <br />
+                    <button className="next-button" onClick={handleStepChange}>{currentStep === 1 ? 'Lanjut Scan Vendor' : 'Lanjut Match Data'}</button>
+                  </div>
+                  :
+                  <div>
+                    <div>{dataGivaudan === dataVendor ? 'Match Data' : 'Not Match Data'}</div>
+                    <br />
+                    {dataGivaudan !== dataVendor &&
+                      <button className="next-button" onClick={() => { setCurrentStep(2); setResult(false) }}>Ulangi</button>
+                    }
+                  </div>
+                }
+
               </div>
               :
               <div>
