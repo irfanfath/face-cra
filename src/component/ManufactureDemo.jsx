@@ -11,6 +11,8 @@ export default function ManufactureDemo() {
   const [dataOcr, setDataOcr] = useState({});
   const [dataGivaudan, setDataGivaudan] = useState({});
   const [dataVendor, setDataVendor] = useState({});
+  const [imageGivaudan, setImageGivaudan] = useState('');
+  const [imageVendor, setImageVendor] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(false);
   const [matchResult, setMatchResult] = useState(false);
@@ -60,8 +62,10 @@ export default function ManufactureDemo() {
 
       if (currentStep === 1) {
         setDataGivaudan(data.message.results);
+        setImageGivaudan(data.message.image_url);
       } else if (currentStep === 2) {
         setDataVendor(data.message.results);
+        setImageVendor(data.message.image_url);
       }
     } catch (error) {
       console.error('Error sending image:', error);
@@ -115,7 +119,7 @@ export default function ManufactureDemo() {
       setCurrentStep(2);
       setResult(false);
     } else if (currentStep === 2) {
-      await sendDataConsole();
+      await sendDataToApi();
     }
   };
 
@@ -127,13 +131,13 @@ export default function ManufactureDemo() {
 
   const sendDataToApi = async () => {
     try {
-      const response = await fetch('https://bigvision.id/upload/matching-data', {
+      const response = await fetch('https://bigvision.id/upload/free-form-ocr-extract/matching', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer your-token-here',
         },
-        body: JSON.stringify({ dataGivaudan, dataVendor })
+        body: JSON.stringify({ dataGivaudan, dataVendor, imageGivaudan, imageVendor })
       });
 
       const result = await response.json();
@@ -148,12 +152,45 @@ export default function ManufactureDemo() {
       {result !== true ?
         <div className="webcam-img">
           <img className="bg-image" alt="" src={bgImage} />
-          <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
-            <span style={{ color: 'white' }}>{currentStep === 1 ? 'Foto Manufaktur Givaudan Anda' : 'Foto Manufaktur Vendor Anda'}<br /><span style={{ fontSize: 20 }}>sesuaikan posisi manufaktur anda</span></span>
+
+          <div style={{ display: 'inline-flex', flexDirection: 'column', lineHeight: '50px', position: 'fixed', fontSize: 14, fontWeight: 600, top: 25, left: 25, right: 0, zIndex: 1000, textAlign: 'left' }}>
+
+            <div style={{ textAlign: 'left', marginBottom: '20px' }} onClick={() => window.location.reload()}>
+              <ArrowLeft size={30} color="#ffff" strokeWidth={2} />
+            </div>
+
+            {currentStep === 1 ?
+              <div style={{ width: 368, height: 20, justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex' }}>
+                <div style={{ textAlign: 'center', color: 'white', fontSize: 14, fontFamily: 'Roboto', fontWeight: '500', lineHeight: 20, wordWrap: 'break-word' }}>1/3</div>
+                <div style={{ justifyContent: 'flex-start', alignItems: 'flex-start', gap: 20, display: 'flex' }}>
+                  <div style={{ width: 20, height: 20, background: 'white', borderRadius: 10, border: '0.50px #2D5988 solid', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, display: 'inline-flex' }}>
+                    <div style={{ width: 10, height: 10, background: '#2D5988', borderRadius: 5 }} />
+                  </div>
+                  <div style={{ width: 20, height: 20, background: 'rgba(171, 183, 194, 0.10)', borderRadius: 10, border: '0.50px #CFD6DC solid' }} />
+                  <div style={{ width: 20, height: 20, background: 'rgba(171, 183, 194, 0.10)', borderRadius: 10, border: '0.50px #CFD6DC solid' }} />
+                </div>
+              </div>
+              :
+              <div style={{ width: 368, height: 20, justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex' }}>
+                <div style={{ textAlign: 'center', color: 'white', fontSize: 14, fontFamily: 'Roboto', fontWeight: '500', lineHeight: 20, wordWrap: 'break-word' }}>2 / 3</div>
+                <div style={{ justifyContent: 'flex-start', alignItems: 'flex-start', gap: 20, display: 'flex' }}>
+                  <div style={{ width: 20, height: 20, background: '#2D5988', boxShadow: '0px 36px 60px -20px rgba(0, 46, 94, 0.25)', borderRadius: 20, border: '1px rgba(255, 255, 255, 0.50) solid', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, display: 'inline-flex' }}>
+                    <div style={{ width: 12, height: 12, position: 'relative' }}>
+                      <div style={{ width: 7.21, height: 5.56, left: 2.65, top: 3.65, position: 'absolute', background: 'white' }}></div>
+                    </div>
+                  </div>
+                  <div style={{ width: 20, height: 20, background: 'white', borderRadius: 10, border: '0.50px #2D5988 solid', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, display: 'inline-flex' }}>
+                    <div style={{ width: 10, height: 10, background: '#2D5988', borderRadius: 5 }} />
+                  </div>
+                  <div style={{ width: 20, height: 20, background: 'rgba(171, 183, 194, 0.10)', borderRadius: 10, border: '0.50px #CFD6DC solid' }} />
+                </div>
+              </div>
+            }
+            <span style={{ color: 'white' }}>{currentStep === 1 ? 'Foto Manufaktur Givaudan Anda' : 'Foto Manufaktur Vendor Anda'}</span>
           </div>
           {loading ?
             <img src={imageSrc} alt="captured"
-              style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
+              style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
             />
             :
             <Webcam
@@ -164,19 +201,19 @@ export default function ManufactureDemo() {
               screenshotFormat="image/jpeg"
               videoConstraints={videoConstraints}
               screenshotQuality={1}
-              style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
+              style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
             />
           }
-          <div style={{ position: 'fixed', bottom: 30, left: 0, right: 0, zIndex: 1000 }}>
+          <div style={{ position: 'fixed', bottom: 60, left: 0, right: 0, zIndex: 1000 }}>
             {loading ?
-              <div style={{ color: '#ffff' }}>Harap tunggu sedang proses ekstrasi..</div>
+              <div>
+                <div style={{ color: '#ffff' }}>Menunggu proses ekstrasi..</div>
+              </div>
               :
-              <button
-                className="circle-button"
-                onClick={capture}
-              >
-                <Camera size={"60px"} color="#ffff" />
-              </button>
+              <div>
+                <div style={{ color: '#ffff', marginBottom: '60px' }}>Sesuaikan posisi manufaktur</div>
+                <button className="next-button" onClick={capture}><Camera size={"22px"} strokeWidth={3} color="#ffff" />&nbsp;Scan</button>
+              </div>
             }
           </div>
         </div>
@@ -186,52 +223,83 @@ export default function ManufactureDemo() {
             <ArrowLeft size={35} color="#ffff" strokeWidth={2} />
           </div>
           <div className="bg-welcoming" style={{ padding: '20px', marginBottom: '5%' }}>
-            {!showEdit &&
-              <div className="bg-ktp-result" style={{ display: 'inline-flex', placeItems: 'center', width: '80%' }}>
-                <CircleCheck color="#0a8053" size={50} />
-                <div style={{ fontSize: '20px', fontWeight: '600', textAlign: 'left', marginLeft: '20px' }}>OCR Extraction <br /><strong>Berhasil</strong></div>
-              </div>
-            }
-            {!showEdit ?
-              <div style={{ marginTop: '50px' }}>
-                {!matchResult ?
-                  <div>
-                    <img src={imageSrc} alt="captured" style={{ width: '100%', borderRadius: '15px' }} />
-                    <div style={{ margin: '20px', fontWeight: '600', fontSize: '18px', color: '#272D4E', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Detail<span style={{ marginLeft: '10px', cursor: 'pointer' }} onClick={() => setShowEdit(true)}><Pencil color="#002E5E" size={18} /></span></div>
-                    <div style={{ textAlign: 'left', padding: '10px', background: '#F5F8FF', borderRadius: 10 }}>
-                      <Editor
-                        editorState={EditorState.createWithContent(ContentState.createFromText(formatOcrData(currentStep === 1 ? dataGivaudan : dataVendor)))}
-                        onChange={handleEditorChange}
-                        readOnly={!showEdit}
-                      />
+            {!matchResult ?
+              <>
+                {!showEdit &&
+                  <div className="bg-ktp-result" style={{ display: 'inline-flex', placeItems: 'center', width: '80%' }}>
+                    <CircleCheck color="#0a8053" size={50} />
+                    <div style={{ color: '#272D4E', fontSize: 20, fontWeight: '700', wordWrap: 'break-word', marginLeft: '10px' }}>Scan Berhasil</div>
+                  </div>
+                }
+                {!showEdit ?
+                  <div style={{ marginTop: '50px' }}>
+                    <div>
+                      <img src={imageSrc} alt="captured" style={{ width: '100%', borderRadius: '15px' }} />
+                      <div style={{ margin: '20px', fontWeight: '600', fontSize: '18px', color: '#272D4E', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Detail<span style={{ marginLeft: '10px', cursor: 'pointer' }} onClick={() => setShowEdit(true)}><Pencil color="#002E5E" size={18} /></span></div>
+                      <div style={{ textAlign: 'left', padding: '10px', background: '#F5F8FF', borderRadius: 10 }}>
+                        <Editor
+                          editorState={EditorState.createWithContent(ContentState.createFromText(formatOcrData(currentStep === 1 ? dataGivaudan : dataVendor)))}
+                          onChange={handleEditorChange}
+                          readOnly={!showEdit}
+                        />
+                      </div>
+                      <br />
+                      <button className="next-button" onClick={handleStepChange}>{currentStep === 1 ? 'Lanjutkan (1/3)' : 'Match Data (2/3)'}</button>
                     </div>
-                    <br />
-                    <button className="next-button" onClick={handleStepChange}>{currentStep === 1 ? 'Lanjut Scan Vendor' : 'Lanjut Match Data'}</button>
                   </div>
                   :
                   <div>
-                    <div>{dataGivaudan === dataVendor ? 'Match Data' : 'Not Match Data'}</div>
-                    <br />
-                    {dataGivaudan !== dataVendor &&
-                      <button className="next-button" onClick={() => { setCurrentStep(2); setResult(false); setMatchResult(false) }}>Ulangi</button>
-                    }
+                    <div style={{ marginBottom: '20px', fontWeight: '600', fontSize: '18px', color: '#272D4E', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Detail</div>
+                    <div style={{ width: '90%', borderRadius: '20px', padding: '15px', resize: 'vertical', background: '#FAFAFA', border: '2px solid #E8E8E8', maxHeight: '300px', overflowY: 'auto', color: '#5e5e5e' }}>
+                      <Editor
+                        editorState={editorState}
+                        onChange={handleEditorChange}
+                      />
+                    </div>
+                    <div style={{ marginTop: '20px', display: 'inline-flex', gap: 10, width: '100%' }}>
+                      <button className="cancel-button" onClick={handleCancel}>Cancel</button>
+                      <button className="next-button" onClick={handleSave}>Save</button>
+                    </div>
                   </div>
                 }
-
-              </div>
+              </>
               :
               <div>
-                <div style={{ marginBottom: '20px', fontWeight: '600', fontSize: '18px', color: '#272D4E', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Detail</div>
-                <div style={{ width: '90%', borderRadius: '20px', padding: '15px', resize: 'vertical', background: '#FAFAFA', border: '2px solid #E8E8E8', maxHeight: '300px', overflowY: 'auto', color: '#5e5e5e' }}>
-                  <Editor
-                    editorState={editorState}
-                    onChange={handleEditorChange}
-                  />
+                <div style={{ display: 'inline-flex', flexDirection: 'column', lineHeight: '30px', fontSize: 14, fontWeight: 600, textAlign: 'left' }}>
+                  <div style={{ width: 368, height: 20, justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex' }}>
+                    <div style={{ textAlign: 'center', color: '#130F26', fontSize: 14, fontWeight: '600', lineHeight: 20, wordWrap: 'break-word' }}>3 / 3</div>
+                    <div style={{ justifyContent: 'flex-start', alignItems: 'flex-start', gap: 20, display: 'flex' }}>
+                      <div style={{ width: 20, height: 20, background: '#2D5988', borderRadius: 20, border: '1px rgba(255, 255, 255, 0.50) solid', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, display: 'inline-flex' }}>
+                        <div style={{ width: 12, height: 12, position: 'relative' }}>
+                          <div style={{ width: 7.21, height: 5.56, left: 2.65, top: 3.65, position: 'absolute', background: 'white' }}></div>
+                        </div>
+                      </div>
+                      <div style={{ width: 20, height: 20, background: '#2D5988', borderRadius: 20, border: '1px rgba(255, 255, 255, 0.50) solid', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, display: 'inline-flex' }}>
+                        <div style={{ width: 12, height: 12, position: 'relative' }}>
+                          <div style={{ width: 7.21, height: 5.56, left: 2.65, top: 3.65, position: 'absolute', background: 'white' }}></div>
+                        </div>
+                      </div>
+                      <div style={{ width: 20, height: 20, background: '#2D5988', borderRadius: 20, border: '1px rgba(255, 255, 255, 0.50) solid', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, display: 'inline-flex' }}>
+                        <div style={{ width: 12, height: 12, position: 'relative' }}>
+                          <div style={{ width: 7.21, height: 5.56, left: 2.65, top: 3.65, position: 'absolute', background: 'white' }}></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <span style={{ color: '#130F26', fontWeight: '600' }}>Mencocokan data manufaktur</span>
                 </div>
-                <div style={{ marginTop: '20px', display: 'inline-flex', gap: 10, width: '100%' }}>
-                  <button className="cancel-button" onClick={handleCancel}>Batal</button>
-                  <button className="next-button" onClick={handleSave}>Simpan</button>
+                <div style={{ marginTop: '50px' }}>
+                  <div style={{ color: '#0F133E', fontSize: 28, fontWeight: 500 }}>
+                    {dataGivaudan === dataVendor ? 'Data Match' : 'Data Tidak Match'}
+                  </div>
+                  <img src={require(`../assets/${dataGivaudan === dataVendor ? 'match' : 'notmatch'}.png`)} alt="Welcoming" />
                 </div>
+                <div style={{marginTop: '20px', marginBottom: '40px', color: '#0F133E', fontSize: '20px', fontWeight: '600'}}>
+                  {dataGivaudan === dataVendor ? 'Data Manufaktur Anda dengan Vendor Match' : 'Silahkan ulangi proses scan manufaktur'}
+                </div>
+                {dataGivaudan !== dataVendor &&
+                  <button className="next-button" onClick={() => { setCurrentStep(2); setResult(false); setMatchResult(false) }}>Ulangi</button>
+                }
               </div>
             }
           </div>
