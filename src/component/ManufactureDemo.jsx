@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import Webcam from "react-webcam";
 import bgImage from '../assets/bg-ktp.png';
-import { ArrowLeft, ArrowRight, ArrowUpDown, Camera, CircleCheck, MoveRight, Pencil } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpDown, Camera, CircleCheck, Pencil } from "lucide-react";
 import { Editor, EditorState, ContentState, convertToRaw } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import { CurrentStep } from "../atoms/currentStep";
@@ -60,7 +60,7 @@ export default function ManufactureDemo() {
 
       const formattedText = formatOcrData(data.message.results);
       setDataOcr(data.message.results);
-      setEditorState(EditorState.createWithContent(ContentState.createFromText(formattedText)));
+      // setEditorState(EditorState.createWithContent(ContentState.createFromText(formattedText)));
       setResult(true);
       setLoading(false);
 
@@ -113,7 +113,7 @@ export default function ManufactureDemo() {
   };
 
   const handleCancel = () => {
-    const formattedText = formatOcrData(dataOcr);
+    const formattedText = formatOcrData(currentStep === 1 ? dataGivaudan : dataVendor);
     setEditorState(EditorState.createWithContent(ContentState.createFromText(formattedText)));
     setShowEdit(false);
   };
@@ -124,6 +124,7 @@ export default function ManufactureDemo() {
       setResult(false);
     } else if (currentStep === 2) {
       await sendDataConsole();
+      setCurrentStep(3);
     }
   };
 
@@ -160,6 +161,22 @@ export default function ManufactureDemo() {
       setCurrentStep(1)
       setShowEdit(false);
     }
+  }
+
+  const handleBackResult = () => {
+    if (currentStep === 1) {
+      setCurrentStep(1)
+      setShowEdit(false)
+    } else if (currentStep === 2) {
+      setResult(false);
+      setCurrentStep(2)
+      setShowEdit(false);
+    } else if (currentStep === 3) {
+      setResult(true); 
+      setCurrentStep(2); 
+      setShowEdit(false);
+      setMatchResult(false)
+    } 
   }
 
   return (
@@ -225,7 +242,7 @@ export default function ManufactureDemo() {
                 display: 'flex',
                 alignItems: 'center',
               }}
-              onClick={() => {setResult(false); setShowEdit(false)}}
+              onClick={handleBackResult}
             >
               <ArrowLeft size={30} color="#ffff" strokeWidth={2} />
               <div
@@ -242,14 +259,37 @@ export default function ManufactureDemo() {
                     letterSpacing: 1,
                   }}
                 >
-                  {currentStep === 1 ? 'Manufaktur Givaudan' : 'Manufaktur Vendor'}
+                  {currentStep === 1 ? 'Manufaktur Givaudan' : currentStep === 2 ? 'Manufaktur Vendor' : currentStep === 3 ? 'Matching Data' : ''}
                 </div>
               </div>
             </div>
-
             :
-            <div style={{ padding: '20px', textAlign: 'left' }} onClick={() => setDetailMatch(false)}>
-              <ArrowLeft size={35} color="#ffff" strokeWidth={2} />
+            <div
+              style={{
+                padding: '20px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              onClick={() => setDetailMatch(false)}
+            >
+              <ArrowLeft size={30} color="#ffff" strokeWidth={2} />
+              <div
+                style={{
+                  flex: 1,
+                  textAlign: 'center',
+                }}
+              >
+                <div
+                  style={{
+                    color: 'white',
+                    fontSize: '18px',
+                    fontWeight: 600,
+                    letterSpacing: 1,
+                  }}
+                >
+                  Match Detail
+                </div>
+              </div>
             </div>
           }
           <div className="bg-welcoming" style={{ padding: '20px', marginBottom: '5%' }}>
@@ -333,10 +373,10 @@ export default function ManufactureDemo() {
                     <div>
                       <img src={imageSrc} alt="captured" style={{ width: '100%', borderRadius: '15px' }} />
                       <div style={{ margin: '20px' }}><ArrowUpDown color="#2D5988" strokeWidth={2} /></div>
-                      <div style={{ color: '#737373', textAlign: 'left', marginBottom: 10 }}>Manufactur Vendor</div>
+                      <div style={{ color: '#737373', textAlign: 'left', marginBottom: 10 }}>Manufaktur Vendor</div>
                       <div style={{ textAlign: 'left', padding: '10px', background: '#F5F8FF', borderRadius: 10 }}>
                         <Editor
-                          editorState={EditorState.createWithContent(ContentState.createFromText(formatOcrData(currentStep === 1 ? dataGivaudan : dataVendor)))}
+                          editorState={EditorState.createWithContent(ContentState.createFromText(formatOcrData(dataVendor)))}
                           onChange={handleEditorChange}
                           readOnly={!showEdit}
                         />
