@@ -60,7 +60,7 @@ export default function ManufactureDemo() {
 
       const formattedText = formatOcrData(data.message.results);
       setDataOcr(data.message.results);
-      // setEditorState(EditorState.createWithContent(ContentState.createFromText(formattedText)));
+      setEditorState(EditorState.createWithContent(ContentState.createFromText(formattedText)));
       setResult(true);
       setLoading(false);
 
