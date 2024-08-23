@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import Webcam from "react-webcam";
 import bgImage from '../assets/bg-ktp.png';
-import { ArrowLeft, Camera, CircleCheck, Pencil } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpDown, Camera, CircleCheck, MoveRight, Pencil } from "lucide-react";
 import { Editor, EditorState, ContentState, convertToRaw } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import { CurrentStep } from "../atoms/currentStep";
@@ -19,9 +19,10 @@ export default function ManufactureDemo() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(false);
   const [matchResult, setMatchResult] = useState(false);
+  const [detailMatch, setDetailMatch] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const [currentStep, setCurrentStep] = useState(1); // Step state
+  const [currentStep, setCurrentStep] = useState(1);
 
   let videoConstraints = {
     facingMode: 'environment',
@@ -150,6 +151,17 @@ export default function ManufactureDemo() {
     }
   };
 
+  const handleBack = () => {
+    if (currentStep === 1) {
+      setCurrentStep(1)
+      setShowEdit(false)
+    } else if (currentStep === 2) {
+      setResult(true);
+      setCurrentStep(1)
+      setShowEdit(false);
+    }
+  }
+
   return (
     <div className="webcam-container">
       {result !== true ?
@@ -158,11 +170,11 @@ export default function ManufactureDemo() {
 
           <div style={{ display: 'inline-flex', flexDirection: 'column', lineHeight: '30px', position: 'fixed', fontSize: 14, fontWeight: 600, top: 25, left: 0, right: 0, zIndex: 1000, textAlign: 'left' }}>
             <div style={{ paddingLeft: 20, paddingRight: 20 }}>
-              <div style={{ textAlign: 'left', marginBottom: '20px' }} onClick={() => window.location.reload()}>
+              <div style={{ textAlign: 'left', marginBottom: '20px' }} onClick={handleBack}>
                 <ArrowLeft size={30} color="#ffff" strokeWidth={2} />
               </div>
 
-              <div style={{ width: '100%', height: 20, justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex' }}>
+              <div style={{ width: '100%', justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex' }}>
                 <div style={{ color: 'white', fontSize: 14, fontWeight: '500' }}>{currentStep === 1 ? '1/3' : '2/3'}</div>
                 <div style={{ justifyContent: 'flex-start', alignItems: 'flex-start', gap: 20, display: 'flex' }}>
                   {currentStep === 1 ? <CurrentStep /> : <DoneStep />}
@@ -206,32 +218,63 @@ export default function ManufactureDemo() {
         </div>
         :
         <div>
-          <div style={{ padding: '20px', textAlign: 'left' }} onClick={() => setResult(false)}>
-            <ArrowLeft size={35} color="#ffff" strokeWidth={2} />
-          </div>
+          {!detailMatch ?
+            <div
+              style={{
+                padding: '20px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              onClick={() => {setResult(false); setShowEdit(false)}}
+            >
+              <ArrowLeft size={30} color="#ffff" strokeWidth={2} />
+              <div
+                style={{
+                  flex: 1,
+                  textAlign: 'center',
+                }}
+              >
+                <div
+                  style={{
+                    color: 'white',
+                    fontSize: '18px',
+                    fontWeight: 600,
+                    letterSpacing: 1,
+                  }}
+                >
+                  {currentStep === 1 ? 'Manufaktur Givaudan' : 'Manufaktur Vendor'}
+                </div>
+              </div>
+            </div>
+
+            :
+            <div style={{ padding: '20px', textAlign: 'left' }} onClick={() => setDetailMatch(false)}>
+              <ArrowLeft size={35} color="#ffff" strokeWidth={2} />
+            </div>
+          }
           <div className="bg-welcoming" style={{ padding: '20px', marginBottom: '5%' }}>
             {!matchResult ?
-              <>
-                {!showEdit &&
-                  <div className="bg-ktp-result" style={{ display: 'inline-flex', placeItems: 'center', width: '80%' }}>
-                    <CircleCheck color="#0a8053" size={50} />
-                    <div style={{ color: '#272D4E', fontSize: 20, fontWeight: '700', wordWrap: 'break-word', marginLeft: '10px' }}>Scan Berhasil</div>
-                  </div>
-                }
+              <div>
                 {!showEdit ?
-                  <div style={{ marginTop: '50px' }}>
-                    <div>
-                      <img src={imageSrc} alt="captured" style={{ width: '100%', borderRadius: '15px' }} />
-                      <div style={{ margin: '20px', fontWeight: '600', fontSize: '18px', color: '#272D4E', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Detail<span style={{ marginLeft: '10px', cursor: 'pointer' }} onClick={() => setShowEdit(true)}><Pencil color="#002E5E" size={18} /></span></div>
-                      <div style={{ textAlign: 'left', padding: '10px', background: '#F5F8FF', borderRadius: 10 }}>
-                        <Editor
-                          editorState={EditorState.createWithContent(ContentState.createFromText(formatOcrData(currentStep === 1 ? dataGivaudan : dataVendor)))}
-                          onChange={handleEditorChange}
-                          readOnly={!showEdit}
-                        />
+                  <div>
+                    <div className="bg-ktp-result" style={{ display: 'inline-flex', placeItems: 'center', width: '80%' }}>
+                      <CircleCheck color="#0a8053" size={50} />
+                      <div style={{ color: '#272D4E', fontSize: 20, fontWeight: '700', wordWrap: 'break-word', marginLeft: '10px' }}>Scan Berhasil</div>
+                    </div>
+                    <div style={{ marginTop: '50px' }}>
+                      <div>
+                        <img src={imageSrc} alt="captured" style={{ width: '100%', borderRadius: '15px' }} />
+                        <div style={{ margin: '20px', fontWeight: '600', fontSize: '18px', color: '#272D4E', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Detail<span style={{ marginLeft: '10px', cursor: 'pointer' }} onClick={() => setShowEdit(true)}><Pencil color="#002E5E" size={18} /></span></div>
+                        <div style={{ textAlign: 'left', padding: '10px', background: '#F5F8FF', borderRadius: 10 }}>
+                          <Editor
+                            editorState={EditorState.createWithContent(ContentState.createFromText(formatOcrData(currentStep === 1 ? dataGivaudan : dataVendor)))}
+                            onChange={handleEditorChange}
+                            readOnly={!showEdit}
+                          />
+                        </div>
+                        <br />
+                        <button className="next-button" onClick={handleStepChange}>{currentStep === 1 ? 'Lanjutkan (1/3)' : 'Match Data (2/3)'}</button>
                       </div>
-                      <br />
-                      <button className="next-button" onClick={handleStepChange}>{currentStep === 1 ? 'Lanjutkan (1/3)' : 'Match Data (2/3)'}</button>
                     </div>
                   </div>
                   :
@@ -249,41 +292,68 @@ export default function ManufactureDemo() {
                     </div>
                   </div>
                 }
-              </>
+              </div>
               :
               <div>
-                <div style={{padding: 10}}>
-                  <div style={{ display: 'inline-flex', justifyContent: 'space-between', width: '100%' }}>
-                    <div style={{ color: '#130F26', fontWeight: 600, letterSpacing: 2 }}>3/3</div>
-                    <div style={{ justifyContent: 'flex-start', alignItems: 'flex-start', gap: 10, display: 'flex' }}>
-                      <DoneStep />
-                      <DoneStep />
-                      <DoneStep />
+                {!detailMatch ?
+                  <div>
+                    <div style={{ padding: 10 }}>
+                      <div style={{ display: 'inline-flex', justifyContent: 'space-between', width: '100%' }}>
+                        <div style={{ color: '#130F26', fontWeight: 600, letterSpacing: 2 }}>3/3</div>
+                        <div style={{ justifyContent: 'flex-start', alignItems: 'flex-start', gap: 10, display: 'flex' }}>
+                          <DoneStep />
+                          <DoneStep />
+                          <DoneStep />
+                        </div>
+                      </div>
+                      <div style={{ textAlign: 'left', marginTop: 10, color: '#130F26', fontWeight: 600 }}>Mencocokkan data manufaktur</div>
+                    </div>
+
+                    <div style={{ marginTop: '50px' }}>
+                      <div style={{ color: '#0F133E', fontSize: 28, fontWeight: 500 }}>
+                        {dataGivaudan === dataVendor ? 'Data Match' : 'Data Tidak Match'}
+                      </div>
+                      <img src={require(`../assets/${dataGivaudan === dataVendor ? 'match' : 'notmatch'}.png`)} alt="Welcoming" />
+                    </div>
+                    <div style={{ marginTop: '40px', marginBottom: '40px', color: '#0F133E', fontSize: '20px', fontWeight: '600' }}>
+                      {dataGivaudan === dataVendor ? 'Data Manufaktur Anda dengan Vendor Match' : 'Silahkan ulangi proses scan manufaktur'}
+                    </div>
+                    <div style={{ marginBottom: '40px' }}>
+                      <div style={{ display: 'inline-flex', gap: 20, alignItems: 'center' }} onClick={() => setDetailMatch(true)}>
+                        <div style={{ color: '#0549CF' }}>Lihat Detail</div>
+                        <div><ArrowRight size={24} color="#0549CF" strokeWidth={2} absoluteStrokeWidth /></div>
+                      </div>
+                    </div>
+                    {dataGivaudan !== dataVendor &&
+                      <button className="next-button" onClick={() => { setCurrentStep(2); setResult(false); setMatchResult(false) }}>Ulangi</button>
+                    }
+                  </div>
+                  :
+                  <div style={{ marginTop: '20px' }}>
+                    <div>
+                      <img src={imageSrc} alt="captured" style={{ width: '100%', borderRadius: '15px' }} />
+                      <div style={{ margin: '20px' }}><ArrowUpDown color="#2D5988" strokeWidth={2} /></div>
+                      <div style={{ color: '#737373', textAlign: 'left', marginBottom: 10 }}>Manufactur Vendor</div>
+                      <div style={{ textAlign: 'left', padding: '10px', background: '#F5F8FF', borderRadius: 10 }}>
+                        <Editor
+                          editorState={EditorState.createWithContent(ContentState.createFromText(formatOcrData(currentStep === 1 ? dataGivaudan : dataVendor)))}
+                          onChange={handleEditorChange}
+                          readOnly={!showEdit}
+                        />
+                      </div>
+                      <br />
                     </div>
                   </div>
-                  <div style={{ textAlign: 'left', marginTop: 10, color: '#130F26', fontWeight: 600 }}>Mencocokkan data manufaktur</div>
-                </div>
-
-                <div style={{ marginTop: '50px' }}>
-                  <div style={{ color: '#0F133E', fontSize: 28, fontWeight: 500 }}>
-                    {dataGivaudan === dataVendor ? 'Data Match' : 'Data Tidak Match'}
-                  </div>
-                  <img src={require(`../assets/${dataGivaudan === dataVendor ? 'match' : 'notmatch'}.png`)} alt="Welcoming" />
-                </div>
-                <div style={{ marginTop: '40px', marginBottom: '40px', color: '#0F133E', fontSize: '20px', fontWeight: '600' }}>
-                  {dataGivaudan === dataVendor ? 'Data Manufaktur Anda dengan Vendor Match' : 'Silahkan ulangi proses scan manufaktur'}
-                </div>
-                {dataGivaudan !== dataVendor &&
-                  <button className="next-button" onClick={() => { setCurrentStep(2); setResult(false); setMatchResult(false) }}>Ulangi</button>
                 }
               </div>
             }
           </div>
+
           <div style={{ marginTop: '40px', marginBottom: '20px' }}>
             <img src={require('../assets/bigvision.png')} alt="Welcoming" />
           </div>
-        </div>
+        </div >
       }
-    </div>
+    </div >
   );
 }
