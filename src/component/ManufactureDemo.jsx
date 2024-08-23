@@ -4,6 +4,9 @@ import bgImage from '../assets/bg-ktp.png';
 import { ArrowLeft, Camera, CircleCheck, Pencil } from "lucide-react";
 import { Editor, EditorState, ContentState, convertToRaw } from 'draft-js';
 import 'draft-js/dist/Draft.css';
+import { CurrentStep } from "../atoms/currentStep";
+import { TodoStep } from "../atoms/todoStep";
+import { DoneStep } from "../atoms/doneStep";
 
 export default function ManufactureDemo() {
   const webcamRef = useRef(null);
@@ -119,7 +122,7 @@ export default function ManufactureDemo() {
       setCurrentStep(2);
       setResult(false);
     } else if (currentStep === 2) {
-      await sendDataToApi();
+      await sendDataConsole();
     }
   };
 
@@ -153,41 +156,24 @@ export default function ManufactureDemo() {
         <div className="webcam-img">
           <img className="bg-image" alt="" src={bgImage} />
 
-          <div style={{ display: 'inline-flex', flexDirection: 'column', lineHeight: '50px', position: 'fixed', fontSize: 14, fontWeight: 600, top: 25, left: 25, right: 0, zIndex: 1000, textAlign: 'left' }}>
+          <div style={{ display: 'inline-flex', flexDirection: 'column', lineHeight: '30px', position: 'fixed', fontSize: 14, fontWeight: 600, top: 25, left: 0, right: 0, zIndex: 1000, textAlign: 'left' }}>
+            <div style={{ paddingLeft: 20, paddingRight: 20 }}>
+              <div style={{ textAlign: 'left', marginBottom: '20px' }} onClick={() => window.location.reload()}>
+                <ArrowLeft size={30} color="#ffff" strokeWidth={2} />
+              </div>
 
-            <div style={{ textAlign: 'left', marginBottom: '20px' }} onClick={() => window.location.reload()}>
-              <ArrowLeft size={30} color="#ffff" strokeWidth={2} />
+              <div style={{ width: '100%', height: 20, justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex' }}>
+                <div style={{ color: 'white', fontSize: 14, fontWeight: '500' }}>{currentStep === 1 ? '1/3' : '2/3'}</div>
+                <div style={{ justifyContent: 'flex-start', alignItems: 'flex-start', gap: 20, display: 'flex' }}>
+                  {currentStep === 1 ? <CurrentStep /> : <DoneStep />}
+                  {currentStep === 1 ? <TodoStep /> : <CurrentStep />}
+                  <TodoStep />
+                </div>
+              </div>
+              <span style={{ color: 'white', fontSize: '16px' }}>{currentStep === 1 ? 'Foto Manufaktur Givaudan Anda' : 'Foto Manufaktur Vendor Anda'}</span>
             </div>
-
-            {currentStep === 1 ?
-              <div style={{ width: 368, height: 20, justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex' }}>
-                <div style={{ textAlign: 'center', color: 'white', fontSize: 14, fontFamily: 'Roboto', fontWeight: '500', lineHeight: 20, wordWrap: 'break-word' }}>1/3</div>
-                <div style={{ justifyContent: 'flex-start', alignItems: 'flex-start', gap: 20, display: 'flex' }}>
-                  <div style={{ width: 20, height: 20, background: 'white', borderRadius: 10, border: '0.50px #2D5988 solid', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, display: 'inline-flex' }}>
-                    <div style={{ width: 10, height: 10, background: '#2D5988', borderRadius: 5 }} />
-                  </div>
-                  <div style={{ width: 20, height: 20, background: 'rgba(171, 183, 194, 0.10)', borderRadius: 10, border: '0.50px #CFD6DC solid' }} />
-                  <div style={{ width: 20, height: 20, background: 'rgba(171, 183, 194, 0.10)', borderRadius: 10, border: '0.50px #CFD6DC solid' }} />
-                </div>
-              </div>
-              :
-              <div style={{ width: 368, height: 20, justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex' }}>
-                <div style={{ textAlign: 'center', color: 'white', fontSize: 14, fontFamily: 'Roboto', fontWeight: '500', lineHeight: 20, wordWrap: 'break-word' }}>2 / 3</div>
-                <div style={{ justifyContent: 'flex-start', alignItems: 'flex-start', gap: 20, display: 'flex' }}>
-                  <div style={{ width: 20, height: 20, background: '#2D5988', boxShadow: '0px 36px 60px -20px rgba(0, 46, 94, 0.25)', borderRadius: 20, border: '1px rgba(255, 255, 255, 0.50) solid', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, display: 'inline-flex' }}>
-                    <div style={{ width: 12, height: 12, position: 'relative' }}>
-                      <div style={{ width: 7.21, height: 5.56, left: 2.65, top: 3.65, position: 'absolute', background: 'white' }}></div>
-                    </div>
-                  </div>
-                  <div style={{ width: 20, height: 20, background: 'white', borderRadius: 10, border: '0.50px #2D5988 solid', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, display: 'inline-flex' }}>
-                    <div style={{ width: 10, height: 10, background: '#2D5988', borderRadius: 5 }} />
-                  </div>
-                  <div style={{ width: 20, height: 20, background: 'rgba(171, 183, 194, 0.10)', borderRadius: 10, border: '0.50px #CFD6DC solid' }} />
-                </div>
-              </div>
-            }
-            <span style={{ color: 'white' }}>{currentStep === 1 ? 'Foto Manufaktur Givaudan Anda' : 'Foto Manufaktur Vendor Anda'}</span>
           </div>
+
           {loading ?
             <img src={imageSrc} alt="captured"
               style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
@@ -204,6 +190,7 @@ export default function ManufactureDemo() {
               style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
             />
           }
+
           <div style={{ position: 'fixed', bottom: 60, left: 0, right: 0, zIndex: 1000 }}>
             {loading ?
               <div>
@@ -265,36 +252,25 @@ export default function ManufactureDemo() {
               </>
               :
               <div>
-                <div style={{ display: 'inline-flex', flexDirection: 'column', lineHeight: '30px', fontSize: 14, fontWeight: 600, textAlign: 'left' }}>
-                  <div style={{ width: 368, height: 20, justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex' }}>
-                    <div style={{ textAlign: 'center', color: '#130F26', fontSize: 14, fontWeight: '600', lineHeight: 20, wordWrap: 'break-word' }}>3 / 3</div>
-                    <div style={{ justifyContent: 'flex-start', alignItems: 'flex-start', gap: 20, display: 'flex' }}>
-                      <div style={{ width: 20, height: 20, background: '#2D5988', borderRadius: 20, border: '1px rgba(255, 255, 255, 0.50) solid', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, display: 'inline-flex' }}>
-                        <div style={{ width: 12, height: 12, position: 'relative' }}>
-                          <div style={{ width: 7.21, height: 5.56, left: 2.65, top: 3.65, position: 'absolute', background: 'white' }}></div>
-                        </div>
-                      </div>
-                      <div style={{ width: 20, height: 20, background: '#2D5988', borderRadius: 20, border: '1px rgba(255, 255, 255, 0.50) solid', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, display: 'inline-flex' }}>
-                        <div style={{ width: 12, height: 12, position: 'relative' }}>
-                          <div style={{ width: 7.21, height: 5.56, left: 2.65, top: 3.65, position: 'absolute', background: 'white' }}></div>
-                        </div>
-                      </div>
-                      <div style={{ width: 20, height: 20, background: '#2D5988', borderRadius: 20, border: '1px rgba(255, 255, 255, 0.50) solid', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, display: 'inline-flex' }}>
-                        <div style={{ width: 12, height: 12, position: 'relative' }}>
-                          <div style={{ width: 7.21, height: 5.56, left: 2.65, top: 3.65, position: 'absolute', background: 'white' }}></div>
-                        </div>
-                      </div>
+                <div style={{padding: 10}}>
+                  <div style={{ display: 'inline-flex', justifyContent: 'space-between', width: '100%' }}>
+                    <div style={{ color: '#130F26', fontWeight: 600, letterSpacing: 2 }}>3/3</div>
+                    <div style={{ justifyContent: 'flex-start', alignItems: 'flex-start', gap: 10, display: 'flex' }}>
+                      <DoneStep />
+                      <DoneStep />
+                      <DoneStep />
                     </div>
                   </div>
-                  <span style={{ color: '#130F26', fontWeight: '600' }}>Mencocokan data manufaktur</span>
+                  <div style={{ textAlign: 'left', marginTop: 10, color: '#130F26', fontWeight: 600 }}>Mencocokkan data manufaktur</div>
                 </div>
+
                 <div style={{ marginTop: '50px' }}>
                   <div style={{ color: '#0F133E', fontSize: 28, fontWeight: 500 }}>
                     {dataGivaudan === dataVendor ? 'Data Match' : 'Data Tidak Match'}
                   </div>
                   <img src={require(`../assets/${dataGivaudan === dataVendor ? 'match' : 'notmatch'}.png`)} alt="Welcoming" />
                 </div>
-                <div style={{marginTop: '20px', marginBottom: '40px', color: '#0F133E', fontSize: '20px', fontWeight: '600'}}>
+                <div style={{ marginTop: '40px', marginBottom: '40px', color: '#0F133E', fontSize: '20px', fontWeight: '600' }}>
                   {dataGivaudan === dataVendor ? 'Data Manufaktur Anda dengan Vendor Match' : 'Silahkan ulangi proses scan manufaktur'}
                 </div>
                 {dataGivaudan !== dataVendor &&
