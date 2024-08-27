@@ -15,16 +15,14 @@ body {
 }
 
 .bg-image {
+  width: 100%;
+  max-height: 80vh;
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw; /* Menutupi seluruh lebar viewport */
-  height: 90vh; /* Menutupi seluruh tinggi viewport */
-  object-fit: cover; /* Mengisi area tanpa distorsi, memotong jika diperlukan */
-  z-index: 1;
-  overflow: hidden; /* Menghindari overflow yang tidak diinginkan */
+  z-index: 1; 
+  overflow: hidden;
 }
-
 /* 
 .bg-image {
   position: absolute;
