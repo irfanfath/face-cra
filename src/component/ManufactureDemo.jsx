@@ -26,12 +26,12 @@ export default function ManufactureDemo() {
 
   const videoConstraints = {
     facingMode: 'environment',
-    width: { ideal: 1920 },
-    height: { ideal: 1080 },
-    aspectRatio: 16 / 9
-    // width: { ideal: 720 },
-    // height: { ideal: 1280 },
-    // aspectRatio: 9 / 16
+    // width: { ideal: 1920 },
+    // height: { ideal: 1080 },
+    // aspectRatio: 16 / 9
+    width: { ideal: 720 },
+    height: { ideal: 1280 },
+    aspectRatio: 9 / 16
   };
 
   const capture = async () => {
@@ -64,10 +64,10 @@ export default function ManufactureDemo() {
       const data = await response.json();
 
       const formattedText = formatOcrData(data.message.results);
-      setDataOcr(data.message.results);
+      // setDataOcr(data.message.results);
       setEditorState(EditorState.createWithContent(ContentState.createFromText(formattedText)));
-      setResult(true);
-      setLoading(false);
+      // setResult(true);
+      // setLoading(false);
 
       if (currentStep === 1) {
         setDataGivaudan(data.message.results);
@@ -210,8 +210,9 @@ export default function ManufactureDemo() {
           </div>
 
           {loading ?
-            <img src={currentStep === 1 ? imageGivaudan : imageVendor} alt="captured"
-              style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
+            // <img src={currentStep === 1 ? imageGivaudan : imageVendor} alt="captured"
+            <img src={imageSrc} alt="captured"
+              style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }}
             />
             :
             // <Webcam
@@ -224,31 +225,23 @@ export default function ManufactureDemo() {
             //   screenshotQuality={1}
             //   style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
             // />
-            // <Webcam
-            //   className="webcam"
-            //   audio={false}
-            //   ref={webcamRef}
-            //   screenshotFormat="image/jpeg"
-            //   videoConstraints={videoConstraints}
-            //   screenshotQuality={1}
-            //   style={{
-            //     background: '#000000',
-            //     position: 'absolute',
-            //     left: 0,
-            //     top: 0,
-            //     width: '100%',
-            //     height: 'auto',
-            //     objectFit: 'cover',
-            //     overflow: 'hidden'
-            //   }}
-            // />
             <Webcam
-              mirrored={true}
+              className="webcam"
               audio={false}
               ref={webcamRef}
-              screenshotQuality={1}
               screenshotFormat="image/jpeg"
-              style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
+              videoConstraints={videoConstraints}
+              screenshotQuality={1}
+              style={{
+                background: '#000000',
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                width: '100%',
+                height: '100vh',
+                objectFit: 'cover', 
+                overflow: 'hidden'
+              }}
             />
           }
 
