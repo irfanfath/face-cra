@@ -193,7 +193,7 @@ export default function ManufactureDemo() {
             alt=""
             src={bgImage} />
 
-          <div style={{ display: 'inline-flex', flexDirection: 'column', lineHeight: '30px', position: 'fixed', fontSize: 14, fontWeight: 600, top: 15, left: 0, right: 0, zIndex: 1000, textAlign: 'left' }}>
+          <div style={{ display: 'inline-flex', flexDirection: 'column', lineHeight: '30px', position: 'fixed', fontSize: 14, fontWeight: 600, top: 15, left: 0, right: 0, zIndex: 1000, textAlign: 'left', background: '#00000' }}>
             <div style={{ paddingLeft: 20, paddingRight: 20 }}>
               <div style={{ textAlign: 'left' }} onClick={handleBack}>
                 <ArrowLeft size={25} color="#ffff" strokeWidth={2} />
@@ -226,26 +226,6 @@ export default function ManufactureDemo() {
               screenshotQuality={1}
               style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }}
             />
-            // <Webcam
-            //   className="webcam"
-            //   scale={1}
-            //   audio={false}
-            //   ref={webcamRef}
-            //   screenshotFormat="image/jpeg"
-            //   videoConstraints={videoConstraints}
-            //   screenshotQuality={1}
-            //   style={{
-            //     background: '#000000',
-            //     position: 'absolute',
-            //     left: 0,
-            //     top: 0,
-            //     width: '100vw', // Menyesuaikan lebar dengan lebar viewport
-            //     height: '100vh', // Menyesuaikan tinggi dengan tinggi viewport
-            //     objectFit: 'cover', // Mengisi area tanpa distorsi
-            //     overflow: 'hidden' // Menyembunyikan overflow jika diperlukan
-            //   }}
-            // />
-
           }
 
           <div style={{ position: 'fixed', bottom: 30, left: 0, right: 0, zIndex: 1000 }}>
@@ -331,7 +311,7 @@ export default function ManufactureDemo() {
                     </div>
                     <div style={{ marginTop: '50px' }}>
                       <div>
-                        <img src={currentStep === 1 ? imageGivaudan : imageVendor} alt="captured" style={{ width: '100%', borderRadius: '15px' }} />
+                        <img src={currentStep === 1 ? imageGivaudan : imageVendor} alt="captured" style={{ width: '100%', borderRadius: '15px', maxHeight: '500vh' }} />
                         <div style={{ margin: '20px', fontWeight: '600', fontSize: '18px', color: '#272D4E', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Detail<span style={{ marginLeft: '10px', cursor: 'pointer' }} onClick={() => setShowEdit(true)}><Pencil color="#002E5E" size={18} /></span></div>
                         <div style={{ textAlign: 'left', padding: '10px', background: '#F5F8FF', borderRadius: 10 }}>
                           <Editor
