@@ -26,9 +26,12 @@ export default function ManufactureDemo() {
 
   const videoConstraints = {
     facingMode: 'environment',
-    width: { ideal: 1920 },
-    height: { ideal: 1080 },
-    aspectRatio: 16 / 9
+    width: { ideal: 1080 },
+    height: { ideal: 1920 },
+    // aspectRatio: 16 / 9
+    // width: { ideal: 720 },
+    // height: { ideal: 1280 },
+    aspectRatio: 9 / 16
   };
 
   const capture = async () => {
