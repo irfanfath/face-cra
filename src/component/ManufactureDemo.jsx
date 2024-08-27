@@ -55,8 +55,8 @@ export default function ManufactureDemo() {
         body: formData
       };
 
-      // const response = await fetch('https://bigvision.id/upload/free-form-ocr-extract', requestOptions);
-      const response = await fetch('https://bigvision.id/upload/image-to-text', requestOptions);
+      const response = await fetch('https://bigvision.id/upload/free-form-ocr-extract', requestOptions);
+      // const response = await fetch('https://bigvision.id/upload/image-to-text', requestOptions);
 
       const data = await response.json();
 
@@ -67,7 +67,6 @@ export default function ManufactureDemo() {
       setLoading(false);
 
       if (currentStep === 1) {
-        // setDataGivaudan(data.message.results);
         setDataGivaudan(data.message.results);
         setImageGivaudan(data.message.image_url);
       } else if (currentStep === 2) {
@@ -223,14 +222,14 @@ export default function ManufactureDemo() {
             />
           }
 
-          <div style={{ position: 'fixed', bottom: 60, left: 0, right: 0, zIndex: 1000 }}>
+          <div style={{ position: 'fixed', bottom: 30, left: 0, right: 0, zIndex: 1000 }}>
             {loading ?
               <div>
                 <div style={{ color: '#ffff' }}>Menunggu proses ekstrasi..</div>
               </div>
               :
               <div>
-                <div style={{ color: '#ffff', marginBottom: '60px' }}>Sesuaikan posisi manufaktur</div>
+                <div style={{ color: '#ffff', marginBottom: '30px' }}>Sesuaikan posisi manufaktur</div>
                 <button className="next-button" onClick={capture}><Camera size={"22px"} strokeWidth={3} color="#ffff" />&nbsp;Scan</button>
               </div>
             }
