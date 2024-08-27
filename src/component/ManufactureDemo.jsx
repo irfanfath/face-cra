@@ -226,7 +226,7 @@ export default function ManufactureDemo() {
               ref={webcamRef}
               screenshotFormat="image/jpeg"
               videoConstraints={videoConstraints}
-              screenshotQuality={2} 
+              screenshotQuality={1} 
               style={{
                 background: '#000000',
                 position: 'absolute',
