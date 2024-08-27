@@ -64,10 +64,10 @@ export default function ManufactureDemo() {
       const data = await response.json();
 
       const formattedText = formatOcrData(data.message.results);
-      // setDataOcr(data.message.results);
+      setDataOcr(data.message.results);
       setEditorState(EditorState.createWithContent(ContentState.createFromText(formattedText)));
-      // setResult(true);
-      // setLoading(false);
+      setResult(true);
+      setLoading(false);
 
       if (currentStep === 1) {
         setDataGivaudan(data.message.results);
