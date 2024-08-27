@@ -24,11 +24,11 @@ export default function ManufactureDemo() {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [currentStep, setCurrentStep] = useState(1);
 
-  let videoConstraints = {
+  const videoConstraints = {
     facingMode: 'environment',
-    width: { ideal: 720 },
-    height: { ideal: 1280 },
-    aspectRatio: 9 / 16
+    width: { ideal: 1920 }, 
+    height: { ideal: 1080 }, 
+    aspectRatio: 16 / 9
   };
 
   const capture = async () => {
@@ -174,11 +174,11 @@ export default function ManufactureDemo() {
       setCurrentStep(2)
       setShowEdit(false);
     } else if (currentStep === 3) {
-      setResult(true); 
-      setCurrentStep(2); 
+      setResult(true);
+      setCurrentStep(2);
       setShowEdit(false);
       setMatchResult(false)
-    } 
+    }
   }
 
   return (
@@ -210,15 +210,33 @@ export default function ManufactureDemo() {
               style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
             />
             :
+            // <Webcam
+            //   className="webcam"
+            //   scale={1}
+            //   audio={false}
+            //   ref={webcamRef}
+            //   screenshotFormat="image/jpeg"
+            //   videoConstraints={videoConstraints}
+            //   screenshotQuality={1}
+            //   style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
+            // />
             <Webcam
               className="webcam"
-              scale={1}
               audio={false}
               ref={webcamRef}
               screenshotFormat="image/jpeg"
               videoConstraints={videoConstraints}
-              screenshotQuality={1}
-              style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
+              screenshotQuality={2} 
+              style={{
+                background: '#000000',
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                width: '100%',
+                height: '100vh',
+                objectFit: 'contain',
+                overflow: 'hidden'
+              }}
             />
           }
 
