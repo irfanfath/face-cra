@@ -26,8 +26,8 @@ export default function ManufactureDemo() {
 
   const videoConstraints = {
     facingMode: 'environment',
-    width: { ideal: 1920 }, 
-    height: { ideal: 1080 }, 
+    width: { ideal: 1920 },
+    height: { ideal: 1080 },
     aspectRatio: 16 / 9
   };
 
@@ -169,6 +169,7 @@ export default function ManufactureDemo() {
     if (currentStep === 1) {
       setCurrentStep(1)
       setShowEdit(false)
+      setResult(false)
     } else if (currentStep === 2) {
       setResult(false);
       setCurrentStep(2)
@@ -206,7 +207,7 @@ export default function ManufactureDemo() {
           </div>
 
           {loading ?
-            <img src={imageSrc} alt="captured"
+            <img src={currentStep === 1 ? imageGivaudan : imageVendor} alt="captured"
               style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
             />
             :
@@ -226,7 +227,7 @@ export default function ManufactureDemo() {
               ref={webcamRef}
               screenshotFormat="image/jpeg"
               videoConstraints={videoConstraints}
-              screenshotQuality={1} 
+              screenshotQuality={1}
               style={{
                 background: '#000000',
                 position: 'absolute',
@@ -323,7 +324,7 @@ export default function ManufactureDemo() {
                     </div>
                     <div style={{ marginTop: '50px' }}>
                       <div>
-                        <img src={imageSrc} alt="captured" style={{ width: '100%', borderRadius: '15px' }} />
+                        <img src={currentStep === 1 ? imageGivaudan : imageVendor} alt="captured" style={{ width: '100%', borderRadius: '15px' }} />
                         <div style={{ margin: '20px', fontWeight: '600', fontSize: '18px', color: '#272D4E', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Detail<span style={{ marginLeft: '10px', cursor: 'pointer' }} onClick={() => setShowEdit(true)}><Pencil color="#002E5E" size={18} /></span></div>
                         <div style={{ textAlign: 'left', padding: '10px', background: '#F5F8FF', borderRadius: 10 }}>
                           <Editor
