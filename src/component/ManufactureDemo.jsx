@@ -257,7 +257,7 @@ export default function ManufactureDemo() {
                   background: '#000000',
                   width: '100%',
                   height: 'auto', 
-                  objectFit: 'cover'
+                  objectFit: 'contain'
                 }}
               />
             </div>
