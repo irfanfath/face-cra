@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import Webcam from "react-webcam";
-import bgImage from '../assets/bg-ocr.png';
+import bgImage from '../assets/bg-ocr2.png';
 import { ArrowLeft, ArrowRight, ArrowUpDown, Camera, CircleCheck, Pencil } from "lucide-react";
 import { Editor, EditorState, ContentState, convertToRaw } from 'draft-js';
 import 'draft-js/dist/Draft.css';
