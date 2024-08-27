@@ -188,10 +188,10 @@ export default function ManufactureDemo() {
     <div className="webcam-container">
       {result !== true ?
         <div className="webcam-img">
-          {/* <img
+          <img
             className="bg-image"
             alt=""
-            src={bgImage} /> */}
+            src={bgImage} />
 
           <div style={{ display: 'inline-flex', flexDirection: 'column', lineHeight: '30px', position: 'fixed', fontSize: 14, fontWeight: 600, top: 15, left: 0, right: 0, zIndex: 1000, textAlign: 'left' }}>
             <div style={{ paddingLeft: 20, paddingRight: 20 }}>
@@ -224,8 +224,28 @@ export default function ManufactureDemo() {
               screenshotFormat="image/jpeg"
               videoConstraints={videoConstraints}
               screenshotQuality={1}
-              style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }}
+              style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '70vh', objectFit: 'cover', overflow: 'hidden' }}
             />
+            // <Webcam
+            //   className="webcam"
+            //   scale={1}
+            //   audio={false}
+            //   ref={webcamRef}
+            //   screenshotFormat="image/jpeg"
+            //   videoConstraints={videoConstraints}
+            //   screenshotQuality={1}
+            //   style={{
+            //     background: '#000000',
+            //     position: 'absolute',
+            //     left: 0,
+            //     top: 0,
+            //     width: '100vw', // Menyesuaikan lebar dengan lebar viewport
+            //     height: '100vh', // Menyesuaikan tinggi dengan tinggi viewport
+            //     objectFit: 'cover', // Mengisi area tanpa distorsi
+            //     overflow: 'hidden' // Menyembunyikan overflow jika diperlukan
+            //   }}
+            // />
+
           }
 
           <div style={{ position: 'fixed', bottom: 30, left: 0, right: 0, zIndex: 1000 }}>
