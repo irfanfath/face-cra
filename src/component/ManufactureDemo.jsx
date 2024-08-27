@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import Webcam from "react-webcam";
-import bgImage from '../assets/bg-ocr.png';
+import bgImage from '../assets/bg-camera.png';
 import { ArrowLeft, ArrowRight, ArrowUpDown, Camera, CircleCheck, Pencil } from "lucide-react";
 import { Editor, EditorState, ContentState, convertToRaw } from 'draft-js';
 import 'draft-js/dist/Draft.css';
@@ -188,12 +188,15 @@ export default function ManufactureDemo() {
     <div className="webcam-container">
       {result !== true ?
         <div className="webcam-img">
-          <img className="bg-image" alt="" src={bgImage} />
+          {/* <img
+            className="bg-image"
+            alt=""
+            src={bgImage} /> */}
 
-          <div style={{ display: 'inline-flex', flexDirection: 'column', lineHeight: '30px', position: 'fixed', fontSize: 14, fontWeight: 600, top: 25, left: 0, right: 0, zIndex: 1000, textAlign: 'left' }}>
+          <div style={{ display: 'inline-flex', flexDirection: 'column', lineHeight: '30px', position: 'fixed', fontSize: 14, fontWeight: 600, top: 15, left: 0, right: 0, zIndex: 1000, textAlign: 'left' }}>
             <div style={{ paddingLeft: 20, paddingRight: 20 }}>
-              <div style={{ textAlign: 'left', marginBottom: '20px' }} onClick={handleBack}>
-                <ArrowLeft size={30} color="#ffff" strokeWidth={2} />
+              <div style={{ textAlign: 'left' }} onClick={handleBack}>
+                <ArrowLeft size={25} color="#ffff" strokeWidth={2} />
               </div>
 
               <div style={{ width: '100%', justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex' }}>
@@ -221,7 +224,7 @@ export default function ManufactureDemo() {
               screenshotFormat="image/jpeg"
               videoConstraints={videoConstraints}
               screenshotQuality={1}
-            style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: 'auto', objectFit: 'contain', overflow: 'hidden' }}
+              style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }}
             />
           }
 
