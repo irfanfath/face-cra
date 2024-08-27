@@ -224,7 +224,7 @@ export default function ManufactureDemo() {
               screenshotFormat="image/jpeg"
               videoConstraints={videoConstraints}
               screenshotQuality={1}
-              style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '80vh', objectFit: 'cover', overflow: 'hidden' }}
+              style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '90vh', objectFit: 'cover', overflow: 'hidden' }}
             />
             // <Webcam
             //   className="webcam"
