@@ -24,18 +24,18 @@ export default function ManufactureDemo() {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [currentStep, setCurrentStep] = useState(1);
 
-  const videoConstraints = {
+  let videoConstraints = {
     facingMode: 'environment',
-    // width: { ideal: 1920 },
-    // height: { ideal: 1080 },
-    // aspectRatio: 16 / 9
-    width: { ideal: 720 },
-    height: { ideal: 1280 },
-    aspectRatio: 9 / 16
+    // width: { ideal: 720 },
+    // height: { ideal: 1280 },
+    // aspectRatio: 9 / 16
+    width: { ideal: 1920 },
+    height: { ideal: 1080 },
+    aspectRatio: 16 / 9
   };
 
   const capture = async () => {
-    const imageSrc = webcamRef.current.getScreenshot();
+    const imageSrc = webcamRef.current.getScreenshot({ quality: 1 });
     setImageSrc(imageSrc);
     localStorage.setItem('ktp', imageSrc);
 
@@ -59,8 +59,6 @@ export default function ManufactureDemo() {
       };
 
       const response = await fetch('https://bigvision.id/upload/free-form-ocr-extract', requestOptions);
-      // const response = await fetch('https://bigvision.id/upload/image-to-text', requestOptions);
-
       const data = await response.json();
 
       const formattedText = formatOcrData(data.message.results);
@@ -161,6 +159,7 @@ export default function ManufactureDemo() {
     if (currentStep === 1) {
       setCurrentStep(1)
       setShowEdit(false)
+      setResult(false)
     } else if (currentStep === 2) {
       setResult(true);
       setCurrentStep(1)
@@ -210,38 +209,19 @@ export default function ManufactureDemo() {
           </div>
 
           {loading ?
-            // <img src={currentStep === 1 ? imageGivaudan : imageVendor} alt="captured"
             <img src={imageSrc} alt="captured"
-              style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }}
+              style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
             />
             :
-            // <Webcam
-            //   className="webcam"
-            //   scale={1}
-            //   audio={false}
-            //   ref={webcamRef}
-            //   screenshotFormat="image/jpeg"
-            //   videoConstraints={videoConstraints}
-            //   screenshotQuality={1}
-            //   style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
-            // />
             <Webcam
               className="webcam"
+              scale={1}
               audio={false}
               ref={webcamRef}
               screenshotFormat="image/jpeg"
               videoConstraints={videoConstraints}
               screenshotQuality={1}
-              style={{
-                background: '#000000',
-                position: 'absolute',
-                left: 0,
-                top: 0,
-                width: '100%',
-                height: '100vh',
-                objectFit: 'cover', 
-                overflow: 'hidden'
-              }}
+            style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }}
             />
           }
 
