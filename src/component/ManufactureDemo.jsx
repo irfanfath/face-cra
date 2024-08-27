@@ -228,15 +228,15 @@ export default function ManufactureDemo() {
             />
           }
 
-          <div style={{ position: 'fixed', bottom: 30, left: 0, right: 0, zIndex: 1000 }}>
+          <div style={{ position: 'fixed', bottom: 20, left: 0, right: 0, zIndex: 1000 }}>
             {loading ?
               <div>
                 <div style={{ color: '#ffff' }}>Menunggu proses ekstrasi..</div>
               </div>
               :
-              <div>
-                <div style={{ color: '#ffff', marginBottom: '30px' }}>Sesuaikan posisi manufaktur</div>
-                <button className="next-button" onClick={capture}><Camera size={"22px"} strokeWidth={3} color="#ffff" />&nbsp;Scan</button>
+              <div style={{padding: '0px 20px 0px 20px'}}>
+                <div style={{ color: '#ffff', marginBottom: '15px', fontSize: '12px' }}>Sesuaikan posisi manufaktur</div>
+                <button className="next-button" onClick={capture}><Camera size={20} strokeWidth={3} color="#ffff" />&nbsp;Scan</button>
               </div>
             }
           </div>
