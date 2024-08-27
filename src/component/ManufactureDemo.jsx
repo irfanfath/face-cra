@@ -234,7 +234,7 @@ export default function ManufactureDemo() {
                 <div style={{ color: '#ffff' }}>Menunggu proses ekstrasi..</div>
               </div>
               :
-              <div style={{padding: '0px 20px 0px 20px'}}>
+              <div style={{ padding: '0px 20px 0px 20px' }}>
                 <div style={{ color: '#ffff', marginBottom: '15px', fontSize: '12px' }}>Sesuaikan posisi manufaktur</div>
                 <button className="next-button" onClick={capture}><Camera size={20} strokeWidth={3} color="#ffff" />&nbsp;Scan</button>
               </div>
@@ -345,7 +345,7 @@ export default function ManufactureDemo() {
               <div>
                 {!detailMatch ?
                   <div>
-                    <div style={{ padding: 10 }}>
+                    <div>
                       <div style={{ display: 'inline-flex', justifyContent: 'space-between', width: '100%' }}>
                         <div style={{ color: '#130F26', fontWeight: 600, letterSpacing: 2 }}>3/3</div>
                         <div style={{ justifyContent: 'flex-start', alignItems: 'flex-start', gap: 10, display: 'flex' }}>
@@ -358,7 +358,7 @@ export default function ManufactureDemo() {
                     </div>
 
                     <div style={{ marginTop: '50px' }}>
-                      <div style={{ color: '#0F133E', fontSize: 28, fontWeight: 500 }}>
+                      <div style={{ color: dataGivaudan === dataVendor ? '#03A08B' : '#F54A45', fontSize: 28, fontWeight: 500 }}>
                         {dataGivaudan === dataVendor ? 'Data Match' : 'Data Tidak Match'}
                       </div>
                       <img src={require(`../assets/${dataGivaudan === dataVendor ? 'match' : 'notmatch'}.png`)} alt="Welcoming" />
@@ -378,7 +378,14 @@ export default function ManufactureDemo() {
                   </div>
                   :
                   <div style={{ marginTop: '20px' }}>
-                    <div>
+                    <div style={{ background: dataGivaudan === dataVendor ? '#F0FFFD' : '#FFF0F0', borderRadius: 4 }}>
+                      <div style={{ justifyContent: 'center', alignItems: 'center', display: 'inline-flex', gap: 6, padding: '10px' }}>
+                        <img src={require(dataGivaudan === dataVendor ? '../assets/icon-check.png' : '../assets/icon-wrong.png')} alt="check" style={{ width: '20px' }} />
+                        <div style={{ color: dataGivaudan === dataVendor ? '#03A08B' : '#F54A45', fontSize: 18, fontWeight: '700' }}>{dataGivaudan === dataVendor ? 'Data Match' : 'Data Tidak Match'}</div>
+                      </div>
+                    </div>
+                    <div style={{ marginTop: '20px' }}>
+                      <div style={{ color: '#737373', textAlign: 'left', marginBottom: '10px' }}>Manufaktur Givaudan</div>
                       <img src={imageSrc} alt="captured" style={{ width: '100%', borderRadius: '15px' }} />
                       <div style={{ margin: '20px' }}><ArrowUpDown color="#2D5988" strokeWidth={2} /></div>
                       <div style={{ color: '#737373', textAlign: 'left', marginBottom: 10 }}>Manufaktur Vendor</div>
