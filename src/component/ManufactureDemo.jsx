@@ -57,6 +57,7 @@ export default function ManufactureDemo() {
       const blob = await fetch(`data:image/jpeg;base64,${base64Image}`).then(res => res.blob());
       const formData = new FormData();
       formData.append('image', blob, 'captured-image.jpeg');
+      formData.append('type', currentStep === 1 ? 'givaudan' : currentStep === 2 ? 'vendor' : '')
       const requestOptions = {
         method: 'POST',
         headers: {
