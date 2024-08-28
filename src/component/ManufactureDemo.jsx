@@ -239,7 +239,7 @@ export default function ManufactureDemo() {
             </div>
           }
 
-          <div style={{ position: 'fixed', bottom: 20, left: 0, right: 0, zIndex: 1000 }}>
+          <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000, padding: 20, background: '#000000' }}>
             {loading ?
               <div>
                 <div style={{ color: '#ffff' }}>Menunggu proses ekstrasi..</div>
