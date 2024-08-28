@@ -8,7 +8,7 @@ export default function WelcomingOCR() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'linear-gradient(262.22deg, #002E5E 22.04%, #2D5988 69.46%)' }}>
       <div style={{marginTop: '40px'}}>
         <img style={{width: '50%'}} src={require('../assets/bigvision.png')} alt="Welcoming" />
       </div>
