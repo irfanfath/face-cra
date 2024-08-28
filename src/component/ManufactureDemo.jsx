@@ -200,7 +200,7 @@ export default function ManufactureDemo() {
             alt=""
             src={bgImage} />
 
-          <div style={{ display: 'inline-flex', flexDirection: 'column', lineHeight: '30px', position: 'fixed', fontSize: 14, fontWeight: 600, top: 15, left: 0, right: 0, zIndex: 1000, textAlign: 'left', background: '#00000' }}>
+          <div style={{ display: 'inline-flex', flexDirection: 'column', lineHeight: '25px', position: 'fixed', fontSize: 14, fontWeight: 600, top: 10, left: 0, right: 0, zIndex: 1000, textAlign: 'left', background: '#00000' }}>
             <div style={{ paddingLeft: 20, paddingRight: 20 }}>
               <div style={{ textAlign: 'left' }} onClick={handleBack}>
                 <ArrowLeft size={25} color="#ffff" strokeWidth={2} />
@@ -214,7 +214,7 @@ export default function ManufactureDemo() {
                   <TodoStep />
                 </div>
               </div>
-              <span style={{ color: 'white', fontSize: '16px' }}>{currentStep === 1 ? 'Foto Manufaktur Givaudan Anda' : 'Foto Manufaktur Vendor Anda'}</span>
+              <span style={{ color: 'white', fontSize: '14px' }}>{currentStep === 1 ? 'Foto Manufaktur Givaudan Anda' : 'Foto Manufaktur Vendor Anda'}</span>
             </div>
           </div>
 
