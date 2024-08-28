@@ -216,16 +216,20 @@ export default function ManufactureDemo() {
               style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
             />
             :
-            <Webcam
-              className="webcam"
-              scale={1}
-              audio={false}
-              ref={webcamRef}
-              screenshotFormat="image/jpeg"
-              videoConstraints={videoConstraints}
-              screenshotQuality={1}
-              style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }}
-            />
+            // Tambahkan elemen kontainer
+            <div className="webcam-video">
+              <Webcam
+                className="webcam"
+                scale={1}
+                audio={false}
+                ref={webcamRef}
+                screenshotFormat="image/jpeg"
+                videoConstraints={videoConstraints}
+                screenshotQuality={1}
+                style={{ background: '#000000', width: '100%', height: '70vh', objectFit: 'cover' }}
+              />
+            </div>
+
           }
 
           <div style={{ position: 'fixed', bottom: 20, left: 0, right: 0, zIndex: 1000 }}>
