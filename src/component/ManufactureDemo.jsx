@@ -36,9 +36,9 @@ export default function ManufactureDemo() {
 
   // let videoConstraints = {
   //   facingMode: 'environment',
-  //   width: { ideal: 640 },  // Sesuaikan lebar sesuai kebutuhan
-  //   height: { ideal: 480 }, // Sesuaikan tinggi sesuai kebutuhan
-  //   aspectRatio: 4 / 3     // Sesuaikan rasio aspek jika perlu
+  //   width: { ideal: 640 },  
+  //   height: { ideal: 480 },
+  //   aspectRatio: 4 / 3 
   // };
 
   const capture = async () => {
@@ -242,10 +242,10 @@ export default function ManufactureDemo() {
           <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000, padding: 15, background: '#000000' }}>
             {loading ?
               <div>
-                <div style={{ color: '#ffff' }}>Menunggu proses ekstrasi..</div>
+                <div style={{ color: '#ffff', marginBottom: '20px' }}>Menunggu proses ekstrasi..</div>
               </div>
               :
-              <div style={{ padding: '0px 20px 0px 20px' }}>
+              <div style={{ padding: '0px 20px 0px 20px', marginBottom: '40px' }}>
                 <div style={{ color: '#ffff', marginBottom: '15px', fontSize: '12px' }}>Sesuaikan posisi manufaktur</div>
                 <button className="next-button" onClick={capture}><Camera size={20} strokeWidth={3} color="#ffff" />&nbsp;Scan</button>
               </div>
