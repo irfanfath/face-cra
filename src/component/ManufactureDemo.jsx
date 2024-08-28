@@ -171,7 +171,7 @@ export default function ManufactureDemo() {
       setCurrentStep(2);
       setResult(false);
     } else if (currentStep === 2) {
-      await sendDataConsole();
+      await sendDataToApi();
       setCurrentStep(3);
     }
   };
