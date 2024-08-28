@@ -456,7 +456,7 @@ export default function ManufactureDemo() {
                     </div>
                     <div style={{ marginTop: '20px' }}>
                       <div style={{ color: '#737373', textAlign: 'left', marginBottom: '10px' }}>Manufaktur Givaudan</div>
-                      <img src={imageSrc} alt="captured" style={{ width: '100%', borderRadius: '15px' }} />
+                      <img src={imageGivaudan} alt="captured" style={{ width: '100%', borderRadius: '15px' }} />
                       <div style={{ margin: '20px' }}><ArrowUpDown color="#2D5988" strokeWidth={2} /></div>
                       <div style={{ color: '#737373', textAlign: 'left', marginBottom: 10 }}>Manufaktur Vendor</div>
                       <div style={{ textAlign: 'left', padding: '10px', background: '#F5F8FF', borderRadius: 10 }}>
