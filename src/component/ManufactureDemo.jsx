@@ -29,8 +29,8 @@ export default function ManufactureDemo() {
     // width: { ideal: 720 },
     // height: { ideal: 1280 },
     // aspectRatio: 9 / 16
-    width: { ideal: 1920 },
-    height: { ideal: 1080 },
+    width: { ideal: 720 },
+    height: { ideal: 1280 },
     aspectRatio: 16 / 9
   };
 
