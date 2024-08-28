@@ -24,22 +24,22 @@ export default function ManufactureDemo() {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [currentStep, setCurrentStep] = useState(1);
 
-  // let videoConstraints = {
-  //   facingMode: 'environment',
-  //   // width: { ideal: 720 },
-  //   // height: { ideal: 1280 },
-  //   // aspectRatio: 9 / 16
-  //   width: { ideal: 1920 },
-  //   height: { ideal: 1080 },
-  //   aspectRatio: 16 / 9
-  // };
-
   let videoConstraints = {
     facingMode: 'environment',
-    width: { ideal: 640 },  // Sesuaikan lebar sesuai kebutuhan
-    height: { ideal: 480 }, // Sesuaikan tinggi sesuai kebutuhan
-    aspectRatio: 4 / 3     // Sesuaikan rasio aspek jika perlu
+    // width: { ideal: 720 },
+    // height: { ideal: 1280 },
+    // aspectRatio: 9 / 16
+    width: { ideal: 720 },
+    height: { ideal: 1280 },
+    aspectRatio: 16 / 9
   };
+
+  // let videoConstraints = {
+  //   facingMode: 'environment',
+  //   width: { ideal: 640 },  // Sesuaikan lebar sesuai kebutuhan
+  //   height: { ideal: 480 }, // Sesuaikan tinggi sesuai kebutuhan
+  //   aspectRatio: 4 / 3     // Sesuaikan rasio aspek jika perlu
+  // };
 
   const capture = async () => {
     const imageSrc = webcamRef.current.getScreenshot({ quality: 1 });
