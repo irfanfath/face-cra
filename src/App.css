@@ -1,9 +1,21 @@
 body {
-  background: linear-gradient(262.22deg, #002E5E 22.04%, #2D5988 69.46%);
-}
-html {
   background: #000000;
 }
+
+.webcam-container {
+  background: linear-gradient(262.22deg, #002E5E 22.04%, #2D5988 69.46%);
+}
+
+.footer {
+  background: linear-gradient(262.22deg, #002E5E 22.04%, #2D5988 69.46%);
+  padding: 20px;
+  margin-top: 40px;
+  min-height: 25vh;
+}
+
+/* html {
+  background: #000000;
+} */
 .App {
   text-align: center;
 }
