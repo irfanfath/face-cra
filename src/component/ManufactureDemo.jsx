@@ -212,21 +212,23 @@ export default function ManufactureDemo() {
           </div>
 
           {loading ?
-            <img src={imageSrc} alt="captured"
-              style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
-            />
+            <div className="webcam-video">
+              <img src={imageSrc} alt="captured"
+                style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', objectFit: 'cover', overflow: 'hidden' }}
+              />
+            </div>
             :
             <div className="webcam-video">
-            <Webcam
-              className="webcam"
-              scale={1}
-              audio={false}
-              ref={webcamRef}
-              screenshotFormat="image/jpeg"
-              videoConstraints={videoConstraints}
-              screenshotQuality={1}
-              style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', objectFit: 'cover', overflow: 'hidden' }}
-            />
+              <Webcam
+                className="webcam"
+                scale={1}
+                audio={false}
+                ref={webcamRef}
+                screenshotFormat="image/jpeg"
+                videoConstraints={videoConstraints}
+                screenshotQuality={1}
+                style={{ background: '#000000', position: 'absolute', left: 0, top: 0, width: '100%', objectFit: 'cover', overflow: 'hidden' }}
+              />
             </div>
           }
 
