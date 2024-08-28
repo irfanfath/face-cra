@@ -14,6 +14,8 @@ export default function ManufactureDemo() {
   const [dataOcr, setDataOcr] = useState({});
   const [dataGivaudan, setDataGivaudan] = useState({});
   const [dataVendor, setDataVendor] = useState({});
+  const [dataMatching, setDataMatching] = useState({});
+  const [statusMatching, setStatusMatching] = useState(true)
   const [imageGivaudan, setImageGivaudan] = useState('');
   const [imageVendor, setImageVendor] = useState('');
   const [loading, setLoading] = useState(false);
@@ -95,6 +97,41 @@ export default function ManufactureDemo() {
     }).join('\n');
   };
 
+  // const formatDataResult = (dataOcr = {}) => {
+  //   if (!dataOcr || !dataOcr.message) {
+  //     console.error('dataOcr or dataOcr.message is undefined');
+  //     console.log(dataOcr)
+
+  //     return null;
+  //   }
+
+  //   return Object.entries(dataOcr).map(([key, value]) => {
+  //     const formattedKey = key.replace('_', ' ').toUpperCase();
+  //     return (
+  //       <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 25, padding: 10 }}>
+  //         <img src={require(value ? '../assets/icon-check.png' : '../assets/icon-wrong.png')} alt="check" style={{ width: '20px' }} />
+  //         <span>{`${formattedKey} : ${value}`}</span>
+  //       </div>
+  //     );
+  //   });
+  // };
+
+  const formatDataResult = (dataOcr = {}) => {
+    const { results, results_status } = dataOcr;
+
+    return Object.entries(results).map(([key, value]) => {
+      const formattedKey = key.replace('_', ' ').toUpperCase();
+      const status = results_status[key];
+
+      return (
+        <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 25, padding: 10 }}>
+          <img src={require(status ? '../assets/icon-check.png' : '../assets/icon-wrong.png')} alt="check" style={{ width: '20px' }} />          <span>{`${formattedKey} : ${value}`}</span>
+        </div>
+      );
+    });
+  };
+
+
   const handleEditorChange = (state) => {
     setEditorState(state);
   };
@@ -134,7 +171,7 @@ export default function ManufactureDemo() {
       setCurrentStep(2);
       setResult(false);
     } else if (currentStep === 2) {
-      await sendDataConsole();
+      await mockDataAPI();
       setCurrentStep(3);
     }
   };
@@ -147,8 +184,8 @@ export default function ManufactureDemo() {
 
   const sendDataToApi = async () => {
     try {
-      const response = await fetch('https://bigvision.id/upload/free-form-ocr-extract/matching', {
-        method: 'POST',
+        const response = await fetch('https://bigvision.id/upload/free-form-ocr-extract/matching', {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer your-token-here',
@@ -156,8 +193,29 @@ export default function ManufactureDemo() {
         body: JSON.stringify({ dataGivaudan, dataVendor, imageGivaudan, imageVendor })
       });
 
-      const result = await response.json();
-      console.log('Data successfully sent to API:', result);
+      const data = await response.json();
+      setDataMatching(data.message);
+      setStatusMatching(data.message.summary);
+      setMatchResult(true)
+    } catch (error) {
+      console.error('Error sending data to API:', error);
+    }
+  };
+
+  const mockDataAPI = async () => {
+    try {
+      const response = await fetch('https://mocki.io/v1/93087220-681a-478e-83ad-d0eb832f3528', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer your-token-here',
+        },
+      });
+
+      const data = await response.json();
+      setDataMatching(data.message);
+      setStatusMatching(data.message.summary);
+      setMatchResult(true)
     } catch (error) {
       console.error('Error sending data to API:', error);
     }
@@ -370,13 +428,13 @@ export default function ManufactureDemo() {
                     </div>
 
                     <div style={{ marginTop: '50px' }}>
-                      <div style={{ color: dataGivaudan === dataVendor ? '#03A08B' : '#F54A45', fontSize: 28, fontWeight: 500 }}>
-                        {dataGivaudan === dataVendor ? 'Data Match' : 'Data Tidak Match'}
+                      <div style={{ color: statusMatching ? '#03A08B' : '#F54A45', fontSize: 28, fontWeight: 500 }}>
+                        {statusMatching ? 'Data Match' : 'Data Tidak Match'}
                       </div>
-                      <img src={require(`../assets/${dataGivaudan === dataVendor ? 'match' : 'notmatch'}.png`)} alt="Welcoming" />
+                      <img src={require(`../assets/${statusMatching ? 'match' : 'notmatch'}.png`)} alt="Welcoming" />
                     </div>
                     <div style={{ marginTop: '40px', marginBottom: '40px', color: '#0F133E', fontSize: '20px', fontWeight: '600' }}>
-                      {dataGivaudan === dataVendor ? 'Data Manufaktur Anda dengan Vendor Match' : 'Silahkan ulangi proses scan manufaktur'}
+                      {statusMatching ? 'Data Manufaktur Anda dengan Vendor Match' : 'Silahkan ulangi proses scan manufaktur'}
                     </div>
                     <div style={{ marginBottom: '40px' }}>
                       <div style={{ display: 'inline-flex', gap: 20, alignItems: 'center' }} onClick={() => setDetailMatch(true)}>
@@ -390,10 +448,10 @@ export default function ManufactureDemo() {
                   </div>
                   :
                   <div style={{ marginTop: '20px' }}>
-                    <div style={{ background: dataGivaudan === dataVendor ? '#F0FFFD' : '#FFF0F0', borderRadius: 4 }}>
+                    <div style={{ background: statusMatching ? '#F0FFFD' : '#FFF0F0', borderRadius: 4 }}>
                       <div style={{ justifyContent: 'center', alignItems: 'center', display: 'inline-flex', gap: 6, padding: '10px' }}>
-                        <img src={require(dataGivaudan === dataVendor ? '../assets/icon-check.png' : '../assets/icon-wrong.png')} alt="check" style={{ width: '20px' }} />
-                        <div style={{ color: dataGivaudan === dataVendor ? '#03A08B' : '#F54A45', fontSize: 18, fontWeight: '700' }}>{dataGivaudan === dataVendor ? 'Data Match' : 'Data Tidak Match'}</div>
+                        <img src={require(statusMatching ? '../assets/icon-check.png' : '../assets/icon-wrong.png')} alt="check" style={{ width: '20px' }} />
+                        <div style={{ color: statusMatching ? '#03A08B' : '#F54A45', fontSize: 18, fontWeight: '700' }}>{statusMatching ? 'Data Match' : 'Data Tidak Match'}</div>
                       </div>
                     </div>
                     <div style={{ marginTop: '20px' }}>
@@ -402,11 +460,7 @@ export default function ManufactureDemo() {
                       <div style={{ margin: '20px' }}><ArrowUpDown color="#2D5988" strokeWidth={2} /></div>
                       <div style={{ color: '#737373', textAlign: 'left', marginBottom: 10 }}>Manufaktur Vendor</div>
                       <div style={{ textAlign: 'left', padding: '10px', background: '#F5F8FF', borderRadius: 10 }}>
-                        <Editor
-                          editorState={EditorState.createWithContent(ContentState.createFromText(formatOcrData(dataVendor)))}
-                          onChange={handleEditorChange}
-                          readOnly={!showEdit}
-                        />
+                        <div>{formatDataResult(dataMatching)}</div>
                       </div>
                       <br />
                     </div>
