@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
-import * as vision from '@mediapipe/tasks-vision';
 import { CircleCheck } from 'lucide-react';
 
 const pipeline = [
@@ -7,8 +6,9 @@ const pipeline = [
   { task: 'hadap-kanan', word: 'Silahkan Hadap Kanan' },
   { task: 'buka-mulut', word: 'Silahkan Buka Mulut' },
   { task: 'kedip-mata', word: 'Silahkan Kedipkan Mata Anda' },
-  { task: 'hadap-depan', word: 'Silahkan menghadap depan' },
-  { task: 'face-liveness', word: 'Silahkan Lihat Kamera' },
+  { task: 'hadap-depan', word: 'Silahkan Menghadap depan' },
+  { task: 'face-active', word: 'Silahkan Lihat Kamera' },
+  // { task: 'face-similarity', word: 'Tetap Lihat Kamera' },
   // { task: 'selesai', word: 'Selesai' }
 ];
 
@@ -54,6 +54,35 @@ const handleLiveness = (image) => {
   })
 }
 
+const handleSimilarity = (image) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const token = 'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJ2Qk55YVpaU0dBVk5Zek12ZEp2ajhWUkdyOFVGUF9qUnh1dFdFd3Exa0RZIn0.eyJleHAiOi0xODAxNTkxNTU4LCJpYXQiOjE2MjkzNzU3MzgsImp0aSI6IjExYWVjZjJlLTNhNDMtNDEyMy05MDFjLTZkOGI0YjliMWMwOSIsImlzcyI6Imh0dHA6Ly9rZXljbG9hazo4MDgwL2F1dGgvcmVhbG1zL3BpY2Fzby1wbGF0Zm9ybSIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiIwYjU1OTNhMi03MTQ4LTRkNzAtOTBkMC0yMTI3NGQyMjdmMDEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhZG1pbiIsInNlc3Npb25fc3RhdGUiOiI4OTRhYmE4OS1hYTFjLTQwNDEtYmIyZC0yNGQ2YTEwMDQ2NDAiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHBzOi8vZHNjLW9jci51ZGF0YS5pZDo4MDgzIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiYWJkYW5tdWxpYTQgYWJkYW5tdWxpYTQiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJjZDMyN2U3ZS1kNDQ0LTRkZGMtOTMyZS04NGYyYjBhOTMyY2EiLCJnaXZlbl9uYW1lIjoiYWJkYW5tdWxpYTQiLCJmYW1pbHlfbmFtZSI6ImFiZGFubXVsaWE0IiwiZW1haWwiOiJqc3Vwb3lvQGdtYWlsLmNvbSJ9.QHe4RwUVmRhE8DunHEte5DSgJfjfJ7MjDPkQUsOVNFUW600bAmAssAsWSCDNogUw__161jv6LzzBaqa0dTNEhZOmfl3wVoRK7Km1ZJsnSmcm6y2y05WbKKChvdbDTGw8zyCmt5iFOtnZLh1Y-U2M1EvogjzFTLHGf_FPPAHtGRXR9w2GOOiXjvCCLq9Nng7rtVyLj0vRAQG4KThkjm0mCIsWyUBnl96lmicARsedEhOH44DyrlyoXs5rA8BKbgXJuMKAorI36I3U-4C9IbBKfYQeZg0lo5Z-V4tbPVgNYvTnSK9lNCR3Su8polqTt8dFgg8QIIf-kv7bDtJ42EEJrA'
+      const blob = base64ToBlob(image, 'image/jpeg');
+      const fotoktp = localStorage.getItem('ktp').split(',')[1];
+      const blob2 = await fetch(`data:image/jpeg;base64,${fotoktp}`).then(res => res.blob());
+      const formData = new FormData();
+      formData.append('image_1', blob, 'image.jpg');
+      formData.append('image_2', blob2, 'image.jpg');
+
+      const action = await fetch('https://bigvision.id/upload/face-similarity', {
+        body: formData,
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      })
+      const data = await action.json();
+      return resolve(data)
+    } catch (e) {
+      return reject(e)
+    }
+  })
+}
+
+
 function base64ToBlob(base64, type = 'application/octet-stream') {
   const binaryString = window.atob(base64);
   const length = binaryString.length;
@@ -88,34 +117,46 @@ const FaceLandmarker = () => {
   const [loading, setLoading] = useState(true)
   const [isLiveness, setIsLiveness] = useState(false);
   const [dataLiveness, setDataLiveness] = useState('');
+  const [dataSimilarity, setDataSimilarity] = useState('');
+  const isLoadFirstPage = useRef(false);
 
   useEffect(() => {
-    const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
-    const messagesQueryParam = new URL(window.location.href).searchParams.get('messages');
+    if(!isLoadFirstPage.current) {
+      const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
+      const messagesQueryParam = new URL(window.location.href).searchParams.get('messages');
 
-    const pipelineQueryParamArray = (pipelineQueryParam != null && pipelineQueryParam !== '') ? pipelineQueryParam.split(',').map((value) => pipeline[value]) : pipeline;
-    setDynamicPipeline(pipelineQueryParamArray);
-    const messagesQueryParamArray = (messagesQueryParam != null && messagesQueryParam !== '') ? messagesQueryParam.split(',') : [];
-    setMessage(messagesQueryParamArray);
+      const pipelineQueryParamArray = (pipelineQueryParam != null && pipelineQueryParam !== '') ? pipelineQueryParam.split(',').map((value) => pipeline[value]) : pipeline;
+      setDynamicPipeline(pipelineQueryParamArray);
+      const messagesQueryParamArray = (messagesQueryParam != null && messagesQueryParam !== '') ? messagesQueryParam.split(',') : [];
+      setMessage(messagesQueryParamArray);
 
-    dynamicPipelineRef.current = pipelineQueryParamArray;
-    const createFaceLandmarker = async () => {
-      const filesetResolver = await vision.FilesetResolver.forVisionTasks(
-        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
-      );
-      const newFaceLandmarker = await vision.FaceLandmarker.createFromOptions(filesetResolver, {
-        baseOptions: {
-          modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
-          delegate: "GPU"
-        },
-        outputFaceBlendshapes: true,
-        runningMode,
-        numFaces: 1
-      });
-      faceLandmarkerRef.current = newFaceLandmarker;
-      enableCam();
-    };
-    createFaceLandmarker();
+      dynamicPipelineRef.current = pipelineQueryParamArray;
+      
+      const createFaceLandmarker = (newFaceLandmarker) => {
+        console.time('enableCam'); // Start timing
+        faceLandmarkerRef.current = newFaceLandmarker;
+        enableCam();
+        console.timeEnd('enableCam'); // End timing
+      };
+      let eventEmitter = window.eventEmitter;
+      const startDate = new Date();
+      if(window.faceLandmarker) {
+        createFaceLandmarker(window.faceLandmarker)
+      } else {
+        console.time('fileload'); // Start timing
+        eventEmitter.addEventListener('fecelandmarker-load', ({
+          detail
+        }) => {
+          const endDate = new Date();
+          console.timeEnd('fileload'); // End timing
+          alert("fileload:" + (endDate.getTime() - startDate.getTime()));
+          // console.log(detail)
+          createFaceLandmarker(detail.faceLandmarker)
+        });
+      }
+      
+      isLoadFirstPage.current = true;
+    }
   }, []);
 
   const enableCam = () => {
@@ -150,6 +191,14 @@ const FaceLandmarker = () => {
     } else {
       webcamRunningRef.current = false;
       cameraRef.current.getTracks().forEach(track => track.stop());
+    }
+  };
+
+  const disableCam = () => {
+    webcamRunningRef.current = false;
+    if (cameraRef.current) {
+      cameraRef.current.getTracks().forEach(track => track.stop());
+      videoRef.current.srcObject = null;
     }
   };
 
@@ -246,7 +295,7 @@ const FaceLandmarker = () => {
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
-            alert('Thankyou for using our service')
+            disableCam();
             // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
           } else {
             setPipelineIndex((val) => {
@@ -260,7 +309,7 @@ const FaceLandmarker = () => {
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
-            alert('Thankyou for using our service')
+            disableCam();
             // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
           } else {
             setPipelineIndex((val) => {
@@ -274,7 +323,7 @@ const FaceLandmarker = () => {
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
-            alert('Thankyou for using our service')
+            disableCam();
             // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
           } else {
             setPipelineIndex((val) => {
@@ -289,7 +338,7 @@ const FaceLandmarker = () => {
           storeData(pipelineRef.current === pipelineCount).then((res) => {
             if (pipelineRef.current === pipelineCount) {
               cameraRef.current.getTracks().forEach(track => track.stop());
-              alert('Thankyou for using our service')
+              disableCam();
               // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
             } else {
               setPipelineIndex((val) => {
@@ -305,7 +354,7 @@ const FaceLandmarker = () => {
           storeData(pipelineRef.current === pipelineCount).then((res) => {
             if (pipelineRef.current === pipelineCount) {
               cameraRef.current.getTracks().forEach(track => track.stop());
-              alert('Thankyou for using our service')
+              disableCam();
               // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
             } else {
               setPipelineIndex((val) => {
@@ -315,33 +364,29 @@ const FaceLandmarker = () => {
             }
           }).catch(() => { });
         }, 1000)
-      } else if (jawopenValue < 0.2 && currentTask === 'face-liveness') {
+      } else if (jawopenValue < 0.2 && currentTask === 'face-active') {
         isLoadingRef.current = true;
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
             cameraRef.current.getTracks().forEach(track => track.stop());
+            disableCam()
             handleLiveness(res.image)
               .then((res) => {
-                setLoading(true)
-                // alert(res.message.results[0].liveness)
+                disableCam()
                 setDataLiveness(res.message.results[0].liveness)
+              })
+            handleSimilarity(res.image)
+              .then((res) => {
+                disableCam()
+                setDataSimilarity(res.message.results.status)
                 setIsLiveness(true)
               })
           } else {
-            handleLiveness(res.image)
-              .then((res) => {
-                alert(res.message.results[0].liveness)
-                if (res.message.results[0].liveness === 'real') {
-                  alert(res.message.results[0].liveness)
-                  setPipelineIndex((val) => {
-                    pipelineRef.current = val + 1;
-                    return val + 1
-                  })
-                } else {
-                  alert(res.message.results[0].liveness)
-                }
-              })
-
+            disableCam()
+            setPipelineIndex((val) => {
+              pipelineRef.current = val + 1;
+              return val + 1
+            })
           }
         }).catch(() => { });
       }
@@ -396,9 +441,31 @@ const FaceLandmarker = () => {
         <div id="liveView" className="videoView">
           {!isLiveness && <img className="bg-image" alt="" src={require('../assets/bg-face.png')} />}
           <div style={{ position: 'relative' }}>
-            {videoRef &&
+            {!isLiveness ?
               <video className='video-face' poster="noposter" ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
+              :
+              <div style={{ marginTop: '10vh' }}>
+                <div className="bg-welcoming" style={{ marginTop: '20px', padding: '20px', marginBottom: '5%' }}>
+                  <div className="bg-ktp-result" style={{ display: 'inline-flex', placeItems: 'center', width: '80%' }}>
+                    <CircleCheck color="#0a8053" size={50} />
+                    <div style={{ fontSize: '20px', fontWeight: '600', textAlign: 'left', marginLeft: '20px' }}>Face Recognition <br /><strong>Berhasil</strong></div>
+                  </div>
+                  <div style={{ marginTop: '50px' }}>
+                    <div style={{ fontSize: '20px' }}>Wajah yang terdeteksi adalah <br /><strong style={{ textTransform: 'capitalize' }}>{dataLiveness}</strong> Face!</div>
+                  </div>
+                  <div style={{ marginTop: '50px' }}>
+                    <div style={{ fontSize: '20px' }}>Hasil Kecocokan KTP dan wajah terdeteksi sebagai <br /><strong style={{ textTransform: 'capitalize' }}>{dataSimilarity}</strong> Face!</div>
+                  </div>
+                  <div style={{ marginTop: '50px' }}>
+                    <button className="next-button" onClick={restartStep}>Menu Utama</button>
+                  </div>
+                </div>
+                <div style={{ marginTop: '40px', marginBottom: '20px' }}>
+                  <img src={require('../assets/bigvision.png')} alt="Welcoming" />
+                </div>
+              </div>
             }
+
             {
               rejectMessage !== '' ? (
                 <div style={{ zIndex: "2000", background: "#C40C0C", position: 'absolute', top: 0, left: 0, right: 0, height: 'fit' }}>
@@ -406,42 +473,25 @@ const FaceLandmarker = () => {
                 </div>
               ) : null
             }
-            {loading ?
-              <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
-                <span style={{ color: 'white' }}>Harap Tunggu<br /><span style={{ fontSize: 20 }}>sedang memproses kamera</span></span>
-              </div>
-              :
-              <div style={{ position: 'fixed', fontSize: 22, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
-                <span style={{ color: 'white' }}>
-                  {(message && message[pipelineIndex]) || (dynamicPipeline[pipelineIndex]?.word)}
-                  <br />
-                  <span style={{ fontSize: 20 }}>{instructionMessage}</span>
-                </span>
-              </div>
+
+            {
+              !isLiveness ?
+                loading ?
+                  <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
+                    <span style={{ color: 'white' }}>Harap Tunggu<br /><span style={{ fontSize: 20 }}>sedang memproses kamera</span></span>
+                  </div>
+                  :
+                  <div style={{ position: 'fixed', fontSize: 22, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
+                    <span style={{ color: 'white' }}>
+                      {(message && message[pipelineIndex]) || (dynamicPipeline[pipelineIndex]?.word)}
+                      <br />
+                      <span style={{ fontSize: 20 }}>{instructionMessage}</span>
+                    </span>
+                  </div>
+                :
+                ''
             }
           </div>
-        </div>
-        <div style={{ position: 'fixed', zIndex: 1000, width: '100%' }}>
-          {isLiveness &&
-            // <div className="modal-content" style={{marginTop: '40vh'}}>
-            //   <div style={{ textAlign: 'center', paddingLeft: '20px', marginBottom: '20px' }}>
-            //     <div>Hasil deteksi wajah : {dataLiveness} Face!</div>
-            //   </div>
-            //   <button onClick={successStep}>Next Step</button>
-            // </div>
-            <div style={{ padding: '20px' }}>
-              <div className="bg-ktp-result" style={{ marginTop: '20px', padding: '20px', marginBottom: '5%' }}>
-                <CircleCheck color="#0a8053" size={100} />
-                <div style={{ marginTop: '20px', fontSize: '30px', fontWeight: '600' }}>Verfikasi Wajah Berhasil</div>
-                <div style={{ marginTop: '50px' }}>
-                  <div style={{ fontSize: '20px' }}>Wajah yang terdeteksi adalah <br /><strong>{dataLiveness}</strong> Face!</div>
-                </div>
-                <div style={{ marginTop: '50px' }}>
-                  <button className="next-button" onClick={restartStep}>Menu utama</button>
-                </div>
-              </div>
-            </div>
-          }
         </div>
         <div style={{ position: 'fixed', bottom: 70, left: 0, right: 0, zIndex: 1000 }}>
           <span style={{ color: 'white' }}>{isLastMessage}</span>

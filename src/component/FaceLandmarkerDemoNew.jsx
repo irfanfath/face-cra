@@ -119,8 +119,10 @@ const FaceLandmarker = () => {
   const [isLiveness, setIsLiveness] = useState(false);
   const [dataLiveness, setDataLiveness] = useState('');
   const [dataSimilarity, setDataSimilarity] = useState('');
+  const isLoadFirstPage = useRef(false);
 
   useEffect(() => {
+    if(!isLoadFirstPage.current) {
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
     const messagesQueryParam = new URL(window.location.href).searchParams.get('messages');
 
@@ -131,6 +133,8 @@ const FaceLandmarker = () => {
 
     dynamicPipelineRef.current = pipelineQueryParamArray;
     const createFaceLandmarker = async () => {
+      const startDate = new Date();
+      console.time('fileLoad'); // Start timing
       console.time('filesetResolver'); // Start timing
       // const filesetResolver = await vision.FilesetResolver.forVisionTasks(
       //   "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
@@ -152,6 +156,9 @@ const FaceLandmarker = () => {
         numFaces: 1
       });
       console.timeEnd('newFaceLandmarker'); // End timing
+      console.timeEnd('fileLoad'); // End timing
+      const endDate = new Date();
+      alert("fileload:" + (endDate.getTime() - startDate.getTime()));
 
       console.time('enableCam'); // Start timing
       faceLandmarkerRef.current = newFaceLandmarker;
@@ -160,6 +167,8 @@ const FaceLandmarker = () => {
 
     };
     createFaceLandmarker();
+    isLoadFirstPage.current = true;
+    }
   }, []);
 
   const enableCam = () => {

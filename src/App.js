@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import './App.css';
 import FaceLandmarkerNew from './component/FaceLandmarkerDemoNew';
+import FaceLandmarkerDemo from './component/FaceLandmarkerDemo';
 import OCRDemo from './component/OCRDemo';
 import WelcomingKTP from './component/WelcomingKTP';
 import ManufactureDemo from './component/ManufactureDemo';
@@ -21,6 +22,8 @@ function App() {
       setCurrentPage('manufacture-extract')
     } else if (step === 'welcoming-ktp') {
       setCurrentPage('welcoming-ktp')
+    } else if (step === 'face-recognition-testing') {
+      setCurrentPage('face-recognition-testing')
     }
      else {
       setCurrentPage(1);
@@ -34,6 +37,7 @@ function App() {
       {currentPage === 'ktp-extract' && <OCRDemo />}
       {currentPage === 'manufacture-extract' && <ManufactureDemo />}
       {currentPage === 'face-recognition' && <FaceLandmarkerNew />}
+      {currentPage === 'face-recognition-testing' && <FaceLandmarkerDemo />}
     </div>
   );
 }
