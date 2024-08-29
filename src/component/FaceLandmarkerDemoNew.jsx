@@ -158,7 +158,6 @@ const FaceLandmarker = () => {
       console.timeEnd('newFaceLandmarker'); // End timing
       console.timeEnd('fileLoad'); // End timing
       const endDate = new Date();
-      alert("fileload:" + (endDate.getTime() - startDate.getTime()));
 
       console.time('enableCam'); // Start timing
       faceLandmarkerRef.current = newFaceLandmarker;
