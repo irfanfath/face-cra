@@ -136,25 +136,26 @@ export default function ManufactureDemo() {
     setEditorState(state);
   };
 
-  const handleSave = () => {
-    const contentState = editorState.getCurrentContent();
-    const rawData = convertToRaw(contentState);
-    const updatedData = {};
+  const handleChange = (key, newValue) => {
+    if (currentStep === 1) {
+      setDataGivaudan(prevData => ({
+        ...prevData,
+        [key]: newValue
+      }));
+    } else if (currentStep === 2) {
+      setDataVendor(prevData => ({
+        ...prevData,
+        [key]: newValue
+      }));
+    }
+  };
 
-    rawData.blocks.forEach(block => {
-      if (block.text) {
-        const [key, ...valueParts] = block.text.split(' : ');
-        if (key && valueParts.length > 0) {
-          const formattedKey = key.toLowerCase().replace(/ /g, '_');
-          updatedData[formattedKey] = valueParts.join(' : ').trim();
-        }
-      }
-    });
+  const handleSave = () => {
 
     if (currentStep === 1) {
-      setDataGivaudan(updatedData);
+      setDataGivaudan(dataGivaudan);
     } else if (currentStep === 2) {
-      setDataVendor(updatedData);
+      setDataVendor(dataVendor);
     }
 
     setShowEdit(false);
@@ -184,7 +185,7 @@ export default function ManufactureDemo() {
 
   const sendDataToApi = async () => {
     try {
-        const response = await fetch('https://bigvision.id/upload/free-form-ocr-extract/matching', {
+      const response = await fetch('https://bigvision.id/upload/free-form-ocr-extract/matching', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -398,11 +399,19 @@ export default function ManufactureDemo() {
                   :
                   <div>
                     <div style={{ marginBottom: '20px', fontWeight: '600', fontSize: '18px', color: '#272D4E', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Detail</div>
-                    <div style={{ width: '90%', borderRadius: '20px', padding: '15px', resize: 'vertical', background: '#FAFAFA', border: '2px solid #E8E8E8', maxHeight: '300px', overflowY: 'auto', color: '#5e5e5e' }}>
-                      <Editor
-                        editorState={editorState}
-                        onChange={handleEditorChange}
-                      />
+                    <div>
+                      <div style={{ textAlign: 'left', padding: '20px', background: '#FAFAFA', border: '2px solid #E8E8E8', borderRadius: 10 }}>
+                        {Object.entries(currentStep === 1 ? dataGivaudan : dataVendor).map(([key, value]) => (
+                          <div style={{ lineHeight: '30px', color: '#5F5F5F', fontWeight: '600' }} key={key}>
+                            <span style={{ wordWrap: 'break-word' }}>{key.replace('_', ' ').toUpperCase()} : </span>
+                            <textarea
+                              style={{ width: '95%', padding: '10px', height: '50px', resize: 'vertical', marginTop: '5px', border: '1px solid #E8E8E8', borderRadius: 5 }}
+                              value={value}
+                              onChange={(e) => handleChange(key, e.target.value)}
+                            />
+                          </div>
+                        ))}
+                      </div>
                     </div>
                     <div style={{ marginTop: '20px', display: 'inline-flex', gap: 10, width: '100%' }}>
                       <button className="cancel-button" onClick={handleCancel}>Cancel</button>
