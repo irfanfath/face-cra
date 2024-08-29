@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import * as vision from '@mediapipe/tasks-vision';
 import { CircleCheck } from 'lucide-react';
 
 const pipeline = [
@@ -98,10 +99,7 @@ const FaceLandmarker = () => {
   const faceLandmarkerRef = useRef(false);
   const pipelineRef = useRef(0);
   const isLoadingRef = useRef(false);
-  const isVideo = useRef(false);
-  const [runningMode, setRunningMode] = useState("IMAGE");
   const [dynamicPipeline, setDynamicPipeline] = useState(DEFAULT_VALUE_PIPELINE);
-  const [webcamRunning, setWebcamRunning] = useState(false);
   const [message, setMessage] = useState([]);
   const [messageError, setMessageError] = useState([]);
   // const [results, setResults] = useState(null);
@@ -118,10 +116,14 @@ const FaceLandmarker = () => {
   const [isLiveness, setIsLiveness] = useState(false);
   const [dataLiveness, setDataLiveness] = useState('');
   const [dataSimilarity, setDataSimilarity] = useState('');
-  const isLoadFirstPage = useRef(false);
+  
+  const isLoadFirstWasm = useRef(false);
+  const isLoadFirstCamera = useRef(false);
 
+  // from properties
+  const isLoadFirstPageProperty = useRef(false);
   useEffect(() => {
-    if(!isLoadFirstPage.current) {
+    if(!isLoadFirstPageProperty.current) {
       const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
       const messagesQueryParam = new URL(window.location.href).searchParams.get('messages');
 
@@ -132,69 +134,97 @@ const FaceLandmarker = () => {
 
       dynamicPipelineRef.current = pipelineQueryParamArray;
       
-      const createFaceLandmarker = (newFaceLandmarker) => {
-        console.time('enableCam'); // Start timing
-        faceLandmarkerRef.current = newFaceLandmarker;
-        enableCam();
-        console.timeEnd('enableCam'); // End timing
-      };
-      let eventEmitter = window.eventEmitter;
-      const startDate = new Date();
-      if(window.faceLandmarker) {
-        createFaceLandmarker(window.faceLandmarker)
-      } else {
-        console.time('fileload'); // Start timing
-        eventEmitter.addEventListener('fecelandmarker-load', ({
-          detail
-        }) => {
-          const endDate = new Date();
-          console.timeEnd('fileload'); // End timing
-          alert("fileload:" + (endDate.getTime() - startDate.getTime()));
-          // console.log(detail)
-          createFaceLandmarker(detail.faceLandmarker)
-        });
-      }
-      
-      isLoadFirstPage.current = true;
+      isLoadFirstPageProperty.current = true;
     }
   }, []);
 
-  const enableCam = () => {
-    if (!faceLandmarkerRef.current) {
-      console.log("Wait! faceLandmarker not loaded yet.");
-      return;
-    }
-
-    setWebcamRunning(!webcamRunning);
-    if (!webcamRunning) {
-      webcamRunningRef.current = true;
-      try {
-        navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: 'user',
-            width: { min: 300 },
-            height: { min: 500 },
-            aspectRatio: 16 / 9,
-            mirror: false
-          }
-        }).then((stream) => {
-          videoRef.current.srcObject = stream;
-          cameraRef.current = stream;
-          videoRef.current.addEventListener("loadeddata", () => {
+  const isLoadFirstPageCamera = useRef(false);
+  // from camera 
+  useEffect(() => {
+    if(!isLoadFirstPageCamera.current) {
+      navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: 'user',
+          width: { min: 300 },
+          height: { min: 500 },
+          aspectRatio: 16 / 9,
+          mirror: false
+        }
+      }).then((stream) => {
+        videoRef.current.srcObject = stream;
+        cameraRef.current = stream;
+        videoRef.current.addEventListener("loadeddata", () => {
+          isLoadFirstCamera.current = true;
+          console.log('masuk sini');
+          if(isLoadFirstWasm.current && isLoadFirstCamera.current) {
             setLoading(false);
             predictWebcam();
-          });
+          }
+          // predictWebcam();
         });
-      } catch (error) {
-        console.error("Error accessing webcam:", error);
-      }
-    } else {
-      webcamRunningRef.current = false;
-      cameraRef.current.getTracks().forEach(track => track.stop());
+      });
+
+      isLoadFirstPageCamera.current = true;
     }
-  };
+  }, [])
+  
+  const isLoadFirstPageWasm = useRef(false);
+  // from wasm 
+  useEffect(() => {
+    if(!isLoadFirstPageWasm.current) {
+      const loadFaceLandmarker = () => {
+        return new Promise(async(resolve, reject) => {
+          try {
+            const startDate = new Date();
+            console.time('fileLoad'); // Start timing
+            console.time('filesetResolver'); // Start timing
+            // const filesetResolver = await vision.FilesetResolver.forVisionTasks(
+            //   "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
+            // );
+            const filesetResolver = await vision.FilesetResolver.forVisionTasks(
+              "/wasm" 
+            );
+            console.timeEnd('filesetResolver'); // End timing
+      
+            console.time('newFaceLandmarker'); // Start timing
+            const newFaceLandmarker = await vision.FaceLandmarker.createFromOptions(filesetResolver, {
+              baseOptions: {
+                modelAssetPath: '/wasm/models/face_landmarker.task', 
+                // modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
+                delegate: "CPU"
+              },
+              outputFaceBlendshapes: true,
+              runningMode: 'VIDEO',
+              numFaces: 1
+            });
+            console.timeEnd('newFaceLandmarker'); // End timing
+            console.timeEnd('fileLoad'); // End timing
+            // const endDate = new Date();
+            // alert("fileload:" + (endDate.getTime() - startDate.getTime()));
+            console.log(newFaceLandmarker);
+            resolve(newFaceLandmarker)
+          } catch(e) {
+            reject(e);
+          }
+        })
+      };
+
+      loadFaceLandmarker().then((newFaceLandmarker) => {
+        faceLandmarkerRef.current = newFaceLandmarker;
+        isLoadFirstWasm.current = true;
+        if(isLoadFirstWasm.current && isLoadFirstCamera.current) {
+          setLoading(false);
+          // request animation;
+          predictWebcam();
+        }
+      })
+
+      isLoadFirstPageWasm.current = true;
+    }
+  }, [])
 
   const disableCam = () => {
+    window.cancelAnimationFrame(webcamRunningRef.current);
     webcamRunningRef.current = false;
     if (cameraRef.current) {
       cameraRef.current.getTracks().forEach(track => track.stop());
@@ -203,24 +233,10 @@ const FaceLandmarker = () => {
   };
 
   const predictWebcam = async (e) => {
-    if (!isVideo.current) {
-      isVideo.current = true;
-      faceLandmarkerRef.current.setOptions({ runningMode: "VIDEO" });
-      // Call this function again to keep predicting when the browser is ready.
-      if (webcamRunningRef.current) {
-        requestAnimationRef.current = window.requestAnimationFrame(predictWebcam);
-      }
-    } else {
-      let startTimeMs = performance.now();
-      const newResults = await faceLandmarkerRef.current.detectForVideo(videoRef.current, startTimeMs);
-      if (webcamRunningRef.current) {
-        drawBlendShapesRealTime(newResults);
-      }
-      // Call this function again to keep predicting when the browser is ready.
-      if (webcamRunningRef.current && !isLoadingRef.current) {
-        requestAnimationRef.current = window.requestAnimationFrame(predictWebcam);
-      }
-    }
+    let startTimeMs = performance.now();
+    const newResults = await faceLandmarkerRef.current.detectForVideo(videoRef.current, startTimeMs);
+    drawBlendShapesRealTime(newResults);
+    requestAnimationRef.current = window.requestAnimationFrame(predictWebcam);
   };
   const storeData = (isLast) => {
     const canvas = document.createElement("canvas");
@@ -294,8 +310,16 @@ const FaceLandmarker = () => {
         isLoadingRef.current = true;
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
-            cameraRef.current.getTracks().forEach(track => track.stop());
-            disableCam();
+            disableCam()
+            handleLiveness(res.image)
+              .then((res) => {
+                setDataLiveness(res.message.results[0].liveness)
+              })
+            handleSimilarity(res.image)
+              .then((res) => {
+                setDataSimilarity(res.message.results.status)
+                setIsLiveness(true)
+              })
             // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
           } else {
             setPipelineIndex((val) => {
@@ -308,8 +332,16 @@ const FaceLandmarker = () => {
         isLoadingRef.current = true;
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
-            cameraRef.current.getTracks().forEach(track => track.stop());
-            disableCam();
+            disableCam()
+            handleLiveness(res.image)
+              .then((res) => {
+                setDataLiveness(res.message.results[0].liveness)
+              })
+            handleSimilarity(res.image)
+              .then((res) => {
+                setDataSimilarity(res.message.results.status)
+                setIsLiveness(true)
+              })
             // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
           } else {
             setPipelineIndex((val) => {
@@ -322,8 +354,16 @@ const FaceLandmarker = () => {
         isLoadingRef.current = true;
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
-            cameraRef.current.getTracks().forEach(track => track.stop());
             disableCam();
+            handleLiveness(res.image)
+              .then((res) => {
+                setDataLiveness(res.message.results[0].liveness)
+              })
+            handleSimilarity(res.image)
+              .then((res) => {
+                setDataSimilarity(res.message.results.status)
+                setIsLiveness(true)
+              })
             // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
           } else {
             setPipelineIndex((val) => {
@@ -337,8 +377,16 @@ const FaceLandmarker = () => {
         setTimeout(() => {
           storeData(pipelineRef.current === pipelineCount).then((res) => {
             if (pipelineRef.current === pipelineCount) {
-              cameraRef.current.getTracks().forEach(track => track.stop());
-              disableCam();
+              disableCam()
+              handleLiveness(res.image)
+                .then((res) => {
+                  setDataLiveness(res.message.results[0].liveness)
+                })
+              handleSimilarity(res.image)
+                .then((res) => {
+                  setDataSimilarity(res.message.results.status)
+                  setIsLiveness(true)
+                })
               // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
             } else {
               setPipelineIndex((val) => {
@@ -353,8 +401,16 @@ const FaceLandmarker = () => {
         setTimeout(() => {
           storeData(pipelineRef.current === pipelineCount).then((res) => {
             if (pipelineRef.current === pipelineCount) {
-              cameraRef.current.getTracks().forEach(track => track.stop());
-              disableCam();
+              disableCam()
+              handleLiveness(res.image)
+                .then((res) => {
+                  setDataLiveness(res.message.results[0].liveness)
+                })
+              handleSimilarity(res.image)
+                .then((res) => {
+                  setDataSimilarity(res.message.results.status)
+                  setIsLiveness(true)
+                })
               // window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id=' + res.transactionId;
             } else {
               setPipelineIndex((val) => {
@@ -368,21 +424,17 @@ const FaceLandmarker = () => {
         isLoadingRef.current = true;
         storeData(pipelineRef.current === pipelineCount).then((res) => {
           if (pipelineRef.current === pipelineCount) {
-            cameraRef.current.getTracks().forEach(track => track.stop());
             disableCam()
             handleLiveness(res.image)
               .then((res) => {
-                disableCam()
                 setDataLiveness(res.message.results[0].liveness)
               })
             handleSimilarity(res.image)
               .then((res) => {
-                disableCam()
                 setDataSimilarity(res.message.results.status)
                 setIsLiveness(true)
               })
           } else {
-            disableCam()
             setPipelineIndex((val) => {
               pipelineRef.current = val + 1;
               return val + 1
@@ -396,6 +448,7 @@ const FaceLandmarker = () => {
   }, []);
 
   const drawBlendShapesRealTime = useCallback((result) => {
+    console.log('masuk sini');
     drawBlendShapes(videoBlendShapesRef.current, result.faceBlendshapes);
 
     const faceAreaHorizontal = result?.faceLandmarks?.[0]?.[4]?.x
@@ -407,9 +460,6 @@ const FaceLandmarker = () => {
       setInstructionMessage("")
     }
 
-    if (webcamRunningRef.current) {
-      window.requestAnimationFrame(drawBlendShapesRealTime);
-    }
   }, [drawBlendShapes]);
   const isLastMessage = useMemo(() => {
     let text = '';
