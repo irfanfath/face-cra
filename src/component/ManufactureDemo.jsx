@@ -398,20 +398,18 @@ export default function ManufactureDemo() {
                   </div>
                   :
                   <div>
-                    <div style={{ marginBottom: '20px', fontWeight: '600', fontSize: '18px', color: '#272D4E', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Detail</div>
-                    <div>
-                      <div style={{ textAlign: 'left', padding: '20px', background: '#FAFAFA', border: '2px solid #E8E8E8', borderRadius: 10 }}>
-                        {Object.entries(currentStep === 1 ? dataGivaudan : dataVendor).map(([key, value]) => (
-                          <div style={{ lineHeight: '30px', color: '#5F5F5F', fontWeight: '600' }} key={key}>
-                            <span style={{ wordWrap: 'break-word' }}>{key.replace('_', ' ').toUpperCase()} : </span>
-                            <textarea
-                              style={{ width: '95%', padding: '10px', height: '50px', resize: 'vertical', marginTop: '5px', border: '1px solid #E8E8E8', borderRadius: 5 }}
-                              value={value}
-                              onChange={(e) => handleChange(key, e.target.value)}
-                            />
-                          </div>
-                        ))}
-                      </div>
+                    <div style={{ fontWeight: '600', fontSize: '18px', color: '#272D4E' }}>Detail</div>
+                    <div style={{ padding: '20px', background: '#FAFAFA', border: '2px solid #E8E8E8', borderRadius: 10, display: 'flex', flexDirection: 'column', gap: 20 }}>
+                      {Object.entries(currentStep === 1 ? dataGivaudan : dataVendor).map(([key, value]) => (
+                        <div style={{ color: '#5F5F5F', fontWeight: '600', textAlign: 'left', width: '100%', display: 'flex', flexDirection: 'column', gap: 6 }} key={key}>
+                          <span style={{ wordWrap: 'break-word' }}>{key.replace('_', ' ').toUpperCase()} : </span>
+                          <input
+                            style={{ height: '40px', border: '1px solid #E8E8E8', borderRadius: 5, fontSize: '20px', padding: '0 10px 0 10px'}}
+                            value={value}
+                            onChange={(e) => handleChange(key, e.target.value)}
+                          />
+                        </div>
+                      ))}
                     </div>
                     <div style={{ marginTop: '20px', display: 'inline-flex', gap: 10, width: '100%' }}>
                       <button className="cancel-button" onClick={handleCancel}>Cancel</button>
