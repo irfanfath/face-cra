@@ -398,7 +398,7 @@ export default function ManufactureDemo() {
                   </div>
                   :
                   <div>
-                    <div style={{ fontWeight: '600', fontSize: '18px', color: '#272D4E' }}>Detail</div>
+                    <div style={{ fontWeight: '600', fontSize: '18px', color: '#272D4E', marginBottom: '20px' }}>Detail</div>
                     <div style={{ padding: '20px', background: '#FAFAFA', border: '2px solid #E8E8E8', borderRadius: 10, display: 'flex', flexDirection: 'column', gap: 20 }}>
                       {Object.entries(currentStep === 1 ? dataGivaudan : dataVendor).map(([key, value]) => (
                         <div style={{ color: '#5F5F5F', fontWeight: '600', textAlign: 'left', width: '100%', display: 'flex', flexDirection: 'column', gap: 6 }} key={key}>
