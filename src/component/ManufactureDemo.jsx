@@ -203,25 +203,6 @@ export default function ManufactureDemo() {
     }
   };
 
-  const mockDataAPI = async () => {
-    try {
-      const response = await fetch('https://mocki.io/v1/93087220-681a-478e-83ad-d0eb832f3528', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer your-token-here',
-        },
-      });
-
-      const data = await response.json();
-      setDataMatching(data.message);
-      setStatusMatching(data.message.summary);
-      setMatchResult(true)
-    } catch (error) {
-      console.error('Error sending data to API:', error);
-    }
-  };
-
   const handleBack = () => {
     if (currentStep === 1) {
       setCurrentStep(1)
@@ -249,6 +230,12 @@ export default function ManufactureDemo() {
       setShowEdit(false);
       setMatchResult(false)
     }
+  }
+
+  const backHome = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('step', 1);
+    window.location.href = url.toString();
   }
 
   return (
@@ -404,7 +391,7 @@ export default function ManufactureDemo() {
                         <div style={{ color: '#5F5F5F', fontWeight: '600', textAlign: 'left', width: '100%', display: 'flex', flexDirection: 'column', gap: 6 }} key={key}>
                           <span style={{ wordWrap: 'break-word' }}>{key.replace('_', ' ').toUpperCase()} : </span>
                           <input
-                            style={{ height: '40px', border: '1px solid #E8E8E8', borderRadius: 5, fontSize: '20px', padding: '0 10px 0 10px'}}
+                            style={{ height: '40px', border: '1px solid #E8E8E8', borderRadius: 5, fontSize: '20px', padding: '0 10px 0 10px' }}
                             value={value}
                             onChange={(e) => handleChange(key, e.target.value)}
                           />
@@ -449,7 +436,9 @@ export default function ManufactureDemo() {
                         <div><ArrowRight size={24} color="#0549CF" strokeWidth={2} absoluteStrokeWidth /></div>
                       </div>
                     </div>
-                    {dataGivaudan !== dataVendor &&
+                    {statusMatching ?
+                      <button className="next-button" onClick={backHome}>Menu Utama</button>
+                      :
                       <button className="next-button" onClick={() => { setCurrentStep(2); setResult(false); setMatchResult(false) }}>Ulangi</button>
                     }
                   </div>
