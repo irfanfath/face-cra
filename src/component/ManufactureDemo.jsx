@@ -26,12 +26,30 @@ export default function ManufactureDemo() {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [currentStep, setCurrentStep] = useState(1);
 
-  let videoConstraints = {
-    facingMode: 'environment',
-    width: { ideal: 480 },
-    height: { ideal: 640 },
-    aspectRatio: 4 / 3
-  };
+  const getVideoConstraints = () => {
+    // Dapatkan ukuran layar
+    const screenHeight = window.innerHeight;
+    const screenWidth = window.innerWidth;
+
+    // Hitung tinggi video sebagai 80% dari tinggi layar
+    const videoHeight = Math.floor(screenHeight * 0.5);
+
+    // Untuk rasio aspek 1:1, lebar harus sama dengan tinggi
+    const videoWidth = videoHeight;
+
+    // Pastikan lebar tidak melebihi lebar layar
+    const maxWidth = Math.min(videoWidth, screenWidth);
+
+    return {
+        facingMode: 'environment',
+        width: { ideal: maxWidth },
+        height: { ideal: videoHeight },
+        aspectRatio: 1 / 1
+    };
+};
+
+// Gunakan fungsi ini saat Anda mengatur video constraints
+const videoConstraints = getVideoConstraints();
 
   // let videoConstraints = {
   //   facingMode: 'environment',
