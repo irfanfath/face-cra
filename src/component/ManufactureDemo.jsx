@@ -43,10 +43,33 @@ export default function ManufactureDemo() {
   //   aspectRatio: 4 / 3 
   // };
 
+  const captureAndResize = (imageSrc) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = imageSrc;
+
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Atur ukuran baru
+        const newWidth = 640; // Lebar baru
+        const newHeight = 360; // Tinggi baru
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+
+        // Gambar ulang pada canvas dengan ukuran baru
+        ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+        // Ambil gambar yang telah diubah ukurannya
+        const resizedScreenshot = canvas.toDataURL('image/jpeg');
+        resolve(resizedScreenshot);
+      };
+    });
+  };
+
   const capture = async () => {
     const imageSrc = webcamRef.current.getScreenshot({ quality: 1 });
-    setImageSrc(imageSrc);
-    localStorage.setItem('ktp', imageSrc);
 
     try {
       if (!imageSrc) {
@@ -55,11 +78,18 @@ export default function ManufactureDemo() {
       }
 
       setLoading(true);
-      const base64Image = imageSrc.split(',')[1];
+
+      // Ubah ukuran gambar
+      const resizedImageSrc = await captureAndResize(imageSrc);
+      setImageSrc(resizedImageSrc);
+      localStorage.setItem('ktp', resizedImageSrc);
+
+      const base64Image = resizedImageSrc.split(',')[1];
       const blob = await fetch(`data:image/jpeg;base64,${base64Image}`).then(res => res.blob());
       const formData = new FormData();
       formData.append('image', blob, 'captured-image.jpeg');
-      formData.append('type', currentStep === 1 ? 'givaudan' : currentStep === 2 ? 'vendor' : '')
+      formData.append('type', currentStep === 1 ? 'givaudan' : currentStep === 2 ? 'vendor' : '');
+
       const requestOptions = {
         method: 'POST',
         headers: {
