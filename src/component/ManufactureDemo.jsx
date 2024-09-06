@@ -32,10 +32,10 @@ export default function ManufactureDemo() {
     const screenWidth = window.innerWidth;
 
     // Hitung tinggi video sebagai 80% dari tinggi layar
-    const videoHeight = Math.floor(screenHeight * 0.6);
+    const videoHeight = Math.floor(screenHeight * 0.4);
 
     // Untuk rasio aspek 1:1, lebar harus sama dengan tinggi
-    const videoWidth = videoHeight;
+    const videoWidth = Math.floor(screenWidth);
 
     // Pastikan lebar tidak melebihi lebar layar
     const maxWidth = Math.min(videoWidth, screenWidth);
@@ -44,7 +44,7 @@ export default function ManufactureDemo() {
         facingMode: 'environment',
         width: { ideal: maxWidth },
         height: { ideal: videoHeight },
-        aspectRatio: 4 / 3
+        aspectRatio: 16 / 9
     };
 };
 
