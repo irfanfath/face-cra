@@ -52,7 +52,7 @@ export default function ManufactureDemo() {
     const videoHeight = Math.floor(screenHeight * 0.7);
 
     // Hitung lebar video berdasarkan rasio aspek 16:9
-    const aspectRatio = 9 / 16;
+    const aspectRatio = 16 / 9;
     const videoWidth = Math.floor(videoHeight * aspectRatio);
 
     return {
