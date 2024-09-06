@@ -268,31 +268,31 @@ export default function ManufactureDemo() {
           {loading ?
             <div className="webcam-video">
               <img src={imageSrc} alt="captured"
-                style={{ position: 'absolute', left: 0, top: 0, width: '100%', objectFit: 'cover', overflow: 'hidden' }}
+                style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: '100%', height: '70%', objectFit: 'cover', overflow: 'hidden' }}
               />
             </div>
             :
             // <div className="webcam-video">
-              <Webcam
-                className="webcam"
-                scale={1}
-                audio={false}
-                ref={webcamRef}
-                screenshotFormat="image/jpeg"
-                videoConstraints={videoConstraints}
-                screenshotQuality={1}
-                style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: '100%', height: '70%', objectFit: 'cover', overflow: 'hidden' }}
-              />
+            <Webcam
+              className="webcam"
+              scale={1}
+              audio={false}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              videoConstraints={videoConstraints}
+              screenshotQuality={1}
+              style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: '100%', height: '70%', objectFit: 'cover', overflow: 'hidden' }}
+            />
             // </div>
           }
 
-          <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000, padding: 15}}>
+          <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000, padding: 15 }}>
             {loading ?
               <div>
                 <div style={{ color: '#ffff', marginBottom: '20px' }}>Menunggu proses ekstrasi..</div>
               </div>
               :
-              <div style={{ padding: '0px 20px 0px 20px'}}>
+              <div style={{ padding: '0px 20px 0px 20px' }}>
                 <div style={{ color: '#ffff', marginBottom: '15px', fontSize: '12px' }}>Sesuaikan posisi manufaktur</div>
                 <button className="next-button" onClick={capture}><Camera size={20} strokeWidth={3} color="#ffff" />&nbsp;Scan</button>
               </div>
