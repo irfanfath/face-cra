@@ -30,7 +30,7 @@ export default function ManufactureDemo() {
     facingMode: 'environment',
     width: { ideal: 480 },
     height: { ideal: 640 },
-    aspectRatio: 9 / 16
+    aspectRatio: 16 / 9
   };
 
 
