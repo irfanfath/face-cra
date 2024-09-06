@@ -369,7 +369,7 @@ export default function ManufactureDemo() {
                     </div>
                     <div style={{ marginTop: '50px' }}>
                       <div>
-                        <img src={currentStep === 1 ? imageGivaudan : imageVendor} alt="captured" style={{ width: '100%', borderRadius: '15px', }} />
+                        <img src={currentStep === 1 ? imageGivaudan : imageVendor} alt="captured" style={{ width: '100%', borderRadius: '15px', height: '50%' }} />
                         <div style={{ margin: '20px', fontWeight: '600', fontSize: '18px', color: '#272D4E', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Detail<span style={{ marginLeft: '10px', cursor: 'pointer' }} onClick={() => setShowEdit(true)}><Pencil color="#002E5E" size={18} /></span></div>
                         <div style={{ textAlign: 'left', padding: '10px', background: '#F5F8FF', borderRadius: 10 }}>
                           <Editor
