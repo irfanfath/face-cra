@@ -26,12 +26,12 @@ export default function ManufactureDemo() {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [currentStep, setCurrentStep] = useState(1);
 
-  let videoConstraints = {
-    facingMode: 'environment',
-    width: { ideal: 480 },
-    height: { ideal: 640 },
-    aspectRatio: 16 / 9
-  };
+  // let videoConstraints = {
+  //   facingMode: 'environment',
+  //   width: { ideal: 480 },
+  //   height: { ideal: 640 },
+  //   aspectRatio: 16 / 9
+  // };
 
 
   // let videoConstraints = {
@@ -44,12 +44,27 @@ export default function ManufactureDemo() {
   //   aspectRatio: 16 / 9
   // };
 
-  // let videoConstraints = {
-  //   facingMode: 'environment',
-  //   width: { ideal: 640 },  
-  //   height: { ideal: 480 },
-  //   aspectRatio: 4 / 3 
-  // };
+  const getVideoConstraints = () => {
+    // Hitung tinggi layar
+    const screenHeight = window.innerHeight;
+
+    // Tinggi video adalah 80% dari tinggi layar
+    const videoHeight = Math.floor(screenHeight * 0.7);
+
+    // Hitung lebar video berdasarkan rasio aspek 16:9
+    const aspectRatio = 9 / 16;
+    const videoWidth = Math.floor(videoHeight * aspectRatio);
+
+    return {
+      facingMode: 'environment',
+      width: { ideal: videoWidth },
+      height: { ideal: videoHeight },
+      aspectRatio: aspectRatio
+    };
+  };
+
+  // Gunakan fungsi ini saat Anda mengatur video constraints
+  const videoConstraints = getVideoConstraints();
 
   const capture = async () => {
     const imageSrc = webcamRef.current.getScreenshot({ quality: 1 });
@@ -276,7 +291,7 @@ export default function ManufactureDemo() {
           {loading ?
             <div className="webcam-video">
               <img src={imageSrc} alt="captured"
-                style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: '100%', height: '70%', objectFit: 'cover', overflow: 'hidden' }}
+                style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', objectFit: 'cover', overflow: 'hidden' }}
               />
             </div>
             :
