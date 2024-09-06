@@ -45,15 +45,14 @@ export default function ManufactureDemo() {
   // };
 
   const getVideoConstraints = () => {
-    // Hitung tinggi layar
-    const screenHeight = window.innerHeight;
+    const screenWidth = window.innerWidth;
 
     // Tinggi video adalah 80% dari tinggi layar
-    const videoHeight = Math.floor(screenHeight * 0.3);
+    const videoWidth = Math.floor(screenWidth * 0.5);
 
     // Hitung lebar video berdasarkan rasio aspek 16:9
     const aspectRatio = 16 / 9;
-    const videoWidth = Math.floor(videoHeight * aspectRatio);
+    const videoHeight =  Math.floor(videoWidth * aspectRatio);
 
     return {
       facingMode: 'environment',
