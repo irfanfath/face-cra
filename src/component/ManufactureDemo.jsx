@@ -32,7 +32,7 @@ export default function ManufactureDemo() {
     const screenWidth = window.innerWidth;
 
     // Hitung tinggi video sebagai 80% dari tinggi layar
-    const videoHeight = Math.floor(screenHeight * 0.5);
+    const videoHeight = Math.floor(screenHeight * 0.7);
 
     // Untuk rasio aspek 1:1, lebar harus sama dengan tinggi
     const videoWidth = videoHeight;
