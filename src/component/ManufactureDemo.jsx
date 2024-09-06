@@ -272,7 +272,7 @@ export default function ManufactureDemo() {
               />
             </div>
             :
-            <div className="webcam-video">
+            // <div className="webcam-video">
               <Webcam
                 className="webcam"
                 scale={1}
@@ -281,9 +281,9 @@ export default function ManufactureDemo() {
                 screenshotFormat="image/jpeg"
                 videoConstraints={videoConstraints}
                 screenshotQuality={1}
-                style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', objectFit: 'contain', overflow: 'hidden' }}
+                style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', objectFit: 'cover', overflow: 'hidden' }}
               />
-            </div>
+            // </div>
           }
 
           <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000, padding: 15}}>
