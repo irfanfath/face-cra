@@ -32,7 +32,7 @@ export default function ManufactureDemo() {
     // height: { ideal: 1280 },
     // aspectRatio: 16 / 9
     width: { ideal: 1920 },
-    height: { ideal: 720 },
+    height: { ideal: 1080 },
     aspectRatio: 16 / 9
   };
 
@@ -43,31 +43,10 @@ export default function ManufactureDemo() {
   //   aspectRatio: 4 / 3 
   // };
 
-  const captureAndResize = (imageSrc) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.src = imageSrc;
-
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-
-        // Atur ukuran baru
-        const newWidth = 360; // Lebar baru
-        const newHeight = 640; // Tinggi baru
-        canvas.width = newWidth;
-        canvas.height = newHeight;
-
-        ctx.drawImage(img, 0, 0, newWidth, newHeight);
-
-        const resizedScreenshot = canvas.toDataURL('image/jpeg');
-        resolve(resizedScreenshot);
-      };
-    });
-  };
-
   const capture = async () => {
     const imageSrc = webcamRef.current.getScreenshot({ quality: 1 });
+    setImageSrc(imageSrc);
+    localStorage.setItem('ktp', imageSrc);
 
     try {
       if (!imageSrc) {
@@ -76,18 +55,11 @@ export default function ManufactureDemo() {
       }
 
       setLoading(true);
-
-      // Ubah ukuran gambar
-      const resizedImageSrc = await captureAndResize(imageSrc);
-      setImageSrc(resizedImageSrc);
-      localStorage.setItem('ktp', resizedImageSrc);
-
-      const base64Image = resizedImageSrc.split(',')[1];
+      const base64Image = imageSrc.split(',')[1];
       const blob = await fetch(`data:image/jpeg;base64,${base64Image}`).then(res => res.blob());
       const formData = new FormData();
       formData.append('image', blob, 'captured-image.jpeg');
-      formData.append('type', currentStep === 1 ? 'givaudan' : currentStep === 2 ? 'vendor' : '');
-
+      formData.append('type', currentStep === 1 ? 'givaudan' : currentStep === 2 ? 'vendor' : '')
       const requestOptions = {
         method: 'POST',
         headers: {
@@ -301,26 +273,26 @@ export default function ManufactureDemo() {
             </div>
             :
             // <div className="webcam-video">
-            <Webcam
-              className="webcam"
-              scale={1}
-              audio={false}
-              ref={webcamRef}
-              screenshotFormat="image/jpeg"
-              videoConstraints={videoConstraints}
-              screenshotQuality={1}
-              style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: '100%', height: '70%', objectFit: 'cover', overflow: 'hidden' }}
-            />
+              <Webcam
+                className="webcam"
+                scale={1}
+                audio={false}
+                ref={webcamRef}
+                screenshotFormat="image/jpeg"
+                videoConstraints={videoConstraints}
+                screenshotQuality={1}
+                style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: '100%', height: '100%', objectFit: 'cover', overflow: 'hidden' }}
+              />
             // </div>
           }
 
-          <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000, padding: 15 }}>
+          <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000, padding: 15}}>
             {loading ?
               <div>
                 <div style={{ color: '#ffff', marginBottom: '20px' }}>Menunggu proses ekstrasi..</div>
               </div>
               :
-              <div style={{ padding: '0px 20px 0px 20px' }}>
+              <div style={{ padding: '0px 20px 0px 20px'}}>
                 <div style={{ color: '#ffff', marginBottom: '15px', fontSize: '12px' }}>Sesuaikan posisi manufaktur</div>
                 <button className="next-button" onClick={capture}><Camera size={20} strokeWidth={3} color="#ffff" />&nbsp;Scan</button>
               </div>
