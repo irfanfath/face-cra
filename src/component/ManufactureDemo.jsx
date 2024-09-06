@@ -48,7 +48,7 @@ export default function ManufactureDemo() {
     const screenWidth = window.innerWidth;
 
     // Tinggi video adalah 80% dari tinggi layar
-    const videoWidth = Math.floor(screenWidth * 0.8);
+    const videoWidth = Math.floor(screenWidth);
 
     // Hitung lebar video berdasarkan rasio aspek 16:9
     const aspectRatio = 4 / 3;
