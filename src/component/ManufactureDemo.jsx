@@ -53,15 +53,13 @@ export default function ManufactureDemo() {
         const ctx = canvas.getContext('2d');
 
         // Atur ukuran baru
-        const newWidth = 640; // Lebar baru
-        const newHeight = 360; // Tinggi baru
+        const newWidth = 360; // Lebar baru
+        const newHeight = 640; // Tinggi baru
         canvas.width = newWidth;
         canvas.height = newHeight;
 
-        // Gambar ulang pada canvas dengan ukuran baru
         ctx.drawImage(img, 0, 0, newWidth, newHeight);
 
-        // Ambil gambar yang telah diubah ukurannya
         const resizedScreenshot = canvas.toDataURL('image/jpeg');
         resolve(resizedScreenshot);
       };
