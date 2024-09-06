@@ -28,13 +28,21 @@ export default function ManufactureDemo() {
 
   let videoConstraints = {
     facingMode: 'environment',
-    // width: { ideal: 720 },
-    // height: { ideal: 1280 },
-    // aspectRatio: 16 / 9
-    width: { ideal: 1920 },
-    height: { ideal: 1080 },
-    aspectRatio: 16 / 9
+    width: { ideal: 480 },
+    height: { ideal: 640 },
+    aspectRatio: 9 / 16
   };
+
+
+  // let videoConstraints = {
+  //   facingMode: 'environment',
+  //   // width: { ideal: 720 },
+  //   // height: { ideal: 1280 },
+  //   // aspectRatio: 16 / 9
+  //   width: { ideal: 1920 },
+  //   height: { ideal: 1080 },
+  //   aspectRatio: 16 / 9
+  // };
 
   // let videoConstraints = {
   //   facingMode: 'environment',
@@ -268,7 +276,7 @@ export default function ManufactureDemo() {
           {loading ?
             <div className="webcam-video">
               <img src={imageSrc} alt="captured"
-                style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: '100%', objectFit: 'cover', overflow: 'hidden' }}
+                style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: '100%', height: '70%', objectFit: 'cover', overflow: 'hidden' }}
               />
             </div>
             :
@@ -281,7 +289,7 @@ export default function ManufactureDemo() {
               screenshotFormat="image/jpeg"
               videoConstraints={videoConstraints}
               screenshotQuality={1}
-              style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: '100%', objectFit: 'cover', overflow: 'hidden' }}
+              style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', objectFit: 'cover', overflow: 'hidden' }}
             />
             // </div>
           }
