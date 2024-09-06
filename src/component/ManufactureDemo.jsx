@@ -26,12 +26,12 @@ export default function ManufactureDemo() {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [currentStep, setCurrentStep] = useState(1);
 
-  // let videoConstraints = {
-  //   facingMode: 'environment',
-  //   width: { ideal: 480 },
-  //   height: { ideal: 640 },
-  //   aspectRatio: 16 / 9
-  // };
+  let videoConstraints = {
+    facingMode: 'environment',
+    width: { ideal: 480 },
+    height: { ideal: 640 },
+    aspectRatio: 4 / 3
+  };
 
 
   // let videoConstraints = {
@@ -44,26 +44,26 @@ export default function ManufactureDemo() {
   //   aspectRatio: 16 / 9
   // };
 
-  const getVideoConstraints = () => {
-    const screenWidth = window.innerWidth;
+  // const getVideoConstraints = () => {
+  //   const screenWidth = window.innerWidth;
 
-    // Tinggi video adalah 80% dari tinggi layar
-    const videoWidth = Math.floor(screenWidth);
+  //   // Tinggi video adalah 80% dari tinggi layar
+  //   const videoWidth = Math.floor(screenWidth);
 
-    // Hitung lebar video berdasarkan rasio aspek 16:9
-    const aspectRatio = 4 / 3;
-    const videoHeight =  Math.floor(videoWidth * aspectRatio);
+  //   // Hitung lebar video berdasarkan rasio aspek 16:9
+  //   const aspectRatio = 4 / 3;
+  //   const videoHeight =  Math.floor(videoWidth * aspectRatio);
 
-    return {
-      facingMode: 'environment',
-      width: { ideal: videoWidth },
-      height: { ideal: videoHeight },
-      aspectRatio: aspectRatio
-    };
-  };
+  //   return {
+  //     facingMode: 'environment',
+  //     width: { ideal: videoWidth },
+  //     height: { ideal: videoHeight },
+  //     aspectRatio: aspectRatio
+  //   };
+  // };
 
-  // Gunakan fungsi ini saat Anda mengatur video constraints
-  const videoConstraints = getVideoConstraints();
+  // // Gunakan fungsi ini saat Anda mengatur video constraints
+  // const videoConstraints = getVideoConstraints();
 
   const capture = async () => {
     const imageSrc = webcamRef.current.getScreenshot({ quality: 1 });
