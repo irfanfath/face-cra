@@ -28,11 +28,10 @@ export default function ManufactureDemo() {
 
   let videoConstraints = {
     facingMode: 'environment',
-    width: { ideal: 480 },
-    height: { ideal: 640 },
-    aspectRatio: 3 / 4
+    width: { ideal: 270 },
+    height: { ideal: 360 },
+    aspectRatio: 4 / 3
   };
-
 
   // let videoConstraints = {
   //   facingMode: 'environment',
