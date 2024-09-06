@@ -44,7 +44,7 @@ export default function ManufactureDemo() {
         facingMode: 'environment',
         width: { ideal: maxWidth },
         height: { ideal: videoHeight },
-        aspectRatio: 1 / 1
+        aspectRatio: 3 / 2
     };
 };
 
