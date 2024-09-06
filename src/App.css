@@ -1,6 +1,6 @@
-body {
+/* body {
   background: #000000;
-}
+} */
 
 .webcam-container {
   background: linear-gradient(262.22deg, #002E5E 22.04%, #2D5988 69.46%);
@@ -31,10 +31,12 @@ body {
 
 .bg-image {
   width: 100%;
-  max-height: 100vh;
+  height: 100%;
+  /* max-height: 100vh; */
   position: absolute;
   top: 0;
   left: 0;
+  bottom: 0;
   z-index: 1; 
   overflow: hidden;
 }
