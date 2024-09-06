@@ -281,7 +281,7 @@ export default function ManufactureDemo() {
                 screenshotFormat="image/jpeg"
                 videoConstraints={videoConstraints}
                 screenshotQuality={1}
-                style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', objectFit: 'cover', overflow: 'hidden' }}
+                style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: '100%', height: '50%', objectFit: 'cover', overflow: 'hidden' }}
               />
             // </div>
           }
