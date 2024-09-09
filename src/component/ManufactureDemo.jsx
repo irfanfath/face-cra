@@ -47,7 +47,7 @@ export default function ManufactureDemo() {
 
   let videoConstraints = {
     facingMode: 'environment',
-    width: { ideal: 700 },
+    width: { ideal: 500 },
     height: { ideal: 400 },
     aspectRatio: 5 / 4
   };
