@@ -47,22 +47,18 @@ const getVideoConstraints = () => {
   const screenHeight = window.innerHeight;
   const screenWidth = window.innerWidth;
 
-  // Tentukan faktor skala untuk memperbesar ukuran video
-  const scaleFactor = 1.5 // Ubah ini sesuai kebutuhan Anda
-
-  // Hitung lebar dan tinggi video berdasarkan faktor skala
-  const videoWidth = screenWidth * scaleFactor;
-  const videoHeight = screenHeight * scaleFactor;
+  // Atur lebar dan tinggi video sesuai dengan dimensi layar
+  const videoWidth = screenWidth;
+  const videoHeight = screenHeight;
 
   // Kembalikan constraints untuk video
   return {
       facingMode: 'environment',
       width: { ideal: videoWidth },
       height: { ideal: videoHeight },
-      aspectRatio: 16 / 9 // Anda dapat menyesuaikan rasio aspek sesuai kebutuhan
+      aspectRatio: 5 / 4
   };
 };
-
 
 
 const videoConstraints = getVideoConstraints();
