@@ -33,8 +33,8 @@ export default function ManufactureDemo() {
 
     // Hitung tinggi video sebagai 80% dari tinggi layar
     // const videoHeight = Math.floor(screenHeight);
-    const videoHeight = 400
-    const videoWidth = 620
+    const videoHeight = 350
+    const videoWidth = 600
 
     // Untuk rasio aspek 1:1, lebar harus sama dengan tinggi
     // const videoWidth = Math.floor(screenWidth);
@@ -288,8 +288,8 @@ const videoConstraints = getVideoConstraints();
             alt=""
             src={bgImage} />
 
-          <div style={{ display: 'inline-flex', flexDirection: 'column', lineHeight: '25px', position: 'fixed', fontSize: 14, fontWeight: 600, top: 10, left: 0, right: 0, zIndex: 1000, textAlign: 'left', background: '#00000' }}>
-            <div style={{ paddingLeft: 20, paddingRight: 20 }}>
+          <div style={{background: '#000000',  display: 'inline-flex', flexDirection: 'column', lineHeight: '25px', position: 'fixed', fontSize: 14, fontWeight: 600, top: 0, left: 0, right: 0, zIndex: 1000, textAlign: 'left', paddingBottom: '20px' }}>
+            <div style={{ paddingLeft: 20, paddingRight: 20, marginTop: 10 }}>
               <div style={{ textAlign: 'left' }} onClick={handleBack}>
                 <ArrowLeft size={25} color="#ffff" strokeWidth={2} />
               </div>
@@ -327,7 +327,7 @@ const videoConstraints = getVideoConstraints();
             // </div>
           }
 
-          <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000, padding: 15 }}>
+          <div style={{ position: 'fixed', bottom: 15, left: 0, right: 0, zIndex: 1000, padding: 15, background: '#000000' }}>
             {loading ?
               <div>
                 <div style={{ color: '#ffff', marginBottom: '20px' }}>Menunggu proses ekstrasi..</div>
