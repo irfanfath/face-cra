@@ -49,7 +49,7 @@ export default function ManufactureDemo() {
     facingMode: 'environment',
     width: { ideal: 400 },
     height: { ideal: 700 },
-    aspectRatio: 5 / 4
+    aspectRatio: 4 / 5
   };
 
   const capture = async () => {
