@@ -42,57 +42,15 @@ export default function ManufactureDemo() {
 //         aspectRatio: 5 / 4 
 //     };
 // };
-const getVideoConstraints = () => {
-  // Ambil dimensi layar saat ini
-  const screenHeight = window.innerHeight;
-  const screenWidth = window.innerWidth;
 
-  // Atur lebar dan tinggi video sesuai dengan dimensi layar
-  const videoWidth = screenWidth;
-  const videoHeight = screenHeight;
+// const videoConstraints = getVideoConstraints();
 
-  // Kembalikan constraints untuk video
-  return {
-      facingMode: 'environment',
-      width: { ideal: videoWidth },
-      height: { ideal: videoHeight },
-      aspectRatio: 5 / 4
+  let videoConstraints = {
+    facingMode: 'environment',
+    width: { ideal: 400 },
+    height: { ideal: 700 },
+    aspectRatio: 5 / 4
   };
-};
-
-
-const videoConstraints = getVideoConstraints();
-
-  // let videoConstraints = {
-  //   facingMode: 'environment',
-  //   // width: { ideal: 720 },
-  //   // height: { ideal: 1280 },
-  //   // aspectRatio: 16 / 9
-  //   width: { ideal: 1920 },
-  //   height: { ideal: 1080 },
-  //   aspectRatio: 16 / 9
-  // };
-
-  // const getVideoConstraints = () => {
-  //   const screenWidth = window.innerWidth;
-
-  //   // Tinggi video adalah 80% dari tinggi layar
-  //   const videoWidth = Math.floor(screenWidth);
-
-  //   // Hitung lebar video berdasarkan rasio aspek 16:9
-  //   const aspectRatio = 4 / 3;
-  //   const videoHeight =  Math.floor(videoWidth * aspectRatio);
-
-  //   return {
-  //     facingMode: 'environment',
-  //     width: { ideal: videoWidth },
-  //     height: { ideal: videoHeight },
-  //     aspectRatio: aspectRatio
-  //   };
-  // };
-
-  // // Gunakan fungsi ini saat Anda mengatur video constraints
-  // const videoConstraints = getVideoConstraints();
 
   const capture = async () => {
     const imageSrc = webcamRef.current.getScreenshot({ quality: 1 });
@@ -332,7 +290,7 @@ const videoConstraints = getVideoConstraints();
               screenshotFormat="image/jpeg"
               videoConstraints={videoConstraints}
               screenshotQuality={1}
-              style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', objectFit: 'cover', overflow: 'hidden' }}
+              style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', objectFit: 'cover', overflow: 'hidden', width: '100%' }}
             />
             // </div>
           }
