@@ -196,8 +196,6 @@ const FaceLandmarker = () => {
         obj.transactionId = "EKYC_" + ((new Date()).getTime()) + "_bmsk";
         obj.idRequest = idRequest;
         obj.app = app;
-        
-        cameraRef.current.getTracks().forEach(track => track.stop());
       }
       if(idRequest && app && app !== '' && idRequest !== ''){
         setRejectMessage("")
@@ -352,9 +350,9 @@ const FaceLandmarker = () => {
       setInstructionMessage("")
     }
 
-    if (webcamRunningRef.current) {
-      window.requestAnimationFrame(drawBlendShapesRealTime);
-    }
+    // if (webcamRunningRef.current) {
+    //   window.requestAnimationFrame(drawBlendShapesRealTime);
+    // }
   }, [drawBlendShapes]);
   const isLastMessage = useMemo(() => {
     let text = '';
