@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import * as vision from '@mediapipe/tasks-vision';
-import { CircleCheck } from 'lucide-react';
 
 const pipeline = [
   { task: 'hadap-kiri', word: 'Silahkan Hadap Kiri' },
@@ -147,19 +146,16 @@ const FaceLandmarker = () => {
         return new Promise(async(resolve, reject) => {
           try {
             console.time('filesetResolver'); // Start timing
-            // const filesetResolver = await vision.FilesetResolver.forVisionTasks(
-            //   "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
-            // );
             const filesetResolver = await vision.FilesetResolver.forVisionTasks(
-              "/wasm" 
+              "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
             );
             console.timeEnd('filesetResolver'); // End timing
       
             console.time('newFaceLandmarker'); // Start timing
             const newFaceLandmarker = await vision.FaceLandmarker.createFromOptions(filesetResolver, {
               baseOptions: {
-                modelAssetPath: '/wasm/models/face_landmarker.task', 
-                // modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
+                // modelAssetPath: '/wasm/models/face_landmarker.task', 
+                modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
                 delegate: "CPU"
               },
               outputFaceBlendshapes: true,
@@ -415,7 +411,7 @@ const FaceLandmarker = () => {
     <div>
       <section id="demos">
         <div id="liveView" className="videoView">
-          <img className="bg-image" alt="" src={require('../assets/bg-face.png')} />
+          <img className="bg-image" alt="" src={require('../assets/Subtract.png')} />
           <div style={{ position: 'relative' }}>
             <video className='video-face' poster="noposter" ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
               
