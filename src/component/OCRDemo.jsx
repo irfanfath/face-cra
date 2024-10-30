@@ -75,7 +75,7 @@ export default function OCRDemo() {
     <div className="webcam-container">
       {result !== true ?
         <div className="webcam-img">
-          <img className="bg-image" alt="" src={bgImage} />
+          {/* <img className="bg-image" alt="" src={bgImage} /> */}
           <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
             <span style={{ color: 'white' }}>Foto KTP Anda<br /><span style={{ fontSize: 20 }}>sesuaikan posisi KTP anda</span></span>
           </div>
