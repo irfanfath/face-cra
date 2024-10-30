@@ -119,7 +119,7 @@ export default function OCRDemo() {
               <div style={{ fontSize: '20px', fontWeight: '600', textAlign: 'left', marginLeft: '20px' }}>OCR Extraction <br /><strong>Berhasil</strong></div>
             </div>
             <div style={{ marginTop: '50px' }}>
-              <img src={imageSrc} alt="captured" style={{ width: '200px', borderRadius: '15px' }} />
+              <img src={imageSrc} alt="captured" style={{ width: '100%', borderRadius: '15px' }} />
               <div style={{ marginTop: '40px', fontWeight: '600', fontSize: '20px' }}>Detail</div>
               <div style={{ textAlign: 'left', padding: '10px 10px 30px 30px' }}>
                 <div>Nama : {dataOcr.nama}</div>
