@@ -465,7 +465,7 @@ const FaceLandmarker = () => {
                     <div style={{ fontSize: '20px' }}>Wajah yang terdeteksi adalah <br /><strong style={{ textTransform: 'capitalize' }}>{dataLiveness}</strong> Face!</div>
                   </div>
                   <div style={{ marginTop: '50px' }}>
-                    <div style={{ fontSize: '20px' }}>Hasil Kecocokan KTP dan wajah terdeteksi sebagai <br /><strong style={{ textTransform: 'capitalize' }}>{dataSimilarity}</strong> Face!</div>
+                    <div style={{ fontSize: '20px' }}>KTP dan wajah teridentifikasi sebagai <br /><strong style={{ textTransform: 'capitalize' }}>{dataSimilarity}</strong> Face!</div>
                   </div>
                   <div style={{ marginTop: '50px' }}>
                     <button className="next-button" onClick={restartStep}>Menu Utama</button>

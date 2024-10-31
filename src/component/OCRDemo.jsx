@@ -75,8 +75,8 @@ export default function OCRDemo() {
     <div className="webcam-container">
       {result !== true ?
         <div className="webcam-img">
-          <img className="bg-image" alt="" src={bgImage} />
-          <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
+          {/* <img className="bg-image" alt="" src={bgImage} /> */}
+          <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 20, right: 20, zIndex: 1000 }}>
             <span style={{ color: 'white' }}>Foto KTP Anda<br /><span style={{ fontSize: 16 }}>Pastikan seluruh bagian e-KTP asli kamu berada dalam bingkai, tidak terpotong dan seluruh data terbaca dengan jelas</span></span>
           </div>
           {loading ?
