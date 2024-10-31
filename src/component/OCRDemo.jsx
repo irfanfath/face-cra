@@ -24,13 +24,10 @@ export default function OCRDemo() {
   // };
   let videoConstraints = {
     facingMode: 'environment',
-    width: { ideal: 720 }, // Lebar lebih kecil dari tinggi untuk portrait
-    height: { ideal: Math.round(720 / 0.635) }, // Sesuai dengan rasio KTP portrait
-    aspectRatio: 0.635, // Rasio portrait untuk KTP
+    width: { ideal: 720 },
+    height: { ideal: Math.round(720 / 0.635) },
+    aspectRatio: 0.635,
   };
-
-
-
 
   const capture = async () => {
     const imageSrc = webcamRef.current.getScreenshot();
@@ -118,6 +115,18 @@ export default function OCRDemo() {
                   width: '90%',
                   border: '8px solid white',
                   borderRadius: '20px',
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  left: '70%',
+                  top: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: '40%',
+                  height: '20%',
+                  border: '3px solid white',
+                  borderRadius: '5px',
                 }}
               />
             </div>
