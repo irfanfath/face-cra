@@ -12,24 +12,22 @@ export default function OCRDemo() {
 
   // let videoConstraints = {
   //   facingMode: 'environment',
-  //   // width: 270,
-  //   // height: 480,
-  //   width: { min: 300 },
-  //   height: { min: 500 },
-  //   aspectRatio: 0.6666666667
-  // };
-  // let videoConstraints = {
-  //   facingMode: 'environment',
   //   width: { ideal: 720 },
   //   height: { ideal: 1280 },
   //   aspectRatio: 9 / 16,
   // };
+  //   let videoConstraints = {
+  //     facingMode: 'environment',
+  //     width: { ideal: 720 },
+  //     height: { ideal: Math.round(720 / 1.586) },
+  //     aspectRatio: 1.586,
+  // };
   let videoConstraints = {
     facingMode: 'environment',
-    width: { ideal: 1280 }, // Lebar lebih besar dari tinggi untuk landscape
-    height: { ideal: Math.round(1280 / 1.586) }, // Sesuai dengan rasio KTP landscape
-    aspectRatio: 1.586, // Rasio landscape untuk KTP
-};
+    width: { ideal: 720 }, // Lebar lebih kecil dari tinggi untuk portrait
+    height: { ideal: Math.round(720 / 0.635) }, // Sesuai dengan rasio KTP portrait
+    aspectRatio: 0.635, // Rasio portrait untuk KTP
+  };
 
 
 
