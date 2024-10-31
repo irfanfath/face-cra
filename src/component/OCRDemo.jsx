@@ -80,7 +80,7 @@ export default function OCRDemo() {
         <div className="webcam-img">
           {/* <img className="bg-image" alt="" src={bgImage} /> */}
           <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 20, right: 20, zIndex: 1000 }}>
-            <span style={{ color: 'white' }}>Foto KTP Anda<br /><span style={{ fontSize: 16 }}>Pastikan seluruh bagian e-KTP asli kamu berada dalam bingkai, tidak terpotong dan seluruh data terbaca dengan jelas</span></span>
+            <span style={{ color: 'white' }}>Foto KTP Anda<br /><span style={{ fontSize: 16 }}>Pastikan wajah Anda berada di tengah kotak putih dan seluruh wajah terlihat jelas. Hindari pencahayaan yang terlalu terang atau gelap untuk hasil yang lebih akurat.</span></span>
           </div>
           {loading ?
             <img src={imageSrc} alt="captured"
