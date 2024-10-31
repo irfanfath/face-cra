@@ -121,7 +121,7 @@ export default function OCRDemo() {
                 style={{
                   position: 'absolute',
                   left: '80%',
-                  top: '45%',
+                  top: '47%',
                   transform: 'translate(-50%, -50%)',
                   width: '20%',
                   height: '15%',
