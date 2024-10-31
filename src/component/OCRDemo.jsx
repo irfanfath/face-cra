@@ -26,10 +26,11 @@ export default function OCRDemo() {
   // };
   let videoConstraints = {
     facingMode: 'environment',
-    width: { ideal: 720 },
-    height: { ideal: Math.round(720 / 1.586) },
-    aspectRatio: 1.586,
+    width: { ideal: 1280 }, // Lebar lebih besar dari tinggi untuk landscape
+    height: { ideal: Math.round(1280 / 1.586) }, // Sesuai dengan rasio KTP landscape
+    aspectRatio: 1.586, // Rasio landscape untuk KTP
 };
+
 
 
 
