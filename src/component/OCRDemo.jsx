@@ -120,11 +120,11 @@ export default function OCRDemo() {
               <div
                 style={{
                   position: 'absolute',
-                  left: '70%',
+                  left: '75%',
                   top: '50%',
                   transform: 'translate(-50%, -50%)',
-                  width: '40%',
-                  height: '20%',
+                  width: '20%',
+                  height: '15%',
                   border: '3px solid white',
                   borderRadius: '5px',
                 }}
