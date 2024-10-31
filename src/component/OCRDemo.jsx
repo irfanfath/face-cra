@@ -22,7 +22,7 @@ export default function OCRDemo() {
     facingMode: 'environment',
     width: { ideal: 720 },
     height: { ideal: 1280 },
-    aspectRatio: 9 / 16
+    aspectRatio: 9 / 16,
   };
 
 
@@ -75,13 +75,13 @@ export default function OCRDemo() {
     <div className="webcam-container">
       {result !== true ?
         <div className="webcam-img">
-          {/* <img className="bg-image" alt="" src={bgImage} /> */}
+          <img className="bg-image" alt="" src={bgImage} />
           <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
             <span style={{ color: 'white' }}>Foto KTP Anda<br /><span style={{ fontSize: 16 }}>Pastikan seluruh bagian e-KTP asli kamu berada dalam bingkai, tidak terpotong dan seluruh data terbaca dengan jelas</span></span>
           </div>
           {loading ?
             <img src={imageSrc} alt="captured" 
-              style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
+              style={{ position: 'absolute', left: 20, top: 0, width: '90%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
             />
             :
             <Webcam
@@ -92,7 +92,7 @@ export default function OCRDemo() {
               screenshotFormat="image/jpeg"
               videoConstraints={videoConstraints}
               screenshotQuality={1}
-              style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
+              style={{ position: 'absolute',left: 20, top: 0, width: '90%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
             />
           }
           <div style={{ position: 'fixed', bottom: 30, left: 0, right: 0, zIndex: 1000 }}>
