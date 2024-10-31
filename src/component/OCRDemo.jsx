@@ -18,12 +18,19 @@ export default function OCRDemo() {
   //   height: { min: 500 },
   //   aspectRatio: 0.6666666667
   // };
+  // let videoConstraints = {
+  //   facingMode: 'environment',
+  //   width: { ideal: 720 },
+  //   height: { ideal: 1280 },
+  //   aspectRatio: 9 / 16,
+  // };
   let videoConstraints = {
     facingMode: 'environment',
     width: { ideal: 720 },
-    height: { ideal: 1280 },
-    aspectRatio: 9 / 16,
-  };
+    height: { ideal: Math.round(720 / 1.586) },
+    aspectRatio: 1.586,
+};
+
 
 
   const capture = async () => {
@@ -80,20 +87,41 @@ export default function OCRDemo() {
             <span style={{ color: 'white' }}>Foto KTP Anda<br /><span style={{ fontSize: 16 }}>Pastikan seluruh bagian e-KTP asli kamu berada dalam bingkai, tidak terpotong dan seluruh data terbaca dengan jelas</span></span>
           </div>
           {loading ?
-            <img src={imageSrc} alt="captured" 
-              style={{ position: 'absolute', left: 20, top: 0, width: '90%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
-            />
+            <img src={imageSrc} alt="captured"
+              style={{
+                position: 'absolute',
+                left: '50%',
+                top: '50%',
+                transform: 'translate(-50%, -50%)',
+                objectFit: 'cover',
+                overflow: 'hidden',
+                width: '90%',
+                border: '8px solid white',
+                borderRadius: '20px',
+              }} />
             :
-            <Webcam
-              className="webcam"
-              scale={1}
-              audio={false}
-              ref={webcamRef}
-              screenshotFormat="image/jpeg"
-              videoConstraints={videoConstraints}
-              screenshotQuality={1}
-              style={{ position: 'absolute',left: 20, top: 0, width: '90%', height: '100vh', objectFit: 'contain', overflow: 'hidden' }}
-            />
+            <div>
+              <Webcam
+                className="webcam"
+                scale={1}
+                audio={false}
+                ref={webcamRef}
+                screenshotFormat="image/jpeg"
+                videoConstraints={videoConstraints}
+                screenshotQuality={1}
+                style={{
+                  position: 'absolute',
+                  left: '50%',
+                  top: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  objectFit: 'cover',
+                  overflow: 'hidden',
+                  width: '90%',
+                  border: '8px solid white',
+                  borderRadius: '20px',
+                }}
+              />
+            </div>
           }
           <div style={{ position: 'fixed', bottom: 30, left: 0, right: 0, zIndex: 1000 }}>
             {loading ?
