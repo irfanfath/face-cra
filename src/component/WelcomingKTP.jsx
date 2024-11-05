@@ -13,9 +13,7 @@ export default function WelcomingKTP() {
   const WelcomePage = () => {
     return (
       <div className="container" style={{ textAlign: 'center' }}>
-        <div style={{ marginTop: '40px' }}>
-          <img src={require('../assets/Logo.png')} alt="Welcoming" />
-        </div>
+        <img src={require('../assets/Logo.png')} alt="Welcoming" />
         <div style={{ marginTop: '20px', padding: '20px' }}>
           <div style={{ fontSize: '34px', fontWeight: '600', color: '#0F133E' }}>e-KYC</div>
           <div style={{ fontSize: '16px', lineHeight: '30px', color: '#737373' }}>Verifikasi identitas digital dengan pemindaian KTP dan pencocokan wajah</div>
@@ -26,22 +24,22 @@ export default function WelcomingKTP() {
         <div style={{ marginTop: '30px' }}>
           <div style={{ fontSize: '18px', fontWeight: '600', color: '#0F133E' }}>Siapkan KTP dan izinkan akses kamera perangkat Anda untuk proses verifikasi</div>
         </div>
-        <div style={{ position: 'fixed', bottom: 40, right: 20, left: 20 }}>
 
+        <div style={{ marginTop: '50px' }}>
           <div style={{ marginBottom: '20px', textAlign: 'left' }}>
-            <label htmlFor='agree' style={{ display: 'inline-flex'}}>
+            <label htmlFor='agree' style={{ display: 'inline-flex' }}>
               <input
                 type='checkbox'
+                style={{ width: '45px' }}
                 name='agree'
                 id='agree'
                 defaultChecked={agree}
                 onClick={() => setAgree(!agree)}
                 required
               />
-              &emsp;<div style={{ fontWeight: '400', fontSize: '14px', lineHeight: '15px' }}>Saya setuju menggunakan data pribadi untuk proses verifikasi yang sesuai dengan <span style={{color: '#0549CF', fontWeight: '600'}}>Kebijakan Privasi</span></div>&emsp;
+              &emsp;<div style={{ fontWeight: '400', fontSize: '14px', lineHeight: '20px' }}>Saya setuju menggunakan data pribadi untuk proses verifikasi yang sesuai dengan <span style={{ color: '#0549CF', fontWeight: '600' }}>Kebijakan Privasi</span></div>&emsp;
             </label>
           </div>
-
           <button
             disabled={!agree}
             style={{
@@ -60,10 +58,8 @@ export default function WelcomingKTP() {
   const GuidePage = () => {
     return (
       <div className="container">
-        <div style={{ marginTop: '40px' }}>
-          <div style={{ color: '#858585' }}>Langkah 1/2</div>
-          <div style={{ fontSize: '24px', fontWeight: '600', color: '#0F133E', marginTop: '20px' }}>Ambil foto e-KTP</div>
-        </div>
+        <div style={{ color: '#858585' }}>Langkah 1/2</div>
+        <div style={{ fontSize: '24px', fontWeight: '600', color: '#0F133E', marginTop: '20px' }}>Ambil foto e-KTP</div>
         <div style={{ marginTop: '30px' }}>
           <div style={{ fontSize: '18px', color: '#0F133E', marginTop: '20px' }}>Gunakan e-KTP asli, jangan menggunakan KTP hasil scan atau fotokopi</div>
         </div>
@@ -79,7 +75,7 @@ export default function WelcomingKTP() {
           <img src={require('../assets/position-guide.png')} alt="Position Guide" />
         </div>
 
-        <div style={{ position: 'fixed', bottom: 40, right: 40, left: 40, textAlign: 'center' }}>
+        <div style={{ marginTop: '40px', textAlign: 'center' }}>
           <button className="next-button" onClick={startStep}>Ambil Foto KTP</button>
         </div>
       </div>

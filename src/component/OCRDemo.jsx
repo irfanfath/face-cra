@@ -104,16 +104,46 @@ export default function OCRDemo() {
             }}
           />
         </div>
-        <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000, textAlign: 'center', background: '#616161', padding: 30 }}>
+        <div
+          style={{
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1000,
+            display: 'flex',          
+            justifyContent: 'center',  
+            alignItems: 'center',
+            background: '#616161',
+            padding: 20
+          }}
+        >
           <button
-            className="circle-button"
             onClick={capture}
+            style={{
+              display: 'flex',
+              justifyContent: 'center',  
+              alignItems: 'center',     
+              borderRadius: '50%',      
+              backgroundColor: '#616161',
+              padding: 0,
+              border: '6px solid #ffff',
+              width: '100px',
+              height: '100px'
+            }}
           >
-            <div style={{ background: '#ffffff', borderRadius: 9999, width: 70, height: 70, justifySelf: 'center' }}></div>
-            {/* <Camera size={"60px"} color="#ffff" /> */}
+            <div
+              style={{
+                background: '#ffffff',
+                borderRadius: '50%',
+                width: '70px', 
+                height: '70px', 
+              }}
+            ></div>
           </button>
         </div>
-      </div>
+
+      </div >
     )
   }
 
@@ -139,7 +169,7 @@ export default function OCRDemo() {
           <div>NIK : {dataOcr.nik}</div>
           <div>Tanggal Lahir : {dataOcr.ttl}</div>
         </div>
-        <div style={{ position: 'fixed', bottom: 40, right: 40, left: 40, textAlign: 'center' }}>
+        <div style={{ marginTop: '40px', textAlign: 'center' }}>
           <button className="retake-button" onClick={() => setLayout(1)}>ulangi foto e-KTP</button>
           <button className="next-button" onClick={() => setLayout(4)}>Konfirmasi & Lanjut</button>
         </div>
@@ -162,7 +192,7 @@ export default function OCRDemo() {
         </div>
         <div style={{ marginTop: '30px' }}>
           <div style={{ fontSize: '18px', color: '#0F133E' }}>
-          Pastikan wajah Anda tidak tertutupi oleh aksesoris apapun (misal : kacamata, masker, topi, dll)
+            Pastikan wajah Anda tidak tertutupi oleh aksesoris apapun (misal : kacamata, masker, topi, dll)
           </div>
         </div>
         <div style={{ marginTop: '30px', textAlign: 'center' }}>
