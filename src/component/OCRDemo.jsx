@@ -199,7 +199,7 @@ export default function OCRDemo() {
           <img src={require('../assets/guide-acc-fr.png')} alt="Accessoris Guide" />
         </div>
 
-        <div style={{ position: 'fixed', bottom: 40, right: 40, left: 40, textAlign: 'center' }}>
+        <div style={{ marginTop: '40px', textAlign: 'center' }}>
           <button className="next-button" onClick={nextStep}>Mulai Pindai Wajah</button>
         </div>
       </div>
