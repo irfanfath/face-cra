@@ -530,7 +530,7 @@ const FaceLandmarker = () => {
             }
           </div>
         </div>
-        <div style={{ position: 'fixed', bottom: 80, left: 30, right: 30, zIndex: 1000, textAlign: 'center' }}>
+        <div style={{ position: 'fixed', bottom: 20, left: 30, right: 30, zIndex: 1000, textAlign: 'center' }}>
           {isLastMessage && <div style={{ color: 'white', background: '#F54A45', padding: '12px', borderRadius: '8px', marginBottom: '15px' }}>{isLastMessage}</div>}
           {instructionMessage && <div style={{ color: 'white', background: '#F54A45', padding: '12px', borderRadius: '8px' }}>{instructionMessage}</div>}
         </div>
