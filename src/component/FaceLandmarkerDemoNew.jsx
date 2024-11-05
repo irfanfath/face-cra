@@ -464,7 +464,7 @@ const FaceLandmarker = () => {
           <div style={{ fontSize: '18px', fontWeight: '600', color: '#0F133E' }}>KTP dan wajah teridentifikasi sebagai <br /><strong style={{ textTransform: 'capitalize' }}>{dataSimilarity}</strong> Face!</div>
 
         </div>
-        <div style={{ position: 'fixed', bottom: 40, right: 20, left: 20 }}>
+        <div style={{ marginTop: '40px'}}>
           <button className="next-button" onClick={restartStep}>Kembali Ke Halaman Utama</button>
         </div>
       </div>
