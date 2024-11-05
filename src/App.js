@@ -31,7 +31,7 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div>
       {currentPage === 1 && <WelcomingKTP />}
       {currentPage === 'welcoming-ocr' && <WelcomingOCR />}
       {currentPage === 'ktp-extract' && <OCRDemo />}

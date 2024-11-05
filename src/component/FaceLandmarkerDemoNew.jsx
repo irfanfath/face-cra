@@ -122,51 +122,51 @@ const FaceLandmarker = () => {
   const isLoadFirstPage = useRef(false);
 
   useEffect(() => {
-    if(!isLoadFirstPage.current) {
-    const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
-    const messagesQueryParam = new URL(window.location.href).searchParams.get('messages');
+    if (!isLoadFirstPage.current) {
+      const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
+      const messagesQueryParam = new URL(window.location.href).searchParams.get('messages');
 
-    const pipelineQueryParamArray = (pipelineQueryParam != null && pipelineQueryParam !== '') ? pipelineQueryParam.split(',').map((value) => pipeline[value]) : pipeline;
-    setDynamicPipeline(pipelineQueryParamArray);
-    const messagesQueryParamArray = (messagesQueryParam != null && messagesQueryParam !== '') ? messagesQueryParam.split(',') : [];
-    setMessage(messagesQueryParamArray);
+      const pipelineQueryParamArray = (pipelineQueryParam != null && pipelineQueryParam !== '') ? pipelineQueryParam.split(',').map((value) => pipeline[value]) : pipeline;
+      setDynamicPipeline(pipelineQueryParamArray);
+      const messagesQueryParamArray = (messagesQueryParam != null && messagesQueryParam !== '') ? messagesQueryParam.split(',') : [];
+      setMessage(messagesQueryParamArray);
 
-    dynamicPipelineRef.current = pipelineQueryParamArray;
-    const createFaceLandmarker = async () => {
-      const startDate = new Date();
-      console.time('fileLoad'); // Start timing
-      console.time('filesetResolver'); // Start timing
-      // const filesetResolver = await vision.FilesetResolver.forVisionTasks(
-      //   "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
-      // );
-      const filesetResolver = await vision.FilesetResolver.forVisionTasks(
-        "/wasm" 
-      );
-      console.timeEnd('filesetResolver'); // End timing
+      dynamicPipelineRef.current = pipelineQueryParamArray;
+      const createFaceLandmarker = async () => {
+        const startDate = new Date();
+        console.time('fileLoad'); // Start timing
+        console.time('filesetResolver'); // Start timing
+        // const filesetResolver = await vision.FilesetResolver.forVisionTasks(
+        //   "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
+        // );
+        const filesetResolver = await vision.FilesetResolver.forVisionTasks(
+          "/wasm"
+        );
+        console.timeEnd('filesetResolver'); // End timing
 
-      console.time('newFaceLandmarker'); // Start timing
-      const newFaceLandmarker = await vision.FaceLandmarker.createFromOptions(filesetResolver, {
-        baseOptions: {
-          modelAssetPath: '/wasm/models/face_landmarker.task', 
-          // modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
-          delegate: "CPU"
-        },
-        outputFaceBlendshapes: true,
-        runningMode,
-        numFaces: 1
-      });
-      console.timeEnd('newFaceLandmarker'); // End timing
-      console.timeEnd('fileLoad'); // End timing
-      const endDate = new Date();
+        console.time('newFaceLandmarker'); // Start timing
+        const newFaceLandmarker = await vision.FaceLandmarker.createFromOptions(filesetResolver, {
+          baseOptions: {
+            modelAssetPath: '/wasm/models/face_landmarker.task',
+            // modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
+            delegate: "CPU"
+          },
+          outputFaceBlendshapes: true,
+          runningMode,
+          numFaces: 1
+        });
+        console.timeEnd('newFaceLandmarker'); // End timing
+        console.timeEnd('fileLoad'); // End timing
+        const endDate = new Date();
 
-      console.time('enableCam'); // Start timing
-      faceLandmarkerRef.current = newFaceLandmarker;
-      enableCam();
-      console.timeEnd('enableCam'); // End timing
+        console.time('enableCam'); // Start timing
+        faceLandmarkerRef.current = newFaceLandmarker;
+        enableCam();
+        console.timeEnd('enableCam'); // End timing
 
-    };
-    createFaceLandmarker();
-    isLoadFirstPage.current = true;
+      };
+      createFaceLandmarker();
+      isLoadFirstPage.current = true;
     }
   }, []);
 
@@ -413,7 +413,7 @@ const FaceLandmarker = () => {
     const faceAreaVertikal = result?.faceLandmarks?.[0]?.[4]?.y
 
     if ((faceAreaHorizontal < 0.4 || faceAreaHorizontal > 0.6) && (faceAreaVertikal < 0.4 || faceAreaVertikal > 0.6)) {
-      setInstructionMessage("Posisikan Wajah Anda di tengah");
+      setInstructionMessage("Posisikan wajah harus di tengah bingkai");
     } else {
       setInstructionMessage("")
     }
@@ -446,6 +446,31 @@ const FaceLandmarker = () => {
     window.location.href = url.toString();
   }
 
+  const ResultPage = () => {
+    return (
+      <div className="container" style={{ textAlign: 'center' }}>
+        <div style={{ marginTop: '40px' }}>
+          <img src={require('../assets/Logo.png')} alt="Logo" />
+        </div>
+        <div style={{ marginTop: '20px', padding: '20px' }}>
+          <div style={{ fontSize: '34px', fontWeight: '600', color: '#0F133E' }}>e-KYC</div>
+          <div style={{ fontSize: '16px', lineHeight: '30px', color: '#737373' }}>Verifikasi identitas digital dengan pemindaian KTP dan pencocokan wajah</div>
+        </div>
+        <div style={{ marginTop: '30px' }}>
+          <img src={require('../assets/result-success.png')} alt="Result Success" />
+        </div>
+        <div style={{ marginTop: '30px' }}>
+          <div style={{ fontSize: '18px', fontWeight: '600', color: '#0F133E' }}>Wajah yang terdeteksi adalah <br /><strong style={{ textTransform: 'capitalize' }}>{dataLiveness}</strong> Face!</div>
+          <div style={{ fontSize: '18px', fontWeight: '600', color: '#0F133E' }}>KTP dan wajah teridentifikasi sebagai <br /><strong style={{ textTransform: 'capitalize' }}>{dataSimilarity}</strong> Face!</div>
+
+        </div>
+        <div style={{ position: 'fixed', bottom: 40, right: 20, left: 20 }}>
+          <button className="next-button" onClick={restartStep}>Kembali Ke Halaman Utama</button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div>
       <section id="demos">
@@ -455,26 +480,27 @@ const FaceLandmarker = () => {
             {!isLiveness ?
               <video className='video-face' poster="noposter" ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
               :
-              <div style={{ marginTop: '10vh' }}>
-                <div className="bg-welcoming" style={{ marginTop: '20px', padding: '20px', marginBottom: '5%' }}>
-                  <div className="bg-ktp-result" style={{ display: 'inline-flex', placeItems: 'center', width: '80%' }}>
-                    <CircleCheck color="#0a8053" size={50} />
-                    <div style={{ fontSize: '20px', fontWeight: '600', textAlign: 'left', marginLeft: '20px' }}>Face Recognition <br /><strong>Berhasil</strong></div>
-                  </div>
-                  <div style={{ marginTop: '50px' }}>
-                    <div style={{ fontSize: '20px' }}>Wajah yang terdeteksi adalah <br /><strong style={{ textTransform: 'capitalize' }}>{dataLiveness}</strong> Face!</div>
-                  </div>
-                  <div style={{ marginTop: '50px' }}>
-                    <div style={{ fontSize: '20px' }}>KTP dan wajah teridentifikasi sebagai <br /><strong style={{ textTransform: 'capitalize' }}>{dataSimilarity}</strong> Face!</div>
-                  </div>
-                  <div style={{ marginTop: '50px' }}>
-                    <button className="next-button" onClick={restartStep}>Menu Utama</button>
-                  </div>
-                </div>
-                <div style={{ marginTop: '40px', marginBottom: '20px' }}>
-                  <img src={require('../assets/bigvision.png')} alt="Welcoming" />
-                </div>
-              </div>
+              // <div style={{ marginTop: '10vh' }}>
+              //   <div className="bg-welcoming" style={{ marginTop: '20px', padding: '20px', marginBottom: '5%' }}>
+              //     <div className="bg-ktp-result" style={{ display: 'inline-flex', placeItems: 'center', width: '80%' }}>
+              //       <CircleCheck color="#0a8053" size={50} />
+              //       <div style={{ fontSize: '20px', fontWeight: '600', textAlign: 'left', marginLeft: '20px' }}>Face Recognition <br /><strong>Berhasil</strong></div>
+              //     </div>
+              //     <div style={{ marginTop: '50px' }}>
+              //       <div style={{ fontSize: '20px' }}>Wajah yang terdeteksi adalah <br /><strong style={{ textTransform: 'capitalize' }}>{dataLiveness}</strong> Face!</div>
+              //     </div>
+              //     <div style={{ marginTop: '50px' }}>
+              //       <div style={{ fontSize: '20px' }}>KTP dan wajah teridentifikasi sebagai <br /><strong style={{ textTransform: 'capitalize' }}>{dataSimilarity}</strong> Face!</div>
+              //     </div>
+              //     <div style={{ marginTop: '50px' }}>
+              //       <button className="next-button" onClick={restartStep}>Menu Utama</button>
+              //     </div>
+              //   </div>
+              //   <div style={{ marginTop: '40px', marginBottom: '20px' }}>
+              //     <img src={require('../assets/bigvision.png')} alt="Welcoming" />
+              //   </div>
+              // </div>
+              <ResultPage />
             }
 
             {
@@ -488,15 +514,15 @@ const FaceLandmarker = () => {
             {
               !isLiveness ?
                 loading ?
-                  <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
+                  <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000, textAlign: 'center' }}>
                     <span style={{ color: 'white' }}>Harap Tunggu<br /><span style={{ fontSize: 20 }}>sedang memproses kamera</span></span>
                   </div>
                   :
-                  <div style={{ position: 'fixed', fontSize: 22, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000 }}>
+                  <div style={{ position: 'fixed', fontSize: 22, fontWeight: 600, top: 50, left: 0, right: 0, zIndex: 1000, textAlign: 'center' }}>
                     <span style={{ color: 'white' }}>
                       {(message && message[pipelineIndex]) || (dynamicPipeline[pipelineIndex]?.word)}
                       <br />
-                      <span style={{ fontSize: 20 }}>{instructionMessage}</span>
+                      {/* <span style={{ fontSize: 20 }}>{instructionMessage}</span> */}
                     </span>
                   </div>
                 :
@@ -504,10 +530,10 @@ const FaceLandmarker = () => {
             }
           </div>
         </div>
-        <div style={{ position: 'fixed', bottom: 70, left: 0, right: 0, zIndex: 1000 }}>
-          <span style={{ color: 'white' }}>{isLastMessage}</span>
+        <div style={{ position: 'fixed', bottom: 100, left: 30, right: 30, zIndex: 1000, textAlign: 'center' }}>
+          {isLastMessage && <div style={{ color: 'white', background: '#F54A45', padding: '12px', borderRadius: '8px', marginBottom: '15px' }}>{isLastMessage}</div>}
+          {instructionMessage && <div style={{ color: 'white', background: '#F54A45', padding: '12px', borderRadius: '8px' }}>{instructionMessage}</div>}
         </div>
-
       </section>
     </div>
   );

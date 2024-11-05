@@ -9,19 +9,8 @@ export default function OCRDemo() {
   const [dataOcr, setDataOcr] = useState([]);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(false);
+  const [layout, setLayout] = useState(1);
 
-  // let videoConstraints = {
-  //   facingMode: 'environment',
-  //   width: { ideal: 720 },
-  //   height: { ideal: 1280 },
-  //   aspectRatio: 9 / 16,
-  // };
-  //   let videoConstraints = {
-  //     facingMode: 'environment',
-  //     width: { ideal: 720 },
-  //     height: { ideal: Math.round(720 / 1.586) },
-  //     aspectRatio: 1.586,
-  // };
   let videoConstraints = {
     facingMode: 'environment',
     width: { ideal: 720 },
@@ -41,6 +30,7 @@ export default function OCRDemo() {
       }
 
       setLoading(true);
+      setLayout(2);
       const base64Image = imageSrc.split(',')[1];
       const blob = await fetch(`data:image/jpeg;base64,${base64Image}`).then(res => res.blob());
       const formData = new FormData();
@@ -60,9 +50,11 @@ export default function OCRDemo() {
       setDataOcr(data.message.results);
       setResult(true)
       setLoading(false);
+      setLayout(3);
     } catch (error) {
       console.error('Error sending image:', error);
       setLoading(false);
+      setLayout(1);
     }
   };
 
@@ -74,103 +66,120 @@ export default function OCRDemo() {
     window.location.href = url.toString();
   };
 
-  return (
-    <div className="webcam-container">
-      {result !== true ?
-        <div className="webcam-img">
-          {/* <img className="bg-image" alt="" src={bgImage} /> */}
-          <div style={{ position: 'fixed', fontSize: 26, fontWeight: 600, top: 50, left: 20, right: 20, zIndex: 1000 }}>
-            <span style={{ color: 'white' }}>Foto KTP Anda<br /><span style={{ fontSize: 16 }}>Pastikan e-KTP asli dan foto wajah Anda berada dalam bingkai, tidak terpotong, pencahayaan cukup dan terbaca jelas.</span></span>
-          </div>
-          {loading ?
-            <img src={imageSrc} alt="captured"
-              style={{
-                position: 'absolute',
-                left: '50%',
-                top: '50%',
-                transform: 'translate(-50%, -50%)',
-                objectFit: 'cover',
-                overflow: 'hidden',
-                width: '90%',
-                border: '8px solid white',
-                borderRadius: '20px',
-              }} />
-            :
-            <div>
-              <Webcam
-                className="webcam"
-                scale={1}
-                audio={false}
-                ref={webcamRef}
-                screenshotFormat="image/jpeg"
-                videoConstraints={videoConstraints}
-                screenshotQuality={1}
-                style={{
-                  position: 'absolute',
-                  left: '50%',
-                  top: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  objectFit: 'cover',
-                  overflow: 'hidden',
-                  width: '90%',
-                  border: '8px solid white',
-                  borderRadius: '20px',
-                }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  left: '80%',
-                  top: '47%',
-                  transform: 'translate(-50%, -50%)',
-                  width: '20%',
-                  height: '15%',
-                  border: '3px solid white',
-                  borderRadius: '5px',
-                }}
-              />
-            </div>
-          }
-          <div style={{ position: 'fixed', bottom: 30, left: 0, right: 0, zIndex: 1000 }}>
-            {loading ?
-              <div style={{ color: '#ffff' }}>Harap tunggu sedang proses verifikasi...</div>
-              :
-              <button
-                className="circle-button"
-                onClick={capture}
-              >
-                <Camera size={"60px"} color="#ffff" />
-              </button>
-            }
-          </div>
-        </div>
-        :
+  const DetectionLayout = () => {
+    return (
+      <div className="container-detection">
+        <div style={{ textAlign: 'center', color: '#F8F8F8', fontSize: '22px', fontWeight: '400', padding: '10px', lineHeight: '40px', marginTop: '20px' }}>Posisikan KTP tetap berada di dalam area bergaris atau bingkai</div>
         <div>
-          <div style={{ padding: '20px', textAlign: 'left' }} onClick={() => setResult(false)}>
-            <Undo2 size={35} color="#ffff" strokeWidth={2} />
-          </div>
-          <div className="bg-welcoming" style={{ padding: '20px', marginBottom: '5%' }}>
-            <div className="bg-ktp-result" style={{ display: 'inline-flex', placeItems: 'center', width: '80%' }}>
-              <CircleCheck color="#0a8053" size={50} />
-              <div style={{ fontSize: '20px', fontWeight: '600', textAlign: 'left', marginLeft: '20px' }}>OCR Extraction <br /><strong>Berhasil</strong></div>
-            </div>
-            <div style={{ marginTop: '50px' }}>
-              <img src={imageSrc} alt="captured" style={{ width: '100%', borderRadius: '15px' }} />
-              <div style={{ marginTop: '40px', fontWeight: '600', fontSize: '20px' }}>Detail</div>
-              <div style={{ textAlign: 'left', padding: '10px 10px 30px 30px' }}>
-                <div>Nama : {dataOcr.nama}</div>
-                <div>NIK : {dataOcr.nik}</div>
-                <div>Tanggal Lahir : {dataOcr.ttl}</div>
-              </div>
-            </div>
-            <div>
-              <button className="next-button" onClick={nextStep}>Lanjutkan</button>
-            </div>
-          </div>
-          <div style={{ marginTop: '40px', marginBottom: '20px' }}>
-            <img src={require('../assets/bigvision.png')} alt="Welcoming" />
+          <Webcam
+            className="webcam"
+            scale={1}
+            audio={false}
+            ref={webcamRef}
+            screenshotFormat="image/jpeg"
+            videoConstraints={videoConstraints}
+            screenshotQuality={1}
+            style={{
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+              objectFit: 'cover',
+              overflow: 'hidden',
+              width: '90%',
+              border: '8px solid white',
+              borderRadius: '20px',
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              left: '80%',
+              top: '47%',
+              transform: 'translate(-50%, -50%)',
+              width: '20%',
+              height: '15%',
+              border: '3px solid white',
+              borderRadius: '5px',
+            }}
+          />
+        </div>
+        <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000, textAlign: 'center', background: '#616161', padding: 30 }}>
+          <button
+            className="circle-button"
+            onClick={capture}
+          >
+            <div style={{ background: '#ffffff', borderRadius: 9999, width: 70, height: 70, justifySelf: 'center' }}></div>
+            {/* <Camera size={"60px"} color="#ffff" /> */}
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  const LoadingLayout = () => {
+    return (
+      <div className="container-loading">
+        <img src={require('../assets/illus-ktp.png')} alt="illustasi ktp" />
+        <div style={{ marginTop: '24px', lineHeight: '35px' }}>
+          <div style={{ fontSize: '24px', color: '#000000', fontWeight: '600' }}>Membaca KTP Anda...</div>
+          <div style={{ fontSize: '18px', color: '#000000', fontWeight: '200' }}>Mohon jangan menutup halaman ini</div>
+        </div>
+      </div>
+    )
+  }
+
+  const ResultLayout = () => {
+    return (
+      <div className="container">
+        <img src={imageSrc} alt="captured" style={{ width: '100%', borderRadius: '15px', marginTop: '50px' }} />
+        <div style={{ marginTop: '20px', fontWeight: '600', fontSize: '24px' }}>Cek kembali data KTP Anda</div>
+        <div style={{ marginTop: '10px', fontSize: '18px', lineHeight: '30px' }}>
+          <div>Nama : {dataOcr.nama}</div>
+          <div>NIK : {dataOcr.nik}</div>
+          <div>Tanggal Lahir : {dataOcr.ttl}</div>
+        </div>
+        <div style={{ position: 'fixed', bottom: 40, right: 40, left: 40, textAlign: 'center' }}>
+          <button className="retake-button" onClick={() => setLayout(1)}>ulangi foto e-KTP</button>
+          <button className="next-button" onClick={() => setLayout(4)}>Konfirmasi & Lanjut</button>
+        </div>
+      </div>
+    )
+  }
+
+  const GuideFRLayout = () => {
+    return (
+      <div className="container">
+        <div style={{ marginTop: '40px' }}>
+          <div style={{ color: '#858585' }}>Langkah 2/2</div>
+          <div style={{ fontSize: '24px', fontWeight: '600', color: '#0F133E', marginTop: '20px' }}>Pindai Wajah</div>
+        </div>
+        <div style={{ marginTop: '30px' }}>
+          <div style={{ fontSize: '18px', color: '#0F133E', marginTop: '20px' }}>Posisikan wajah Anda di dalam bingkai dan berada tepat di tengah</div>
+        </div>
+        <div style={{ marginTop: '30px', textAlign: 'center' }}>
+          <img src={require('../assets/guide-fr.png')} alt="Guide FR" />
+        </div>
+        <div style={{ marginTop: '30px' }}>
+          <div style={{ fontSize: '18px', color: '#0F133E' }}>
+          Pastikan wajah Anda tidak tertutupi oleh aksesoris apapun (misal : kacamata, masker, topi, dll)
           </div>
         </div>
+        <div style={{ marginTop: '30px', textAlign: 'center' }}>
+          <img src={require('../assets/guide-acc-fr.png')} alt="Accessoris Guide" />
+        </div>
+
+        <div style={{ position: 'fixed', bottom: 40, right: 40, left: 40, textAlign: 'center' }}>
+          <button className="next-button" onClick={nextStep}>Mulai Pindai Wajah</button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      {
+        layout === 1 ? <DetectionLayout /> : layout === 2 ? <LoadingLayout /> : layout === 3 ? <ResultLayout /> : <GuideFRLayout />
       }
     </div>
   );

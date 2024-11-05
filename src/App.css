@@ -1,5 +1,24 @@
-body {
-  background: #000000;
+/* body {
+  background: var(--Black-1, #424242);
+} */
+.container {
+  background: #ffffff;
+  padding: 20px;
+  height: 100vh;
+}
+
+.container-detection {
+  padding: 20px;
+  height: 100vh;
+  background: var(--Black-1, #424242);
+}
+
+.container-loading {
+  background: #ffffff;
+  height: 100vh;
+  align-content: center;
+  padding: 20px;
+  text-align: center;
 }
 
 .webcam-container {
@@ -11,13 +30,6 @@ body {
   padding: 20px;
   margin-top: 40px;
   min-height: 25vh;
-}
-
-/* html {
-  background: #000000;
-} */
-.App {
-  text-align: center;
 }
 
 .App-logo {
@@ -40,15 +52,6 @@ body {
   z-index: 1; 
   overflow: hidden;
 }
-/* 
-.bg-image {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  z-index: 1;
-} */
 
 .overlay-text {
   position: absolute;
@@ -105,7 +108,7 @@ body {
   height: 100px; 
   border-radius: 50%; 
   background-color: transparent; 
-  border: 2px solid #ffff; 
+  border: 8px solid #ffff; 
   justify-content: center;
   align-items: center;
   cursor: pointer;
@@ -115,21 +118,31 @@ body {
   background-color: gray; 
 }
 
+.retake-button {
+  border-radius: 8px;
+  background: transparent;
+  border: transparent;
+  color: #0549CF;
+  padding: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
 .next-button {
-  border-radius: 30px;
-  background: linear-gradient(262deg, #002E5E 0%, #2D5988 100%);
-  box-shadow: 0px 18px 30px -10px rgba(0, 46, 94, 0.25);
+  border-radius: 8px;
+  background: #0549CF;
   border: transparent;
   color: #ffff;
   padding: 10px;
   font-size: 20px;
-  font-weight: 400;
-  width: 90%;
+  font-weight: 600;
   cursor: pointer;
-  display: inline-flex;
-  justify-content: center;
-  letter-spacing: 1px;
-  align-items: center;
+  width: 100%;
+  padding: 16px;
 }
 
 .next-button:hover {
