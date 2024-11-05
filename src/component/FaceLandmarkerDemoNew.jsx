@@ -454,7 +454,7 @@ const FaceLandmarker = () => {
         </div>
         <div style={{ marginTop: '20px', padding: '20px' }}>
           <div style={{ fontSize: '34px', fontWeight: '600', color: '#0F133E' }}>e-KYC</div>
-          <div style={{ fontSize: '16px', lineHeight: '30px', color: '#737373' }}>Verifikasi identitas digital dengan pemindaian KTP dan pencocokan wajah</div>
+          <div style={{ fontSize: '16px', lineHeight: '30px', color: '#737373' }}>Verifikasi identitas digital dengan pemindaian KTP dan pencocokkan wajah</div>
         </div>
         <div style={{ marginTop: '30px' }}>
           <img src={require('../assets/result-success.png')} alt="Result Success" />

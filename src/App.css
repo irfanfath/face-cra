@@ -9,6 +9,7 @@
 .container-detection {
   padding: 20px;
   background: var(--Black-1, #424242);
+  height: 100vh;
 }
 
 .container-loading {
