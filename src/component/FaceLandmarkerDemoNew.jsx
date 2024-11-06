@@ -488,8 +488,8 @@ const FaceLandmarker = () => {
             justifyContent: 'center'
           }}>
             <div style={{
-              width: '340px',
-              height: '454px',
+              width: '80%',
+              height: '55vh',
               backgroundColor: 'transparent',
               borderRadius: '9999px',
               boxShadow: '0 0 0 9999px #6b7280',
