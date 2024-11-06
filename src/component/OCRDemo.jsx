@@ -163,18 +163,20 @@ export default function OCRDemo() {
     return (
       <div className="container">
         <img src={imageSrc} alt="captured" style={{ width: '100%', borderRadius: '15px', marginTop: '50px' }} />
-        <div style={{ marginTop: '20px', fontWeight: '600', fontSize: '24px' }}>Cek kembali data KTP Anda</div>
         {dataOcr.nik === '1234567890' ?
           <div style={{ marginTop: '40px', background: '#FFFBF6', border: '2px solid #FFBC73', borderLeft: '8px solid #FFBC73', padding: '10px 20px 10px 20px', borderRadius: '8px', lineHeight: '30px' }}>
             <div style={{ color: '#1E1E1E', fontWeight: '600' }}>Data KTP Anda tidak terbaca</div>
             <div style={{ color: '#858585' }}>Mohon ulangi ambil foto e-KTP Anda</div>
           </div>
           :
-          <div style={{ marginTop: '10px', fontSize: '18px', lineHeight: '30px' }}>
-            <div>Nama : {dataOcr.nama}</div>
-            <div>NIK : {dataOcr.nik}</div>
-            <div>Tanggal Lahir : {dataOcr.ttl}</div>
-          </div>
+          <>
+            <div style={{ marginTop: '20px', fontWeight: '600', fontSize: '24px' }}>Periksa data KTP Anda</div>
+            <div style={{ marginTop: '10px', fontSize: '18px', lineHeight: '30px' }}>
+              <div>Nama : {dataOcr.nama}</div>
+              <div>NIK : {dataOcr.nik}</div>
+              <div>Tanggal Lahir : {dataOcr.ttl}</div>
+            </div>
+          </>
         }
         <div style={{ marginTop: '40px', textAlign: 'center' }}>
           <button className="retake-button" onClick={() => setLayout(1)}>ulangi foto e-KTP</button>
