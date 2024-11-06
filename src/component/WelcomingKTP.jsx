@@ -52,6 +52,7 @@ export default function WelcomingKTP() {
               color: !agree ? '#666' : '#ffffff',
               cursor: !agree ? 'not-allowed' : 'pointer',
               opacity: !agree ? 0.6 : 1,
+              marginTop: '40px'
             }}
             className="next-button" onClick={() => setLayout(2)}
           >Mulai Verifikasi</button>
