@@ -464,7 +464,7 @@ const FaceLandmarker = () => {
           <div style={{ fontSize: '18px', fontWeight: '600', color: '#0F133E' }}>KTP dan wajah teridentifikasi sebagai <br /><strong style={{ textTransform: 'capitalize' }}>{dataSimilarity}</strong> Face!</div>
 
         </div>
-        <div style={{ marginTop: '40px'}}>
+        <div style={{ marginTop: '40px' }}>
           <button className="next-button" onClick={restartStep}>Kembali Ke Halaman Utama</button>
         </div>
       </div>
@@ -475,7 +475,29 @@ const FaceLandmarker = () => {
     <div>
       <section id="demos">
         <div id="liveView" className="videoView">
-          {!isLiveness && <img className="bg-image" alt="" src={require('../assets/Subtract.png')} />}
+          {/* {!isLiveness && <img className="bg-image" alt="" src={require('../assets/Subtract.png')} />} */}
+
+          <div style={{
+            height: '100vh',
+            position: 'absolute',
+            width: '100%',
+            opacity: '70%',
+            display: 'flex',
+            zIndex: 1,
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <div style={{
+              width: '340px',
+              height: '454px',
+              backgroundColor: 'transparent',
+              borderRadius: '9999px',
+              boxShadow: '0 0 0 9999px #6b7280',
+              // border: '2px solid #ffffff'
+              border: `4px solid ${instructionMessage || isLastMessage ? 'red' : '#ffffff'}` 
+            }}></div>
+          </div>
+
           <div style={{ position: 'relative' }}>
             {!isLiveness ?
               <video className='video-face' poster="noposter" ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
