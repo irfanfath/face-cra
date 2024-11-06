@@ -47,7 +47,7 @@
   top: 0;
   left: 0;
   bottom: 0;
-  z-index: 1; 
+  z-index: 1;
   overflow: hidden;
 }
 
@@ -71,6 +71,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -88,30 +89,17 @@
   -moz-transform: scaleX(-1);
 }
 
-/* Style the modal content */
-.modal-content {
-  background-color: #fefefe;
-  margin-left: 20px;
-  padding: 10px;
-  border: 1px solid #888;
-  width: 80%; /* Set the width of the modal */
-  max-width: 600px; /* Maximum width of the modal */
-  text-align: center;
-  position: relative; /* Relative positioning for close button */
-  border-radius: 20px;
-}
-
 .circle-button {
-  width: 100px; 
-  height: 100px; 
-  border-radius: 50%; 
-  background-color: transparent; 
-  border: 6px solid #ffff; 
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 6px solid #ffff;
   cursor: pointer;
 }
 
 .circle-button:hover {
-  background-color: gray; 
+  background-color: gray;
 }
 
 .retake-button {
@@ -142,7 +130,7 @@
 }
 
 .next-button:hover {
-  background: #ffff; 
+  background: #ffff;
   color: #2D5988;
   border: 2px solid #2D5988;
 }
@@ -180,15 +168,87 @@
 .webcam-video {
   display: flex;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
   width: 100%;
   height: 40vh;
 }
 
+/* Modal backdrop */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.3s, opacity 0.3s;
+}
 
+/* Show the modal when open */
+.modal-backdrop.open {
+  visibility: visible;
+  opacity: 1;
+}
 
+/* Modal container */
+.modal-container {
+  background: #fff;
+  width: 100%;
+  max-height: 70vh;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  overflow-y: auto;
+  padding: 20px;
+  padding-top: 0;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+}
 
+/* Modal header */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  width: 100%;
+  background: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid gainsboro;
+}
+
+.modal-header h2 {
+  font-size: 1.4em;
+  margin: 0;
+}
+
+.close-button {
+  font-size: 1.7em;
+  cursor: pointer;
+  color: #424242;
+}
+
+/* Modal content */
+.modal-content {
+  font-size: 0.9em;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.modal-content .section-title {
+  font-weight: bold;
+  margin-top: 16px;
+  margin-bottom: 4px;
+}
+
+.modal-content p {
+  margin: 8px 0;
+}

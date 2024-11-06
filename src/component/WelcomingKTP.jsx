@@ -1,8 +1,13 @@
 import React, { useState } from "react";
+import PrivacyPolicy from "../atoms/privacyPolicy";
 
 export default function WelcomingKTP() {
   const [layout, setLayout] = useState(1);
   const [agree, setAgree] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   const startStep = () => {
     const url = new URL(window.location.href);
@@ -37,7 +42,7 @@ export default function WelcomingKTP() {
                 onClick={() => setAgree(!agree)}
                 required
               />
-              &emsp;<div style={{ fontWeight: '400', fontSize: '14px', lineHeight: '20px' }}>Saya setuju menggunakan data pribadi untuk proses verifikasi yang sesuai dengan <span style={{ color: '#0549CF', fontWeight: '600' }}>Kebijakan Privasi</span></div>&emsp;
+              &emsp;<div style={{ fontWeight: '400', fontSize: '14px', lineHeight: '20px' }}>Saya setuju menggunakan data pribadi untuk proses verifikasi yang sesuai dengan <span style={{ color: '#0549CF', fontWeight: '600', cursor: 'pointer' }} onClick={openModal}>Kebijakan Privasi</span></div>&emsp;
             </label>
           </div>
           <button
@@ -51,6 +56,8 @@ export default function WelcomingKTP() {
             className="next-button" onClick={() => setLayout(2)}
           >Mulai Verifikasi</button>
         </div>
+        <PrivacyPolicy isOpen={isModalOpen} onClose={closeModal} />
+
       </div>
     )
   }
