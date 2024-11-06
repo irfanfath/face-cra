@@ -477,27 +477,29 @@ const FaceLandmarker = () => {
         <div id="liveView" className="videoView">
           {/* {!isLiveness && <img className="bg-image" alt="" src={require('../assets/Subtract.png')} />} */}
 
-          <div style={{
-            height: '100vh',
-            position: 'absolute',
-            width: '100%',
-            opacity: '70%',
-            display: 'flex',
-            zIndex: 1,
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
+          {!isLiveness &&
             <div style={{
-              width: '80%',
-              height: '55vh',
-              backgroundColor: 'transparent',
-              borderRadius: '9999px',
-              boxShadow: '0 0 0 9999px #6b7280',
-              // border: '2px solid #ffffff'
-              border: `4px solid ${instructionMessage || isLastMessage ? 'red' : '#ffffff'}` 
-            }}></div>
-          </div>
-
+              height: '100vh',
+              position: 'absolute',
+              width: '100%',
+              opacity: '70%',
+              display: 'flex',
+              zIndex: 1,
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <div style={{
+                width: '80%',
+                height: '55vh',
+                backgroundColor: 'transparent',
+                borderRadius: '9999px',
+                boxShadow: '0 0 0 9999px #6b7280',
+                // border: '2px solid #ffffff'
+                border: `4px solid ${instructionMessage || isLastMessage ? 'red' : '#ffffff'}`
+              }}></div>
+            </div>
+          }
+          
           <div style={{ position: 'relative' }}>
             {!isLiveness ?
               <video className='video-face' poster="noposter" ref={videoRef} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100vh', objectFit: 'cover', overflow: 'hidden' }} autoPlay playsInline></video>
