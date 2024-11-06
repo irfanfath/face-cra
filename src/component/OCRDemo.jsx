@@ -178,7 +178,7 @@ export default function OCRDemo() {
         }
         <div style={{ marginTop: '40px', textAlign: 'center' }}>
           <button className="retake-button" onClick={() => setLayout(1)}>ulangi foto e-KTP</button>
-          <button className="next-button" onClick={() => setLayout(4)}>Konfirmasi & Lanjut</button>
+          {dataOcr.nik !== '1234567890' && <button className="next-button" onClick={() => setLayout(4)}>Konfirmasi & Lanjut</button>}
         </div>
       </div>
     )
