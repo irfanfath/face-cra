@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import './App.css';
-import FaceLandmarker from './component/FaceLandmarkerDemo';
 import FaceLandmarkerNew from './component/FaceLandmarkerDemoNew';
+import FaceLandmarkerDemoWebbased from './component/FaceLandmarkerDemoWebbased';
 
 function App() {
   const location = useMemo(() => {
@@ -11,7 +11,7 @@ function App() {
   return (
     <div className="App">
       {
-        location === "1" ? <FaceLandmarker /> : <FaceLandmarkerNew />
+        location === "web_based" ? <FaceLandmarkerDemoWebbased /> : <FaceLandmarkerNew />
       }
       
     </div>

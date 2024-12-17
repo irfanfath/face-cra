@@ -77,7 +77,7 @@ function base64ToBlob(base64, type = 'application/octet-stream') {
 }
 
 const DEFAULT_VALUE_PIPELINE = [0, 1, 2, 3];
-const FaceLandmarker = () => {
+const FaceLandmarkerWebbased = () => {
   const faceLandmarkerRef = useRef(false);
   const pipelineRef = useRef(0);
   const isLoadingRef = useRef(false);
@@ -127,6 +127,7 @@ const FaceLandmarker = () => {
       enableCam();
     };   
     createFaceLandmarker();
+    window.parent.postMessage({ action: 'initiate', success: true }, "*")
   }, []);
 
   const enableCam = () => {
@@ -255,6 +256,7 @@ const FaceLandmarker = () => {
             cameraRef.current.getTracks().forEach(track => track.stop());
             // handleLiveness(res.image)
             // .then(() => {
+              window.parent.postMessage({ action: 'finish', success: true, data: { image: res.image, transactionId: res.transactionId, success: true} }, '*')
               window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
             // })
           } else {
@@ -272,6 +274,7 @@ const FaceLandmarker = () => {
             cameraRef.current.getTracks().forEach(track => track.stop());
             // handleLiveness(res.image)
             // .then(() => {
+              window.parent.postMessage({ action: 'finish', success: true, data: { image: res.image, transactionId: res.transactionId } }, '*')
               window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
             // })
           } else {
@@ -288,6 +291,7 @@ const FaceLandmarker = () => {
             cameraRef.current.getTracks().forEach(track => track.stop());
             // handleLiveness(res.image)
             // .then(() => {
+              window.parent.postMessage({ action: 'finish', success: true, data: { image: res.image, transactionId: res.transactionId, success: true} }, '*')
               window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
             // })
           } else {
@@ -304,6 +308,7 @@ const FaceLandmarker = () => {
             cameraRef.current.getTracks().forEach(track => track.stop());
             // handleLiveness(res.image)
             // .then(() => {
+              window.parent.postMessage({ action: 'finish', success: true, data: { image: res.image, transactionId: res.transactionId, success: true} }, '*')            
               window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
             // })
           } else {
@@ -320,6 +325,7 @@ const FaceLandmarker = () => {
               cameraRef.current.getTracks().forEach(track => track.stop());
               // handleLiveness(res.image)
               // .then(() => {
+                window.parent.postMessage({ action: 'finish', success: true, data: { image: res.image, transactionId: res.transactionId, success: true} }, '*'); 
                 window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
               // })
             } else {
@@ -367,7 +373,7 @@ const FaceLandmarker = () => {
   }, [messageError]);
 
   return (
-    <div>
+    <div style={{ maxWidth: "400px", width: "100%"}}>
       <section id="demos">
         <div id="liveView" className="videoView">
           <img className="bg-image" alt="" src={require('../assets/Subtract.png')} />
@@ -406,4 +412,4 @@ const FaceLandmarker = () => {
   );
 };
 
-export default FaceLandmarker;
+export default FaceLandmarkerWebbased;
