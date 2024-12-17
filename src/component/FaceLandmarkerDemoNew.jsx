@@ -127,6 +127,7 @@ const FaceLandmarker = () => {
       enableCam();
     };   
     createFaceLandmarker();
+    window.parent.postMessage({ action: 'initiate', success: true }, "*")
   }, []);
 
   const enableCam = () => {
@@ -255,6 +256,7 @@ const FaceLandmarker = () => {
             cameraRef.current.getTracks().forEach(track => track.stop());
             // handleLiveness(res.image)
             // .then(() => {
+              window.parent.postMessage({ action: 'finish', success: true, data: { image: res.image, transactionId: res.transactionId, success: true} }, '*')
               window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
             // })
           } else {
@@ -272,6 +274,7 @@ const FaceLandmarker = () => {
             cameraRef.current.getTracks().forEach(track => track.stop());
             // handleLiveness(res.image)
             // .then(() => {
+              window.parent.postMessage({ action: 'finish', success: true, data: { image: res.image, transactionId: res.transactionId } }, '*')
               window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
             // })
           } else {
@@ -288,6 +291,7 @@ const FaceLandmarker = () => {
             cameraRef.current.getTracks().forEach(track => track.stop());
             // handleLiveness(res.image)
             // .then(() => {
+              window.parent.postMessage({ action: 'finish', success: true, data: { image: res.image, transactionId: res.transactionId, success: true} }, '*')
               window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
             // })
           } else {
@@ -304,6 +308,7 @@ const FaceLandmarker = () => {
             cameraRef.current.getTracks().forEach(track => track.stop());
             // handleLiveness(res.image)
             // .then(() => {
+              window.parent.postMessage({ action: 'finish', success: true, data: { image: res.image, transactionId: res.transactionId, success: true} }, '*')            
               window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
             // })
           } else {
@@ -320,6 +325,7 @@ const FaceLandmarker = () => {
               cameraRef.current.getTracks().forEach(track => track.stop());
               // handleLiveness(res.image)
               // .then(() => {
+                window.parent.postMessage({ action: 'finish', success: true, data: { image: res.image, transactionId: res.transactionId, success: true} }, '*'); 
                 window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
               // })
             } else {
