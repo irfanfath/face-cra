@@ -196,7 +196,7 @@ const FaceLandmarkerWebbased = () => {
       if(isLast){
         obj.transactionId = "EKYC_" + ((new Date()).getTime()) + "_bmsk";
         obj.idRequest = idRequest;
-        obj.app = app;
+        obj.app = `${app}_web_based`;
       }
       if(idRequest && app && app !== '' && idRequest !== ''){
         setRejectMessage("")
@@ -257,7 +257,6 @@ const FaceLandmarkerWebbased = () => {
             // handleLiveness(res.image)
             // .then(() => {
               window.parent.postMessage({ action: 'finish', success: true, data: { image: res.image, transactionId: res.transactionId, success: true} }, '*')
-              window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
             // })
           } else {
             setPipelineIndex((val) => {
@@ -275,7 +274,6 @@ const FaceLandmarkerWebbased = () => {
             // handleLiveness(res.image)
             // .then(() => {
               window.parent.postMessage({ action: 'finish', success: true, data: { image: res.image, transactionId: res.transactionId } }, '*')
-              window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
             // })
           } else {
             setPipelineIndex((val) => {
@@ -292,7 +290,6 @@ const FaceLandmarkerWebbased = () => {
             // handleLiveness(res.image)
             // .then(() => {
               window.parent.postMessage({ action: 'finish', success: true, data: { image: res.image, transactionId: res.transactionId, success: true} }, '*')
-              window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
             // })
           } else {
             setPipelineIndex((val) => {
@@ -309,7 +306,6 @@ const FaceLandmarkerWebbased = () => {
             // handleLiveness(res.image)
             // .then(() => {
               window.parent.postMessage({ action: 'finish', success: true, data: { image: res.image, transactionId: res.transactionId, success: true} }, '*')            
-              window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
             // })
           } else {
             setPipelineIndex((val) => {
@@ -326,8 +322,7 @@ const FaceLandmarkerWebbased = () => {
               // handleLiveness(res.image)
               // .then(() => {
                 window.parent.postMessage({ action: 'finish', success: true, data: { image: res.image, transactionId: res.transactionId, success: true} }, '*'); 
-                window.location.href = 'https://bigvision.id?image=' + res.image + '&transaction_id='+ res.transactionId;
-              // })
+             // })
             } else {
               setPipelineIndex((val) => {
                 pipelineRef.current = val + 1;
