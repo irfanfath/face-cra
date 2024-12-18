@@ -99,7 +99,7 @@ const FaceLandmarkerWebbased = () => {
   const [instructionMessage, setInstructionMessage] = useState('');
   const [rejectMessage, setRejectMessage] = useState('');
   const [loading, setLoading] = useState(true)
-
+  
   useEffect(() => { 
     const pipelineQueryParam = new URL(window.location.href).searchParams.get('pipeline');
     const messagesQueryParam = new URL(window.location.href).searchParams.get('messages');
