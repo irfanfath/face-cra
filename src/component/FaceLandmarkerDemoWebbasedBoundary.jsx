@@ -17,6 +17,10 @@ const FaceLandmarkerDemoWebbasedBoundary = () => {
         const data = await res.json();
         setIsValid(!data.is_limit)
       })
+      .catch(() => {
+        setIsLoading(false);
+        setIsValid(false)
+      })
   }, [])
   return <>
     <LoadingOverlay isLoading={isLoading}>
