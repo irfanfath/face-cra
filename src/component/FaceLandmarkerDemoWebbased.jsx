@@ -368,7 +368,7 @@ const FaceLandmarkerWebbased = () => {
   }, [messageError]);
 
   return (
-    <div style={{ maxWidth: "400px", width: "100%"}}>
+    <div style={{ maxWidth: "400px", width: "100%", position:'relative', margin: 'auto'}}>
       <section id="demos">
         <div id="liveView" className="videoView">
           <img className="bg-image" alt="" src={require('../assets/Subtract.png')} />
