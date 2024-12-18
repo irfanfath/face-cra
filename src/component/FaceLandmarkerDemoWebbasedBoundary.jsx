@@ -25,7 +25,7 @@ const FaceLandmarkerDemoWebbasedBoundary = () => {
   return <>
     <LoadingOverlay isLoading={isLoading}>
       {
-        isValid ? <FaceLandmarkerWebbased /> : <ErrorDisplay  error="Something wrong" isVisible={isValid && !isLoading} /> 
+        isValid ? <FaceLandmarkerWebbased /> : <ErrorDisplay  error="Something wrong" isVisible={!isLoading} /> 
       }
       
     </LoadingOverlay>
